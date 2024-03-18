@@ -9,6 +9,7 @@ export default function PhoneNum() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
 
   const handleSendCode = async () => {
     // 전화번호 유효성 검사 (간단한 예시)
@@ -20,6 +21,7 @@ export default function PhoneNum() {
       // 인증번호 전송 API 호출
       await axios.post("/surbear-veri-post", { phoneNumber });
       alert("인증번호가 전송되었습니다.");
+      setCodeSent(true);
     } catch (error) {
       console.error(error);
     }
@@ -56,6 +58,7 @@ export default function PhoneNum() {
         <div className="mb-10">
           <span className="font-extrabold">전화번호</span>
           <input
+            type="number"
             placeholder="'-'를 제외한 전화번호를 입력해주세요"
             className="main-input mt-1 mb-2"
             value={phoneNumber}
@@ -65,20 +68,25 @@ export default function PhoneNum() {
             className="long-button bg-white border-[#6E7CF2] text-[#6E7CF2]"
             onClick={handleSendCode}
           >
-            인증번호 받기
+            {codeSent ? "인증번호 재발급" : "인증번호 받기"}
           </button>
         </div>
         {/* 인증번호 */}
         <div>
           <span className="font-extrabold">인증번호</span>
           <input
+            type="number"
             placeholder="인증번호를 입력해주세요"
-            className="main-input mt-1 mb-2"
+            className={`main-input mt-1 mb-2 text-[#101010] `}
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
           />
           <button
-            className="long-button font-extrabold bg-white border-[#9E9E9E] text-[#9E9E9E]"
+            className={`long-button font-extrabold bg-white ${
+              verificationCode
+                ? "border-[#6E7CF2] text-[#6E7CF2]"
+                : "border-[#9E9E9E] text-[#9E9E9E]"
+            }`}
             onClick={handleVerifyCode}
           >
             인증번호 확인

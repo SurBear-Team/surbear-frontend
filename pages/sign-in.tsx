@@ -49,7 +49,7 @@ export default function LoginForm() {
             />
           </div>
           <button
-            className="bg-[#6E7CF2] w-full font-bold rounded-lg py-3"
+            className="bg-[#6E7CF2] text-white w-full font-bold rounded-lg py-3"
             type="submit"
           >
             로그인

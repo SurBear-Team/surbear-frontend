@@ -59,7 +59,7 @@ export default function LoginForm() {
           <div className="text-[#616161] text-xs">아이디 찾기</div>
 
           <div className="text-[#616161] text-xs">비밀번호 찾기</div>
-          <Link href="/sign-up" className="text-[#616161] text-xs">
+          <Link href="/sign-up/clause" className="text-[#616161] text-xs">
             회원가입
           </Link>
         </div>

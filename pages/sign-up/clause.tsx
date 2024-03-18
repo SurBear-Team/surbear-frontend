@@ -68,6 +68,22 @@ export default function Clause() {
     setShowSheet(true); // Sheet를 표시
   };
 
+  const [isButtonActive, setIsButtonActive] = useState(false);
+
+  useEffect(() => {
+    const { terms1, terms2, terms3, terms4, terms5, all } = isChecked;
+    // 모든 조건이 참일 때만 버튼을 활성화
+    setIsButtonActive(terms1 && terms2 && terms3 && terms4 && terms5 && all);
+  }, [isChecked]);
+
+  const handleNextButtonClick = () => {
+    if (isButtonActive) {
+      router.push("/sign-up/phoneNum");
+    } else {
+      alert("약관 확인 plz");
+    }
+  };
+
   return (
     <>
       {/* 탑바 */}
@@ -132,7 +148,10 @@ export default function Clause() {
           <div className="bg-[#EEEEEE] w-full h-[1px] mt-4 mx-10 max-w-[313px]" />
 
           {/* 다음 버튼 */}
-          <button className="mt-8 bg-white w-full font-extrabold rounded-lg py-3 mx-12 max-w-[297px] border-[1.5px] border-[#6E7CF2] text-[#6E7CF2]">
+          <button
+            onClick={handleNextButtonClick}
+            className="mt-8 bg-white w-full font-extrabold rounded-lg py-3 mx-12 max-w-[297px] border-[1.5px] border-[#6E7CF2] text-[#6E7CF2]"
+          >
             다음
           </button>
         </div>
@@ -141,7 +160,11 @@ export default function Clause() {
             {/* 오버레이 배경 */}
             <Overlay />
             {/* 시트 */}
-            <Sheet termKey={sheetTitle} onClose={toggleShowSheet} />
+            <Sheet
+              showSheet={showSheet}
+              termKey={sheetTitle}
+              onClose={toggleShowSheet}
+            />
           </>
         )}
       </div>

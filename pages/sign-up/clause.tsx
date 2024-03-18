@@ -88,7 +88,7 @@ export default function Clause() {
   return (
     <>
       {/* 탑바 */}
-      <TopBar onClick={() => router.back()} />
+      <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
       {/* 본문 */}
       <div className="screen">
         <div className="w-full">

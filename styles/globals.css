@@ -47,7 +47,7 @@ body {
   }
 
   .long-button {
-    @apply w-full font-extrabold rounded-lg py-3 border-[1.5px];
+    @apply w-full font-extrabold rounded-lg py-3 border-2;
   }
 
   .main-input {

@@ -90,14 +90,16 @@ export default function Clause() {
       {/* 탑바 */}
       <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
       {/* 본문 */}
-      <div className="screen">
-        <div className="w-full">
-          <Checkbox
-            inputChecked={isChecked.all}
-            onClick={() => handleCheckboxClick("all")}
-            label="전체 동의"
-            isAll={true}
-          />
+      <div className="screen ">
+        <div className="w-full px-10">
+          <div className="flex">
+            <Checkbox
+              inputChecked={isChecked.all}
+              onClick={() => handleCheckboxClick("all")}
+              label="전체 동의"
+              isAll={true}
+            />
+          </div>
           {/* 약관 블록 */}
           <Checkbox
             inputChecked={isChecked.terms1}
@@ -141,12 +143,12 @@ export default function Clause() {
           />
 
           {/* 회색 선 */}
-          <div className="gray-line mt-4 mx-10" />
+          <div className="gray-line mt-4 " />
 
           {/* 다음 버튼 */}
           <button
             onClick={handleNextButtonClick}
-            className="long-button mx-12 mt-8 max-w-[297px] bg-white border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button w-full mt-8 min-w-[34px] bg-white border-[#6E7CF2] text-[#6E7CF2]"
           >
             다음
           </button>

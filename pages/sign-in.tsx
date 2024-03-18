@@ -34,14 +34,14 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2 mb-6">
             <input
-              className="main-input"
+              className="main-input text-[#101010]"
               placeholder="아이디를 입력해주세요"
               id="username"
               {...register("username")}
             />
 
             <input
-              className="main-input"
+              className="main-input text-[#101010]"
               placeholder="비밀번호를 입력해주세요"
               id="password"
               type="password"

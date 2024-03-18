@@ -53,9 +53,9 @@ export default function PhoneNum() {
   return (
     <>
       <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
-      <div className="screen px-12 flex-col w-full">
+      <div className="screen px-12 flex-col">
         {/* 전화번호 */}
-        <div className="mb-10">
+        <div className="mb-10 w-full">
           <span className="font-extrabold">전화번호</span>
           <input
             type="number"
@@ -72,7 +72,7 @@ export default function PhoneNum() {
           </button>
         </div>
         {/* 인증번호 */}
-        <div>
+        <div className="w-full">
           <span className="font-extrabold">인증번호</span>
           <input
             type="number"
@@ -95,7 +95,7 @@ export default function PhoneNum() {
 
         <div className="gray-line w-full mt-12 mx-10" />
         {/* 다음버튼 */}
-        <div>
+        <div className="w-full">
           <button
             className="long-button px-32 mt-8 font-extrabold bg-white border-[#6E7CF2] text-[#6E7CF2]"
             onClick={handleNext}

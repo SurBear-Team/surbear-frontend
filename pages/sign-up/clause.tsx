@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
+import { TopBar } from "../components/TopBar";
 
 type CheckboxName =
   | "all"
@@ -87,14 +88,9 @@ export default function Clause() {
   return (
     <>
       {/* 탑바 */}
-      <div className="bg-white fixed">
-        <div className="flex gap-2 pl-6 py-3 ">
-          <div onClick={router.back}>⬅</div>
-          <div className="font-extrabold">회원가입</div>
-        </div>
-      </div>
+      <TopBar onClick={() => router.back()} />
       {/* 본문 */}
-      <div className="w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center">
+      <div className="screen">
         <div className="w-full">
           <Checkbox
             inputChecked={isChecked.all}
@@ -145,12 +141,12 @@ export default function Clause() {
           />
 
           {/* 회색 선 */}
-          <div className="bg-[#EEEEEE] w-full h-[1px] mt-4 mx-10 max-w-[313px]" />
+          <div className="gray-line mt-4 mx-10" />
 
           {/* 다음 버튼 */}
           <button
             onClick={handleNextButtonClick}
-            className="mt-8 bg-white w-full font-extrabold rounded-lg py-3 mx-12 max-w-[297px] border-[1.5px] border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button mx-12 mt-8 max-w-[297px] bg-white border-[#6E7CF2] text-[#6E7CF2]"
           >
             다음
           </button>

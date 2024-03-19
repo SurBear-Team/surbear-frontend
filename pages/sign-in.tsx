@@ -25,33 +25,30 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center">
+    <div className="screen">
       {/* 이거 나중에 루트로 뺌 */}
       <div className="px-12 w-full">
         <div className="flex justify-center mb-8">
-          <img src="/images/SurBear.png" alt="SurBear" width={264} />
+          <img src="/images/LOGO.png" alt="SurBear" width={264} />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2 mb-6">
             <input
-              className="p-2 w-full border-2 focus:ring-[#6E7CF2] focus:border-[#6E7CF2] border-[#BDBDBD] rounded-lg text-[#BDBDBD] font-bold placeholder:font-bold placeholder:text-[#BDBDBD] "
+              className="main-input text-[#101010]"
               placeholder="아이디를 입력해주세요"
               id="username"
               {...register("username")}
             />
 
             <input
-              className="p-2 w-full border-2 focus:ring-[#6E7CF2] focus:border-[#6E7CF2] border-[#BDBDBD] rounded-lg text-[#BDBDBD] font-bold placeholder:font-bold placeholder:text-[#BDBDBD] "
+              className="main-input text-[#101010]"
               placeholder="비밀번호를 입력해주세요"
               id="password"
               type="password"
               {...register("password")}
             />
           </div>
-          <button
-            className="bg-[#6E7CF2] w-full font-bold rounded-lg py-3"
-            type="submit"
-          >
+          <button className="long-button bg-[#6E7CF2] text-white" type="submit">
             로그인
           </button>
         </form>
@@ -59,7 +56,7 @@ export default function LoginForm() {
           <div className="text-[#616161] text-xs">아이디 찾기</div>
 
           <div className="text-[#616161] text-xs">비밀번호 찾기</div>
-          <Link href="/sign-up" className="text-[#616161] text-xs">
+          <Link href="/sign-up/clause" className="text-[#616161] text-xs">
             회원가입
           </Link>
         </div>

@@ -17,7 +17,6 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
@@ -29,5 +28,37 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* 스크롤바 숨기기 */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+@layer components {
+  .screen {
+    @apply w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center;
+  }
+
+  .long-button {
+    @apply w-full font-extrabold rounded-lg py-3 border-2;
+  }
+
+  .main-input {
+    @apply p-2 w-full border-2 focus:ring-[#6E7CF2] focus:border-[#6E7CF2] border-[#BDBDBD] rounded-lg text-[#BDBDBD] font-bold placeholder:font-bold placeholder:text-[#BDBDBD];
+  }
+
+  .gray-line {
+    @apply bg-[#EEEEEE] h-[1px] flex justify-center;
+  }
+
+  .check-box {
+    @apply px-[7px] py-[7px] rounded-md cursor-pointer border-2 border-[#616161];
   }
 }

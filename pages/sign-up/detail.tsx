@@ -79,7 +79,9 @@ export default function IdPassword() {
         <div className="w-full">
           <button
             className="long-button px-32 mt-8 font-extrabold bg-white border-[#6E7CF2] text-[#6E7CF2]"
-            onClick={() => {}}
+            onClick={() => {
+              router.push("/sign-up/complete");
+            }}
           >
             다음
           </button>

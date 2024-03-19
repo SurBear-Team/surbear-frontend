@@ -29,7 +29,7 @@ export default function LoginForm() {
       {/* 이거 나중에 루트로 뺌 */}
       <div className="px-12 w-full">
         <div className="flex justify-center mb-8">
-          <img src="/images/SurBear.png" alt="SurBear" width={264} />
+          <img src="/images/LOGO.png" alt="SurBear" width={264} />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2 mb-6">

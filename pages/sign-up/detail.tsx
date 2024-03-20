@@ -3,6 +3,7 @@ import { TopBar } from "../components/TopBar";
 import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
+import { ArrowBackIcon } from "../components/styles/Icons";
 
 export default function IdPassword() {
   const router = useRouter();
@@ -24,7 +25,11 @@ export default function IdPassword() {
 
   return (
     <>
-      <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
+      <TopBar
+        onClick={() => router.back()}
+        leftSVG={<ArrowBackIcon />}
+        title="회원가입"
+      />
       <div className="screen px-12 flex-col w-full">
         {/* 닉네임 */}
         <div className="w-full">

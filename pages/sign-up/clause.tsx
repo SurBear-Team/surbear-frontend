@@ -4,6 +4,7 @@ import { Overlay } from "../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
 import { TopBar } from "../components/TopBar";
+import { ArrowBackIcon } from "../components/styles/Icons";
 
 type CheckboxName =
   | "all"
@@ -88,7 +89,11 @@ export default function Clause() {
   return (
     <>
       {/* 탑바 */}
-      <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
+      <TopBar
+        onClick={() => router.back()}
+        leftSVG={<ArrowBackIcon />}
+        title="회원가입"
+      />
       {/* 본문 */}
       <div className="screen ">
         <div className="w-full px-10">

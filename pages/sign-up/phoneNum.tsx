@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { TopBar } from "../components/TopBar";
 import { useState } from "react";
 import axios from "axios";
+import { ArrowBackIcon } from "../components/styles/Icons";
 
 export default function PhoneNum() {
   const router = useRouter();
@@ -52,7 +53,11 @@ export default function PhoneNum() {
 
   return (
     <>
-      <TopBar onClick={() => router.back()} leftSVG={"⬅"} />
+      <TopBar
+        onClick={() => router.back()}
+        leftSVG={<ArrowBackIcon />}
+        title="회원가입"
+      />
       <div className="screen px-12 flex-col">
         {/* 전화번호 */}
         <div className="mb-10 w-full">

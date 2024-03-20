@@ -34,29 +34,29 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2 mb-6">
             <input
-              className="main-input text-[#101010]"
+              className="main-input text-gray-9"
               placeholder="아이디를 입력해주세요"
               id="username"
               {...register("username")}
             />
 
             <input
-              className="main-input text-[#101010]"
+              className="main-input text-gray-9"
               placeholder="비밀번호를 입력해주세요"
               id="password"
               type="password"
               {...register("password")}
             />
           </div>
-          <button className="long-button bg-[#6E7CF2] text-white" type="submit">
+          <button className="long-button bg-primary-1 text-white" type="submit">
             로그인
           </button>
         </form>
         <div className="flex mt-4 justify-center gap-6">
-          <div className="text-[#616161] text-xs">아이디 찾기</div>
+          <div className="text-gray-7 text-xs">아이디 찾기</div>
 
-          <div className="text-[#616161] text-xs">비밀번호 찾기</div>
-          <Link href="/sign-up/clause" className="text-[#616161] text-xs">
+          <div className="text-gray-7 text-xs">비밀번호 찾기</div>
+          <Link href="/sign-up/clause" className="text-gray-7 text-xs">
             회원가입
           </Link>
         </div>

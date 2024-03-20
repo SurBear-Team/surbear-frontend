@@ -44,12 +44,12 @@ export default function IdPassword() {
               })}
               type="text"
               placeholder="아이디를 입력해주세요"
-              className={`main-input mt-1 mb-10 text-[#101010] ${
-                errors.username ? "border-red-500" : ""
+              className={`main-input mt-1 mb-10 text-gray-9 ${
+                errors.username ? "border-red-1" : ""
               }`}
             />
             {errors.username && typeof errors.username.message === "string" ? (
-              <p className="absolute bottom-4 font-extrabold text-xs text-[#D52828]">
+              <p className="absolute bottom-4 font-extrabold text-xs text-red-1">
                 {errors.username.message}
               </p>
             ) : null}
@@ -68,12 +68,12 @@ export default function IdPassword() {
               })}
               type="password"
               placeholder="비밀번호를 입력해주세요"
-              className={`main-input mt-1 mb-10 text-[#101010] ${
+              className={`main-input mt-1 mb-10 text-gray-9 ${
                 errors.username ? "border-red-500" : ""
               }`}
             />
             {errors.password && typeof errors.password.message === "string" ? (
-              <p className="absolute bottom-4 font-extrabold text-xs text-[#D52828]">
+              <p className="absolute bottom-4 font-extrabold text-xs text-red-1">
                 {errors.password.message}
               </p>
             ) : null}
@@ -90,13 +90,13 @@ export default function IdPassword() {
               })}
               type="password"
               placeholder="비밀번호를 확인해주세요"
-              className={`main-input mt-1 mb-10 text-[#101010] ${
-                errors.username ? "border-red-500" : ""
+              className={`main-input mt-1 mb-10 text-gray-9 ${
+                errors.username ? "border-red-1" : ""
               }`}
             />
             {errors.passwordConfirm &&
             typeof errors.passwordConfirm.message === "string" ? (
-              <p className="absolute bottom-4 font-extrabold text-xs text-[#D52828]">
+              <p className="absolute bottom-4 font-extrabold text-xs text-red-1">
                 {errors.passwordConfirm.message}
               </p>
             ) : null}
@@ -107,7 +107,7 @@ export default function IdPassword() {
           <div className="w-full">
             <button
               type="submit"
-              className="long-button px-32 mt-8 font-extrabold bg-white border-[#6E7CF2] text-[#6E7CF2]"
+              className="long-button px-32 mt-8 font-extrabold bg-white border-primary-1 text-primary-1"
               onClick={() => {}}
             >
               다음

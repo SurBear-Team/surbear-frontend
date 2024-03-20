@@ -32,7 +32,7 @@ export default function IdPassword() {
           <input
             type="text"
             placeholder="닉네임을 입력해주세요"
-            className="main-input mt-1 mb-10 text-[#101010]"
+            className="main-input mt-1 mb-10 text-gray-9"
           />
         </div>
         {/* 나이 */}
@@ -43,7 +43,7 @@ export default function IdPassword() {
               setShowSheet(true);
             }}
             value={selectedAge}
-            className="main-input text-center mt-1 mb-10 text-[#101010] cursor-pointer"
+            className="main-input text-center mt-1 mb-10 text-gray-9 cursor-pointer"
           />
         </div>
         {/* 성별 */}
@@ -53,8 +53,8 @@ export default function IdPassword() {
             <button
               className={`long-button ${
                 selectedGender === "남자"
-                  ? "border-[#6E7CF2] bg-[#6E7CF2] text-white"
-                  : "border-[#6E7CF2]"
+                  ? "border-primary-1 bg-primary-1 text-white"
+                  : "border-primary-1"
               }`}
               onClick={() => setSelectedGender("남자")}
             >
@@ -63,8 +63,8 @@ export default function IdPassword() {
             <button
               className={`long-button ${
                 selectedGender === "여자"
-                  ? "border-[#6E7CF2] bg-[#6E7CF2] text-white"
-                  : "border-[#6E7CF2]"
+                  ? "border-primary-1 bg-primary-1 text-white"
+                  : "border-primary-1"
               }`}
               onClick={() => setSelectedGender("여자")}
             >
@@ -78,7 +78,7 @@ export default function IdPassword() {
         {/* 다음버튼 */}
         <div className="w-full">
           <button
-            className="long-button px-32 mt-8 font-extrabold bg-white border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button px-32 mt-8 font-extrabold bg-white border-primary-1 text-primary-1"
             onClick={() => {
               router.push("/sign-up/complete");
             }}
@@ -123,7 +123,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       </div>
       <div className="gray-line my-4" />
       <div
-        className="px-4 py-5 border-b-[1px] border-[#EEEEEE]"
+        className="px-4 py-5 border-b-[1px] border-gray-2"
         onClick={() => {
           onSelected("10대 이하");
           onClose();
@@ -133,7 +133,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
           10대 이하
         </div>
       </div>
-      <div className="px-4 py-5 border-b-[1px] border-[#EEEEEE]">
+      <div className="px-4 py-5 border-b-[1px] border-gray-2">
         <div
           className="flex justify-center mx-auto font-extrabold"
           onClick={() => {
@@ -146,7 +146,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       </div>
 
       <div
-        className="px-4 py-5 border-b-[1px] border-[#EEEEEE]"
+        className="px-4 py-5 border-b-[1px] border-gray-2"
         onClick={() => {
           onSelected("20대");
           onClose();
@@ -156,7 +156,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       </div>
 
       <div
-        className="px-4 py-5 border-b-[1px] border-[#EEEEEE]"
+        className="px-4 py-5 border-b-[1px] border-gray-2"
         onClick={() => {
           onSelected("30대");
           onClose();
@@ -166,7 +166,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       </div>
 
       <div
-        className="px-4 py-5 border-b-[1px] border-[#EEEEEE]"
+        className="px-4 py-5 border-b-[1px] border-gray-2"
         onClick={() => {
           onSelected("40대");
           onClose();
@@ -176,7 +176,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       </div>
 
       <div
-        className="px-4 py-5 border-b-[1px] border-[#EEEEEE]"
+        className="px-4 py-5 border-b-[1px] border-gray-2"
         onClick={() => {
           onSelected("50대");
           onClose();

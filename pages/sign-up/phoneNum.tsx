@@ -65,7 +65,7 @@ export default function PhoneNum() {
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
           <button
-            className="long-button bg-white border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button bg-white border-primary-1 text-primary-1"
             onClick={handleSendCode}
           >
             {codeSent ? "인증번호 재발급" : "인증번호 받기"}
@@ -77,15 +77,15 @@ export default function PhoneNum() {
           <input
             type="number"
             placeholder="인증번호를 입력해주세요"
-            className={`main-input mt-1 mb-2 text-[#101010] `}
+            className={`main-input mt-1 mb-2 text-gray-9`}
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
           />
           <button
             className={`long-button font-extrabold bg-white ${
               verificationCode
-                ? "border-[#6E7CF2] text-[#6E7CF2]"
-                : "border-[#9E9E9E] text-[#9E9E9E]"
+                ? "border-primary-1 text-primary-1"
+                : "border-gray-5 text-gray-5"
             }`}
             onClick={handleVerifyCode}
           >
@@ -97,7 +97,7 @@ export default function PhoneNum() {
         {/* 다음버튼 */}
         <div className="w-full">
           <button
-            className="long-button px-32 mt-8 font-extrabold bg-white border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button px-32 mt-8 font-extrabold bg-white border-primary-1 text-primary-1"
             onClick={handleNext}
           >
             다음

@@ -143,12 +143,12 @@ export default function Clause() {
           />
 
           {/* 회색 선 */}
-          <div className="gray-line mt-4 " />
+          <div className="gray-line mt-4" />
 
           {/* 다음 버튼 */}
           <button
             onClick={handleNextButtonClick}
-            className="long-button w-full mt-8 min-w-[34px] bg-white border-[#6E7CF2] text-[#6E7CF2]"
+            className="long-button w-full mt-8 min-w-[34px] bg-white border-primary-1 text-primary-1"
           >
             다음
           </button>

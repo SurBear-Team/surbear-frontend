@@ -33,7 +33,7 @@ export default function IdPassword() {
       <div className="screen px-12 flex-col w-full">
         {/* 닉네임 */}
         <div className="w-full">
-          <span className="font-extrabold">닉네임</span>
+          <span className="font-semibold">닉네임</span>
           <input
             type="text"
             placeholder="닉네임을 입력해주세요"
@@ -42,7 +42,7 @@ export default function IdPassword() {
         </div>
         {/* 나이 */}
         <div className="w-full">
-          <span className="font-extrabold">나이</span>
+          <span className="font-semibold">나이</span>
           <input
             onClick={() => {
               setShowSheet(true);
@@ -53,13 +53,13 @@ export default function IdPassword() {
         </div>
         {/* 성별 */}
         <div className="w-full">
-          <span className="font-extrabold ">성별</span>
+          <span className="font-semibold ">성별</span>
           <div className="flex gap-4 mt-1">
             <button
               className={`long-button ${
                 selectedGender === "남자"
                   ? "border-primary-1 bg-primary-1 text-white"
-                  : "border-primary-1"
+                  : "border-primary-1 text-primary-1"
               }`}
               onClick={() => setSelectedGender("남자")}
             >
@@ -69,7 +69,7 @@ export default function IdPassword() {
               className={`long-button ${
                 selectedGender === "여자"
                   ? "border-primary-1 bg-primary-1 text-white"
-                  : "border-primary-1"
+                  : "border-primary-1 text-primary-1"
               }`}
               onClick={() => setSelectedGender("여자")}
             >
@@ -83,7 +83,7 @@ export default function IdPassword() {
         {/* 다음버튼 */}
         <div className="w-full">
           <button
-            className="long-button px-32 mt-8 font-extrabold bg-white border-primary-1 text-primary-1"
+            className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
             onClick={() => {
               router.push("/sign-up/complete");
             }}

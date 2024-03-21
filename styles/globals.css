@@ -1,8 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -23,12 +24,23 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+} */
+
+body {
+  font-family: "Pretendard";
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* number type input의 화살표 지우기 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* 스크롤바 숨기기 */
@@ -47,11 +59,11 @@ body {
   }
 
   .long-button {
-    @apply w-full font-extrabold rounded-lg py-3 border-2;
+    @apply w-full font-semibold rounded-lg py-3 border;
   }
 
   .main-input {
-    @apply p-2 w-full border-2  focus:ring-primary-1 focus:border-primary-1 border-gray-4 rounded-lg text-gray-4 font-bold placeholder:font-bold placeholder:text-gray-4;
+    @apply p-2 w-full border  focus:ring-primary-1 focus:border-primary-1 border-gray-4 rounded-lg text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
   }
 
   .gray-line {
@@ -59,6 +71,6 @@ body {
   }
 
   .check-box {
-    @apply px-[7px] py-[7px] rounded-md cursor-pointer border-2 border-gray-7;
+    @apply w-4 h-4 rounded-[4px];
   }
 }

@@ -61,11 +61,11 @@ export default function PhoneNum() {
       <div className="screen px-12 flex-col">
         {/* 전화번호 */}
         <div className="mb-10 w-full">
-          <span className="font-extrabold">전화번호</span>
+          <span className="font-semibold">전화번호</span>
           <input
             type="number"
             placeholder="'-'를 제외한 전화번호를 입력해주세요"
-            className="main-input mt-1 mb-2"
+            className="main-input mt-1 mb-2 text-gray-9"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
@@ -78,7 +78,7 @@ export default function PhoneNum() {
         </div>
         {/* 인증번호 */}
         <div className="w-full">
-          <span className="font-extrabold">인증번호</span>
+          <span className="font-semibold">인증번호</span>
           <input
             type="number"
             placeholder="인증번호를 입력해주세요"
@@ -87,7 +87,7 @@ export default function PhoneNum() {
             onChange={(e) => setVerificationCode(e.target.value)}
           />
           <button
-            className={`long-button font-extrabold bg-white ${
+            className={`long-button bg-white ${
               verificationCode
                 ? "border-primary-1 text-primary-1"
                 : "border-gray-5 text-gray-5"
@@ -102,7 +102,7 @@ export default function PhoneNum() {
         {/* 다음버튼 */}
         <div className="w-full">
           <button
-            className="long-button px-32 mt-8 font-extrabold bg-white border-primary-1 text-primary-1"
+            className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
             onClick={handleNext}
           >
             다음

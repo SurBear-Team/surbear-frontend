@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import LogoSVG from "./components/LogoSVG";
 
 export default function LoginForm() {
   const { register, handleSubmit } = useForm();
@@ -29,7 +30,7 @@ export default function LoginForm() {
       {/* 이거 나중에 루트로 뺌 */}
       <div className="px-12 w-full">
         <div className="flex justify-center mb-8">
-          <img src="/images/LOGO.png" alt="SurBear" width={264} />
+          <LogoSVG />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2 mb-6">

@@ -111,7 +111,10 @@ export default function Clause() {
             onClick={() => handleCheckboxClick("terms1")}
             label="[필수] 개인정보수집및활용동의1"
             isAll={false}
-            showSheet={() => handleShowSheet("terms1")}
+            showSheet={(e: MouseEvent) => {
+              e.stopPropagation();
+              handleShowSheet("terms1");
+            }}
           />
           {/* 약관 블록 */}
 
@@ -120,7 +123,10 @@ export default function Clause() {
             onClick={() => handleCheckboxClick("terms2")}
             label="[필수] 개인정보수집및활용동의2"
             isAll={false}
-            showSheet={() => handleShowSheet("terms2")}
+            showSheet={(e: MouseEvent) => {
+              e.stopPropagation();
+              handleShowSheet("terms2");
+            }}
           />
 
           <Checkbox
@@ -128,7 +134,10 @@ export default function Clause() {
             onClick={() => handleCheckboxClick("terms3")}
             label="[필수] 개인정보수집및활용동의3"
             isAll={false}
-            showSheet={() => handleShowSheet("terms3")}
+            showSheet={(e: MouseEvent) => {
+              e.stopPropagation();
+              handleShowSheet("terms3");
+            }}
           />
 
           <Checkbox
@@ -136,7 +145,10 @@ export default function Clause() {
             onClick={() => handleCheckboxClick("terms4")}
             label="[필수] 개인정보수집및활용동의4"
             isAll={false}
-            showSheet={() => handleShowSheet("terms4")}
+            showSheet={(e: MouseEvent) => {
+              e.stopPropagation();
+              handleShowSheet("terms4");
+            }}
           />
 
           <Checkbox
@@ -144,7 +156,10 @@ export default function Clause() {
             onClick={() => handleCheckboxClick("terms5")}
             label="[필수] 개인정보수집및활용동의5"
             isAll={false}
-            showSheet={() => handleShowSheet("terms5")}
+            showSheet={(e: MouseEvent) => {
+              e.stopPropagation();
+              handleShowSheet("terms5");
+            }}
           />
 
           {/* 회색 선 */}

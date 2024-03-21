@@ -25,13 +25,25 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       variants={SheetAnimation}
       className="fixed bottom-0 z-20 bg-white border-1 border-black w-full h-4/5 rounded-2xl px-6 pb-6"
     >
-      <div className="flex pt-4 gap-1 font-extrabold ">
-        <div className="cursor-pointer" onClick={onClose}>
-          X
-        </div>
-        <div>닫기</div>
+      <div className="flex pt-4 gap-1 cursor-pointer" onClick={onClose}>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 4L4 12M4 4L12 12"
+            stroke="#101010"
+            strokeWidth="1.33333"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <div className="font-semibold text-xs mt-[1px]">닫기</div>
       </div>
-      <div className="gray-line my-4" />
+      <div className="gray-line mt-4" />
       {ageRanges.map((ageRange) => (
         <div
           key={ageRange}
@@ -41,7 +53,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
             onClose();
           }}
         >
-          <div className="flex justify-center mx-auto font-extrabold">
+          <div className="flex justify-center mx-auto font-base">
             {ageRange}
           </div>
         </div>

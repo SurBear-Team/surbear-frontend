@@ -1,9 +1,18 @@
+import { SubTopBar } from "./SubTopBar";
+
 interface TopBarProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   leftSVG?: React.ReactNode;
   onRightClick?: React.MouseEventHandler<HTMLDivElement>;
   rightSVG?: React.ReactNode;
   title?: string;
+  hasSubTopBar?: boolean;
+  subTitle?: string;
+  hasFilter?: boolean;
+  onFilterClick?: () => void;
+  hasOrder?: boolean;
+  onOrderClick?: () => void;
+  orderType?: string;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -12,6 +21,13 @@ export const TopBar: React.FC<TopBarProps> = ({
   onRightClick,
   rightSVG,
   title,
+  hasSubTopBar,
+  subTitle,
+  hasFilter,
+  onFilterClick,
+  hasOrder,
+  onOrderClick,
+  orderType,
 }) => {
   return (
     <div className="bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center">
@@ -22,6 +38,16 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
         <div onClick={onRightClick}>{rightSVG}</div>
       </div>
+      {hasSubTopBar && (
+        <SubTopBar
+          subTitle={subTitle}
+          hasFilter={hasFilter}
+          onFilterClick={onFilterClick}
+          hasOrder={hasOrder}
+          onOrderClick={onOrderClick}
+          orderType={orderType}
+        />
+      )}
     </div>
   );
 };

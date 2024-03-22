@@ -59,7 +59,7 @@ input::-webkit-inner-spin-button {
   }
 
   .long-button {
-    @apply w-full font-semibold rounded-lg py-3 border;
+    @apply w-full font-semibold rounded-lg py-3 cursor-pointer border;
   }
 
   .main-input {

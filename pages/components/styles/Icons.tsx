@@ -76,3 +76,30 @@ export const ArrowDownIcon = () => {
     </svg>
   );
 };
+
+// 신고 아이콘
+export const ReportIcon = () => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12 11.6667H4V7C4 4.791 5.791 3 8 3C10.209 3 12 4.791 12 7V11.6667Z"
+        stroke="#D52828"
+        stroke-width="1.33333"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M2.66665 14H13.3333M1.33331 4.33337L2.33331 4.66671M4.33331 1.33337L4.66665 2.33337M3.33331 3.33337L2.33331 2.33337"
+        stroke="#D52828"
+        stroke-width="1.33333"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};

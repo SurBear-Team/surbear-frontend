@@ -50,7 +50,7 @@ const TabBox = ({ onClick, Icon, text }: any) => {
       onClick={onClick}
     >
       <div>{Icon}</div>
-      <div className="text-[10px] ">{text}</div>
+      <div className="text-[10px]  whitespace-nowrap">{text}</div>
     </div>
   );
 };

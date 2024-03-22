@@ -30,8 +30,38 @@ export default function Explore() {
                 title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
                 nickname={`김치냉장고`}
                 point={5}
+                onReportClick={() => {
+                  console.log("신고하기");
+                }}
+                showDetail={() => {
+                  console.log("더보기");
+                }}
               />
             ))}
+            <SurveyCard
+              title={`제목 2줄까지`}
+              ismine={true}
+              onDeleteClick={() => {
+                console.log("삭제");
+              }}
+              onUpdateClick={() => {
+                console.log("수정");
+              }}
+              onStartClick={() => {
+                console.log("설문 시작");
+              }}
+            />
+            <SurveyCard
+              title={`제목 2줄까지`}
+              ismine={true}
+              isFinished={true}
+              onDeleteClick={() => {
+                console.log("삭제");
+              }}
+              showResult={() => {
+                console.log("결과 보기");
+              }}
+            />
           </div>
         </div>
       </div>

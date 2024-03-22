@@ -10,9 +10,13 @@ export const SubTopBar = ({
 }: any) => {
   return (
     <div className="px-6 py-3 shadow-xl">
-      <div className="flex text-center font-semibold justify-between">
+      <div
+        className={`flex text-center font-semibold ${
+          subTitle ? "justify-between" : "justify-end"
+        }`}
+      >
         {subTitle}
-        <div className="flex gap-4 ">
+        <div className="flex gap-4">
           {hasFilter && (
             <div
               onClick={onFilterClick}

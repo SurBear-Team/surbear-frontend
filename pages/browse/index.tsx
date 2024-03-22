@@ -1,7 +1,9 @@
+import SurveyCard from "../components/SurveyCard";
 import { TopBar } from "../components/TopBar";
 import { SearchIcon } from "../components/styles/Icons";
 
 export default function Explore() {
+  let SurveyList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
   return (
     <>
       <TopBar
@@ -21,8 +23,15 @@ export default function Explore() {
       />
       <div className="text-white">
         <div className="screen">
-          <div className="bg-gray-1 w-full h-screen">
-            <div>뭐시깽이</div>
+          <div className="bg-[#F8F8F8] w-full h-3/4 p-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar">
+            {SurveyList.map((index) => (
+              <SurveyCard
+                key={index}
+                title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
+                nickname={`김치냉장고`}
+                point={5}
+              />
+            ))}
           </div>
         </div>
       </div>

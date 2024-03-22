@@ -1,4 +1,5 @@
 import SurveyCard from "../components/SurveyCard";
+import { TabBar } from "../components/TabBar";
 import { TopBar } from "../components/TopBar";
 import { SearchIcon } from "../components/styles/Icons";
 
@@ -10,7 +11,6 @@ export default function Explore() {
         title="설문 둘러보기"
         rightSVG={<SearchIcon />}
         hasSubTopBar={true}
-        subTitle={`내 포인트 : ${1} pt`} // 이건 임시
         hasFilter={true}
         onFilterClick={() => {
           console.log("필터 클릭");
@@ -23,7 +23,7 @@ export default function Explore() {
       />
       <div className="text-white">
         <div className="screen">
-          <div className="bg-[#F8F8F8] w-full h-3/4 p-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar">
+          <div className="bg-[#F8F8F8] w-full h-screen pt-[120px] pb-[105px] px-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar">
             {SurveyList.map((index) => (
               <SurveyCard
                 key={index}
@@ -35,6 +35,7 @@ export default function Explore() {
           </div>
         </div>
       </div>
+      <TabBar />
     </>
   );
 }

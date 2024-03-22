@@ -3,7 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import LogoSVG from "./components/LogoSVG";
+import LogoSVG from "./components/styles/LogoSVG";
 
 export default function LoginForm() {
   const { register, handleSubmit } = useForm();

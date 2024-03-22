@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import CharSVG from "../components/CharSVG";
+import CharSVG from "../components/styles/CharSVG";
 
 export default function CompleteSignUp() {
   const router = useRouter();

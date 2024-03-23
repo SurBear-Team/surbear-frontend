@@ -22,7 +22,7 @@ export default function Profile() {
           title="현재 포인트"
           content={`10,000 pt`}
           onClick={() => {
-            console.log("포인트");
+            router.push("/profile/point-history");
           }}
         />
         <ProfileCard

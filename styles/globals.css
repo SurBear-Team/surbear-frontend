@@ -78,11 +78,11 @@ input::-webkit-inner-spin-button {
     @apply flex p-6 flex-col items-start rounded-lg shadow-md;
   }
 
-  .mySurvey-Btn {
+  .small-Btn {
     @apply border-[1px] rounded-3xl py-2 w-full font-semibold;
   }
 
-  .mySurvey-LongBtn {
-    @apply mySurvey-Btn px-8;
+  .medium-Btn {
+    @apply small-Btn px-8;
   }
 }

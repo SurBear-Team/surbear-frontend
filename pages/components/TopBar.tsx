@@ -30,7 +30,11 @@ export const TopBar: React.FC<TopBarProps> = ({
   orderType,
 }) => {
   return (
-    <div className="bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center">
+    <div
+      className={`bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center ${
+        hasSubTopBar ? "" : "shadow-md"
+      }`}
+    >
       <div className="flex px-6 py-3 justify-between">
         <div className="flex gap-2 items-center">
           <div onClick={onClick}>{leftSVG}</div>

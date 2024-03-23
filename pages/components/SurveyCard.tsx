@@ -64,14 +64,14 @@ export default function SurveyCard({
             <div className="flex gap-2 w-full">
               <button
                 onClick={onDeleteClick}
-                className="mySurvey-Btn bg-white border-red-1 text-red-1"
+                className="small-Btn bg-white border-red-1 text-red-1"
               >
                 삭제
               </button>
               {!isFinished && (
                 <button
                   onClick={onUpdateClick}
-                  className="mySurvey-Btn bg-white border-primary-1 text-primary-1"
+                  className="small-Btn bg-white border-primary-1 text-primary-1"
                 >
                   수정
                 </button>
@@ -79,7 +79,7 @@ export default function SurveyCard({
             </div>
             <button
               onClick={isFinished ? showResult : onStartClick}
-              className="mySurvey-Btn w-full px-8 border-primary-1 bg-primary-1"
+              className="medium-Btn w-full text-white  border-primary-1 bg-primary-1"
             >
               {isFinished ? "결과 보기" : "설문 시작"}
             </button>

@@ -78,6 +78,10 @@ input::-webkit-inner-spin-button {
     @apply flex p-6 flex-col items-start rounded-lg shadow-md;
   }
 
+  .profile-card {
+    @apply card py-4 flex-row w-full items-center bg-white justify-between;
+  }
+
   .small-Btn {
     @apply border-[1px] rounded-3xl py-2 w-full font-semibold;
   }

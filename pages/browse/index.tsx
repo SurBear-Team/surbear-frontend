@@ -27,6 +27,7 @@ export default function Explore() {
             {SurveyList.map((index) => (
               <SurveyCard
                 key={index}
+                category={"카테고리"}
                 title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
                 nickname={`김치냉장고`}
                 point={5}
@@ -39,6 +40,7 @@ export default function Explore() {
               />
             ))}
             <SurveyCard
+              category={"카테고리"}
               title={`제목 2줄까지`}
               ismine={true}
               onDeleteClick={() => {
@@ -52,6 +54,7 @@ export default function Explore() {
               }}
             />
             <SurveyCard
+              category={"카테고리"}
               title={`제목 2줄까지`}
               ismine={true}
               isFinished={true}

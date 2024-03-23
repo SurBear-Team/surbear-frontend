@@ -1,6 +1,7 @@
 import { ReportIcon } from "./styles/Icons";
 
 interface SurveyCardProps {
+  category: string;
   title: string;
   nickname?: string;
   point?: number;
@@ -15,6 +16,7 @@ interface SurveyCardProps {
 }
 
 export default function SurveyCard({
+  category,
   title,
   nickname,
   point,
@@ -31,7 +33,7 @@ export default function SurveyCard({
     <>
       <div className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}>
         <div className="flex justify-between items-center w-full pb-2">
-          <div className="text-gray-5 text-xs font-semibold">카테고리</div>
+          <div className="text-gray-5 text-xs font-semibold">{category}</div>
           {!ismine && (
             <div
               onClick={onReportClick}

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   BrowseIcon,
   MySurveyIcon,
@@ -6,11 +7,12 @@ import {
 } from "./styles/Icons";
 
 export const TabBar = () => {
+  const rotuer = useRouter();
   return (
     <div className="flex w-full left-0 right-0 mx-auto max-w-[36rem] px-3 justify-evenly items-start gap-4 bg-white fixed bottom-0">
       <TabBox
         onClick={() => {
-          console.log("둘러보기");
+          rotuer.push("/browse");
         }}
         Icon={<BrowseIcon />}
         text="둘러보기"
@@ -34,7 +36,7 @@ export const TabBar = () => {
 
       <TabBox
         onClick={() => {
-          console.log("프로필");
+          rotuer.push("/profile");
         }}
         Icon={<ProfileIcon />}
         text="프로필"

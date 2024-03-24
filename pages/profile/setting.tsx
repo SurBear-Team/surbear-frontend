@@ -9,7 +9,7 @@ export default function ProfileSetting() {
     <>
       <TopBar
         leftSVG={<ArrowBackIcon />}
-        onClick={() => {
+        onLeftClick={() => {
           route.back();
         }}
         title="설정"

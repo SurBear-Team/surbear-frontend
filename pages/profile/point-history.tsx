@@ -11,7 +11,7 @@ export default function PointHistory() {
     <>
       <TopBar
         leftSVG={<ArrowBackIcon />}
-        onClick={() => {
+        onLeftClick={() => {
           route.back();
         }}
         title="현재 포인트 내역"

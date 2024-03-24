@@ -90,7 +90,7 @@ export default function Clause() {
     <>
       {/* 탑바 */}
       <TopBar
-        onClick={() => router.back()}
+        onLeftClick={() => router.back()}
         leftSVG={<ArrowBackIcon />}
         title="회원가입"
       />

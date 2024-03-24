@@ -26,7 +26,7 @@ export default function IdPassword() {
   return (
     <>
       <TopBar
-        onClick={() => router.back()}
+        onLeftClick={() => router.back()}
         leftSVG={<ArrowBackIcon />}
         title="회원가입"
       />

@@ -3,9 +3,9 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import LogoSVG from "./components/styles/LogoSVG";
+import LogoSVG from "../components/styles/LogoSVG";
 
-export default function LoginForm() {
+export default function SignIn() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
@@ -53,14 +53,22 @@ export default function LoginForm() {
             로그인
           </button>
         </form>
-        <div className="flex mt-4 justify-center gap-6">
-          <div className="text-gray-7 text-xs whitespace-nowrap">
-            아이디 찾기
-          </div>
 
-          <div className="text-gray-7 text-xs whitespace-nowrap">
+        {/* 아찾 비찾 회가 */}
+        <div className="flex mt-4 justify-center gap-6">
+          <Link
+            href="/sign-in/find-id"
+            className="text-gray-7 text-xs whitespace-nowrap"
+          >
+            아이디 찾기
+          </Link>
+
+          <Link
+            href="/sign-in/find-pwd"
+            className="text-gray-7 text-xs whitespace-nowrap"
+          >
             비밀번호 찾기
-          </div>
+          </Link>
           <Link
             href="/sign-up/clause"
             className="text-gray-7 text-xs whitespace-nowrap"
@@ -68,6 +76,8 @@ export default function LoginForm() {
             회원가입
           </Link>
         </div>
+
+        {/* 또는 */}
         <div className="mt-6 flex px-6 items-center">
           <div className="w-full h-[1px] bg-[#EAEAEA]" />
           <div className="text-gray-7 px-3 text-center text-[10px] font-medium whitespace-nowrap">

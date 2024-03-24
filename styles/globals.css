@@ -63,7 +63,7 @@ input::-webkit-inner-spin-button {
   }
 
   .main-input {
-    @apply p-2 w-full border  focus:ring-primary-1 focus:border-primary-1 border-gray-4 rounded-lg text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
+    @apply p-2 w-full border border-gray-4 text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
   }
 
   .gray-line {

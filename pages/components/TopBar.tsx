@@ -1,41 +1,43 @@
 import { SubTopBar } from "./SubTopBar";
 
 interface TopBarProps {
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onLeftClick?: React.MouseEventHandler<HTMLDivElement>;
   leftSVG?: React.ReactNode;
   onRightClick?: React.MouseEventHandler<HTMLDivElement>;
   rightSVG?: React.ReactNode;
   title?: string;
-  hasSubTopBar?: boolean;
-  subTitle?: string;
-  hasFilter?: boolean;
-  onFilterClick?: () => void;
-  hasOrder?: boolean;
-  onOrderClick?: () => void;
-  orderType?: string;
+  hasSubTopBar?: boolean; // 서브 탑바가 있나요?
+  subTitle?: string; // 서브 탑바 제목
+  hasOrder?: boolean; // 정렬이 있나요?
+  onOrderClick?: () => void; // 정렬 클릭
+  showOrder?: boolean; // 정렬 보여주기
+  orderList?: string[]; // 정렬 목록
+  orderType?: string; // 현재 정렬이 뭐로 됐는지
+  onOrderSelect?: (selectedOrder: string) => void; // 선택한 정렬
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
-  onClick,
+  onLeftClick,
   leftSVG,
   onRightClick,
   rightSVG,
   title,
   hasSubTopBar,
   subTitle,
-  hasFilter,
-  onFilterClick,
   hasOrder,
   onOrderClick,
+  showOrder,
+  orderList,
   orderType,
+  onOrderSelect,
 }) => {
   return (
     <div
-      className={`bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center `}
+      className={`bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center shadow-md`}
     >
       <div className="flex px-6 py-3 justify-between">
-        <div className="flex gap-2 items-center">
-          <div onClick={onClick}>{leftSVG}</div>
+        <div className={`flex ${leftSVG && "gap-2"} items-center`}>
+          <div onClick={onLeftClick}>{leftSVG}</div>
           <span className="text-base font-semibold mt-[2px]">{title}</span>
         </div>
         <div onClick={onRightClick}>{rightSVG}</div>
@@ -43,11 +45,12 @@ export const TopBar: React.FC<TopBarProps> = ({
       {hasSubTopBar && (
         <SubTopBar
           subTitle={subTitle}
-          hasFilter={hasFilter}
-          onFilterClick={onFilterClick}
           hasOrder={hasOrder}
           onOrderClick={onOrderClick}
+          showOrder={showOrder}
+          orderList={orderList || []}
           orderType={orderType}
+          onOrderSelect={onOrderSelect}
         />
       )}
     </div>

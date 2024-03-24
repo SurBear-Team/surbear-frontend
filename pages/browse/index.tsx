@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SurveyCard from "../components/SurveyCard";
 import { TabBar } from "../components/TabBar";
 import { TopBar } from "../components/TopBar";
@@ -5,6 +6,19 @@ import { SearchIcon } from "../components/styles/Icons";
 
 export default function Browse() {
   let SurveyList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
+  const orderList = [
+    "최신순",
+    "높은 포인트순",
+    "적은 문항수순",
+    "많은 문항수순",
+  ];
+  const [showOrder, setShowOrder] = useState(false);
+
+  const [orderType, setOrderType] = useState("높은 포인트순");
+  const handleOrderSelect = (selectedOrderType: string) => {
+    setOrderType(selectedOrderType);
+    setShowOrder(false);
+  };
   return (
     <>
       <TopBar
@@ -14,15 +28,15 @@ export default function Browse() {
           console.log("검색");
         }}
         hasSubTopBar={true}
-        hasFilter={true}
-        onFilterClick={() => {
-          console.log("필터 클릭");
-        }}
+        subTitle="전체"
         hasOrder={true}
         onOrderClick={() => {
-          console.log("정렬 클릭");
+          setShowOrder((prev) => !prev);
         }}
-        orderType="최신순"
+        showOrder={showOrder}
+        orderList={orderList}
+        orderType={orderType}
+        onOrderSelect={handleOrderSelect}
       />
 
       <div className="screen">

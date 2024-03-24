@@ -54,13 +54,35 @@ export default function LoginForm() {
           </button>
         </form>
         <div className="flex mt-4 justify-center gap-6">
-          <div className="text-gray-7 text-xs">아이디 찾기</div>
+          <div className="text-gray-7 text-xs whitespace-nowrap">
+            아이디 찾기
+          </div>
 
-          <div className="text-gray-7 text-xs">비밀번호 찾기</div>
-          <Link href="/sign-up/clause" className="text-gray-7 text-xs">
+          <div className="text-gray-7 text-xs whitespace-nowrap">
+            비밀번호 찾기
+          </div>
+          <Link
+            href="/sign-up/clause"
+            className="text-gray-7 text-xs whitespace-nowrap"
+          >
             회원가입
           </Link>
         </div>
+        <div className="mt-6 flex px-6 items-center">
+          <div className="w-full h-[1px] bg-[#EAEAEA]" />
+          <div className="text-gray-7 px-3 text-center text-[10px] font-medium whitespace-nowrap">
+            또는
+          </div>
+          <div className="w-full h-[1px] bg-[#EAEAEA]" />
+        </div>
+        <button
+          className="long-button mt-7 bg-white border-primary-1 text-primary-1"
+          onClick={() => {
+            router.push("/browse");
+          }}
+        >
+          로그인 없이 시작
+        </button>
       </div>
     </div>
   );

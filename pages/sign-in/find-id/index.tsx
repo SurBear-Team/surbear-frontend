@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
 import { useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "../components/styles/Icons";
+import { TopBar } from "@/pages/components/TopBar";
+import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 
 export default function PhoneNum() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function PhoneNum() {
 
   const handleVerifyCode = async () => {
     try {
-      const response = await axios.get(`/surbear-vier-get`);
+      const response = await axios.get(`/surbear-veri-get`);
       if (response.data.success) {
         setIsVerified(true);
         alert("인증에 성공했습니다.");
@@ -45,7 +45,7 @@ export default function PhoneNum() {
     if (!isVerified) {
       alert("먼저 전화번호 인증을 완료해 주세요.");
     } else {
-      alert("인증 성공! 다음 단계로 진행합니다.");
+      alert("인증 성공!");
     }
   };
 
@@ -54,7 +54,8 @@ export default function PhoneNum() {
       <TopBar
         onLeftClick={() => router.back()}
         leftSVG={<ArrowBackIcon />}
-        title="회원가입"
+        title="아이디 찾기"
+        hasShadow={false}
       />
       <div className="screen px-12 flex-col">
         {/* 전화번호 */}

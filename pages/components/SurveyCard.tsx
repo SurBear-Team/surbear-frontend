@@ -5,6 +5,7 @@ interface SurveyCardProps {
   title: string;
   nickname?: string;
   point?: number;
+  deadline?: string;
   ismine?: boolean; // 이게 true면 삭제 수정 설문시작 버튼으로
   isFinished?: boolean;
   onReportClick?: () => void;
@@ -20,6 +21,7 @@ export default function SurveyCard({
   title,
   nickname,
   point,
+  deadline,
   ismine,
   isFinished,
   onReportClick,
@@ -51,6 +53,7 @@ export default function SurveyCard({
             <div className="text-gray-5 text-xs font-semibold">
               <div>작성자 : {nickname}</div>
               <div>지급 포인트 : {point} pt</div>
+              <div>설문 마감 : {deadline}</div>
             </div>
             <div
               onClick={showDetail}

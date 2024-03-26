@@ -48,6 +48,7 @@ export default function Browse() {
               title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
               nickname={`김치냉장고`}
               point={5}
+              deadline={`2024년 3월 24일 12시`}
               onReportClick={() => {
                 console.log("신고하기");
               }}

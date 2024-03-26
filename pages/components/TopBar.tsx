@@ -6,6 +6,7 @@ interface TopBarProps {
   onRightClick?: React.MouseEventHandler<HTMLDivElement>;
   rightSVG?: React.ReactNode;
   title?: string;
+  hasShadow?: boolean; // 탑바에 그림자 없을 때
   hasSubTopBar?: boolean; // 서브 탑바가 있나요?
   subTitle?: string; // 서브 탑바 제목
   hasOrder?: boolean; // 정렬이 있나요?
@@ -22,6 +23,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onRightClick,
   rightSVG,
   title,
+  hasShadow,
   hasSubTopBar,
   subTitle,
   hasOrder,
@@ -33,7 +35,9 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center shadow-md`}
+      className={`bg-white left-0 right-0 mx-auto fixed w-full max-w-[36rem] justify-center ${
+        hasShadow && "shadow-md"
+      }`}
     >
       <div className="flex px-6 py-3 justify-between">
         <div className={`flex ${leftSVG && "gap-2"} items-center`}>

@@ -40,7 +40,7 @@ export default function Browse() {
       />
 
       <div className="screen">
-        <div className="bg-[#F8F8F8] w-full h-screen pt-[120px] pb-[105px] px-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar">
+        <div className="inner-screen">
           {SurveyList.map((index) => (
             <SurveyCard
               key={index}

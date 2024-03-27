@@ -7,38 +7,39 @@ import {
 } from "./styles/Icons";
 
 export const TabBar = () => {
-  const rotuer = useRouter();
+  const router = useRouter();
+  const isActive = (path: string) => router.pathname === path;
   return (
     <div className="flex w-full left-0 right-0 mx-auto max-w-[36rem] px-3 justify-evenly items-start gap-4 bg-white fixed bottom-0">
       <TabBox
         onClick={() => {
-          rotuer.push("/browse");
+          router.push("/browse");
         }}
-        Icon={<BrowseIcon />}
+        Icon={<BrowseIcon active={isActive("/browse")} />}
         text="둘러보기"
       />
 
       <TabBox
         onClick={() => {
-          console.log("내 설문");
+          router.push("/my-survey");
         }}
-        Icon={<MySurveyIcon />}
+        Icon={<MySurveyIcon active={isActive("/my-survey")} />}
         text="내 설문"
       />
 
       <TabBox
         onClick={() => {
-          console.log("포인트 교환");
+          router.push("/point");
         }}
-        Icon={<PointIcon />}
+        Icon={<PointIcon active={isActive("/point")} />}
         text="포인트 교환"
       />
 
       <TabBox
         onClick={() => {
-          rotuer.push("/profile");
+          router.push("/profile");
         }}
-        Icon={<ProfileIcon />}
+        Icon={<ProfileIcon active={isActive("/profile")} />}
         text="프로필"
       />
     </div>

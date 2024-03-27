@@ -4,7 +4,7 @@ import axios from "axios";
 import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 
-export default function PhoneNum() {
+export default function FindId() {
   const router = useRouter();
 
   const [phoneNumber, setPhoneNumber] = useState("");

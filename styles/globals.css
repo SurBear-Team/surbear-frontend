@@ -58,6 +58,10 @@ input::-webkit-inner-spin-button {
     @apply w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center;
   }
 
+  .inner-screen {
+    @apply bg-[#F8F8F8] w-full h-screen pt-[120px] pb-[105px] px-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar;
+  }
+
   .long-button {
     @apply w-full font-semibold rounded-full py-2 cursor-pointer border;
   }

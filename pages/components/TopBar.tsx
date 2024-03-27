@@ -44,7 +44,9 @@ export const TopBar: React.FC<TopBarProps> = ({
           <div onClick={onLeftClick}>{leftSVG}</div>
           <span className="text-base font-semibold mt-[2px]">{title}</span>
         </div>
-        <div onClick={onRightClick}>{rightSVG}</div>
+        <div onClick={onRightClick} className="flex items-center">
+          {rightSVG}
+        </div>
       </div>
       {hasSubTopBar && (
         <SubTopBar

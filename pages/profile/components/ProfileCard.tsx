@@ -16,7 +16,7 @@ export const ProfileCard = ({ title, content, onClick }: ProfileCardProps) => {
         </div>
         <button
           onClick={onClick}
-          className="medium-Btn w-full border-primary-1 bg-primary-1 text-white px-0"
+          className="medium-Btn w-full primary-btn-style px-0"
         >
           내역 보기
         </button>

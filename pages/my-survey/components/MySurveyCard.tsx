@@ -21,7 +21,7 @@ export const MySurveyCard = ({
   return (
     <div className={`card ${showResult ? "bg-gray-1" : "bg-white"}`}>
       <div className="flex items-center w-full pb-1">
-        <div className="text-gray-5 text-xs font-semibold">{category}</div>
+        <div className="sm-gray-text">{category}</div>
       </div>
       <div className="text-gray-9 font-semibold pb-4">{title}</div>
       {beforeStart ? (
@@ -44,7 +44,7 @@ export const MySurveyCard = ({
 
           <button
             onClick={onBlueBtnClick}
-            className="medium-Btn w-full text-white border-primary-1 bg-primary-1"
+            className="medium-Btn w-full primary-btn-style"
           >
             설문 시작
           </button>
@@ -68,7 +68,7 @@ export const MySurveyCard = ({
           </div>
           <button
             onClick={onBlueBtnClick}
-            className="medium-Btn w-full text-white border-primary-1 bg-primary-1"
+            className="medium-Btn w-full primary-btn-style"
           >
             설문 종료
           </button>
@@ -83,7 +83,7 @@ export const MySurveyCard = ({
           </button>
           <button
             onClick={onBlueBtnClick}
-            className="medium-Btn w-full text-white border-primary-1 bg-primary-1"
+            className="medium-Btn w-full primary-btn-style"
           >
             결과 보기
           </button>

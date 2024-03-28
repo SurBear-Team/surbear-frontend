@@ -70,6 +70,16 @@ input::-webkit-inner-spin-button {
     @apply p-2 w-full border border-gray-4 text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
   }
 
+  /* 회색글씨 */
+  .sm-gray-text {
+    @apply text-gray-5 text-xs font-semibold;
+  }
+
+  /* 파란버튼 색 */
+  .primary-btn-style {
+    @apply border-primary-1 bg-primary-1 text-white;
+  }
+
   .gray-line {
     @apply bg-gray-2 h-[1px] flex justify-center;
   }

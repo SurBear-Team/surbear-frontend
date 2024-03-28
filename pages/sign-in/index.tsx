@@ -49,7 +49,7 @@ export default function SignIn() {
               {...register("password")}
             />
           </div>
-          <button className="long-button bg-primary-1 text-white" type="submit">
+          <button className="long-button primary-btn-style" type="submit">
             로그인
           </button>
         </form>

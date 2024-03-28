@@ -23,7 +23,7 @@ export default function FoundId() {
         비밀번호 찾기
       </button>
       <button
-        className="long-button w-full mt-4 bg-primary-1 border-primary-1 text-white"
+        className="long-button w-full mt-4 primary-btn-style"
         onClick={() => {
           router.push("/sign-in");
         }}

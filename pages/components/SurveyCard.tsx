@@ -35,7 +35,7 @@ export default function SurveyCard({
     <>
       <div className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}>
         <div className="flex justify-between items-center w-full pb-2">
-          <div className="text-gray-5 text-xs font-semibold">{category}</div>
+          <div className="sm-gray-text">{category}</div>
           {!ismine && (
             <div
               onClick={onReportClick}
@@ -50,14 +50,14 @@ export default function SurveyCard({
 
         {!ismine ? (
           <>
-            <div className="text-gray-5 text-xs font-semibold">
+            <div className="sm-gray-text">
               <div>작성자 : {nickname}</div>
               <div>지급 포인트 : {point} pt</div>
               <div>설문 마감 : {deadline}</div>
             </div>
             <div
               onClick={showDetail}
-              className="long-button bg-primary-1 text-white mt-4 flex justify-center"
+              className="long-button primary-btn-style mt-4 flex justify-center"
             >
               더보기
             </div>
@@ -82,7 +82,7 @@ export default function SurveyCard({
             </div>
             <button
               onClick={isFinished ? showResult : onStartClick}
-              className="medium-Btn w-full text-white  border-primary-1 bg-primary-1"
+              className="medium-Btn w-full primary-btn-style"
             >
               {isFinished ? "결과 보기" : "설문 시작"}
             </button>

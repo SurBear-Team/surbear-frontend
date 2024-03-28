@@ -58,7 +58,7 @@ export default function IdPassword() {
             <button
               className={`long-button ${
                 selectedGender === "남자"
-                  ? "border-primary-1 bg-primary-1 text-white"
+                  ? "primary-btn-style"
                   : "border-primary-1 text-primary-1"
               }`}
               onClick={() => setSelectedGender("남자")}
@@ -68,7 +68,7 @@ export default function IdPassword() {
             <button
               className={`long-button ${
                 selectedGender === "여자"
-                  ? "border-primary-1 bg-primary-1 text-white"
+                  ? "primary-btn-style"
                   : "border-primary-1 text-primary-1"
               }`}
               onClick={() => setSelectedGender("여자")}

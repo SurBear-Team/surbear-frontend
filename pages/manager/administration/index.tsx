@@ -7,7 +7,7 @@ import { Overlay } from "@/pages/components/styles/Overlay";
 import { SettingCard } from "@/pages/profile/components/SettingCard";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { InputDialog } from "./components/InputDialog";
+import { InputDialog } from "../components/InputDialog";
 
 export default function ManagerAdministration() {
   const router = useRouter();

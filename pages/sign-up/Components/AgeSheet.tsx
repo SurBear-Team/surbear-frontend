@@ -8,15 +8,7 @@ type AgeSheetProps = {
 };
 
 export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
-  const ageRanges = [
-    "10대 이하",
-    "10대",
-    "20대",
-    "30대",
-    "40대",
-    "50대",
-    "60대 이상",
-  ];
+  const ageRanges = ["20대 미만", "20대", "30대", "40대", "50대", "60대 이상"];
 
   return (
     <motion.div

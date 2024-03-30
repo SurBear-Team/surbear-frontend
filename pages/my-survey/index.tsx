@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { TabBar } from "../components/TabBar";
 import { TopBar } from "../components/TopBar";
 import { AddSurveyIcon } from "../components/styles/Icons";
 import { MySurveyCard } from "./components/MySurveyCard";
+import { Dialog } from "../components/Dialog";
+import { Overlay } from "../components/styles/Overlay";
 
 export default function MySurvey() {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   return (
     <>
       <TopBar
@@ -26,11 +31,11 @@ export default function MySurvey() {
             category={`카테고리`}
             title={`제목 2줄까지`}
             onDeleteClick={() => {
-              console.log("설문 삭제");
+              setShowDeleteDialog(true);
             }}
             beforeStart={true}
             onUpdateClick={() => {
-              console.log("설문 수정");
+              setShowUpdateDialog(true);
             }}
             onBlueBtnClick={() => {
               console.log("설문 시작");
@@ -41,11 +46,11 @@ export default function MySurvey() {
             category={`카테고리`}
             title={`제목 2줄까지`}
             onDeleteClick={() => {
-              console.log("설문 삭제");
+              setShowDeleteDialog(true);
             }}
             beforeFinish={true}
             onUpdateClick={() => {
-              console.log("설문 수정");
+              setShowUpdateDialog(true);
             }}
             onBlueBtnClick={() => {
               console.log("설문 종료");
@@ -56,7 +61,7 @@ export default function MySurvey() {
             category={`카테고리`}
             title={`제목 2줄까지`}
             onDeleteClick={() => {
-              console.log("설문 삭제");
+              setShowDeleteDialog(true);
             }}
             showResult={true}
             onBlueBtnClick={() => {
@@ -64,6 +69,40 @@ export default function MySurvey() {
             }}
           />
         </div>
+        {showDeleteDialog && (
+          <>
+            <Overlay />
+            <Dialog
+              title="설문을 삭제하시겠습니까?"
+              leftText="취소"
+              onLeftClick={() => {
+                setShowDeleteDialog((prev) => !prev);
+              }}
+              rightText="삭제"
+              onRightClick={() => {
+                console.log("`번호` 삭제");
+              }}
+              isDelete={true}
+            />
+          </>
+        )}
+
+        {showUpdateDialog && (
+          <>
+            <Overlay />
+            <Dialog
+              title="설문을 수정하시겠습니까?"
+              leftText="취소"
+              onLeftClick={() => {
+                setShowUpdateDialog((prev) => !prev);
+              }}
+              rightText="수정"
+              onRightClick={() => {
+                console.log("`번호` 수정");
+              }}
+            />
+          </>
+        )}
       </div>
 
       <TabBar />

@@ -6,6 +6,23 @@ import { SearchIcon } from "../components/styles/Icons";
 
 export default function Browse() {
   let SurveyList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
+  const categoryList = [
+    "전체",
+    "사회",
+    "경제",
+    "생활",
+    "취미",
+    "IT",
+    "문화",
+    "기타",
+  ];
+  const [showCategory, setShowCategory] = useState(false);
+  const [categoryType, setCategoryType] = useState("전체");
+  const handleCategorySelect = (selectedCategoryType: string) => {
+    setCategoryType(selectedCategoryType);
+    setShowCategory(false);
+  };
+
   const orderList = [
     "최신순",
     "높은 포인트순",
@@ -13,7 +30,6 @@ export default function Browse() {
     "많은 문항수순",
   ];
   const [showOrder, setShowOrder] = useState(false);
-
   const [orderType, setOrderType] = useState("높은 포인트순");
   const handleOrderSelect = (selectedOrderType: string) => {
     setOrderType(selectedOrderType);
@@ -27,9 +43,17 @@ export default function Browse() {
         onRightClick={() => {
           console.log("검색");
         }}
-        hasSubTopBar={true}
+        hasSubTopBar={true} // 서브 탑바
         subTitle="전체"
-        hasOrder={true}
+        hasCategory={true} // 카테고리
+        onCategoryClick={() => {
+          setShowCategory((prev) => !prev);
+        }}
+        showCategory={showCategory}
+        categoryList={categoryList}
+        categoryType={categoryType}
+        onCategorySelect={handleCategorySelect}
+        hasOrder={true} // 정렬
         onOrderClick={() => {
           setShowOrder((prev) => !prev);
         }}

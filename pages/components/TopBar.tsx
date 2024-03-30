@@ -7,8 +7,17 @@ interface TopBarProps {
   rightSVG?: React.ReactNode;
   title?: string;
   hasShadow?: boolean; // 탑바에 그림자 없을 때
+
   hasSubTopBar?: boolean; // 서브 탑바가 있나요?
   subTitle?: string; // 서브 탑바 제목
+
+  hasCategory?: boolean; // 카테고리가 있나요?
+  onCategoryClick?: () => void; //카테고리 클릭
+  showCategory?: boolean; // 카테고리 보여주기
+  categoryList?: string[]; // 카테고리 목록
+  categoryType?: string; // 현재 카테고리가 뭐로 됐는지
+  onCategorySelect?: (selectedCategory: string) => void; // 선택한 카테고리
+
   hasOrder?: boolean; // 정렬이 있나요?
   onOrderClick?: () => void; // 정렬 클릭
   showOrder?: boolean; // 정렬 보여주기
@@ -26,6 +35,12 @@ export const TopBar: React.FC<TopBarProps> = ({
   hasShadow,
   hasSubTopBar,
   subTitle,
+  hasCategory,
+  onCategoryClick,
+  showCategory,
+  categoryList,
+  categoryType,
+  onCategorySelect,
   hasOrder,
   onOrderClick,
   showOrder,
@@ -51,6 +66,12 @@ export const TopBar: React.FC<TopBarProps> = ({
       {hasSubTopBar && (
         <SubTopBar
           subTitle={subTitle}
+          hasCategory={hasCategory}
+          onCategoryClick={onCategoryClick}
+          showCategory={showCategory}
+          categoryList={categoryList}
+          categoryType={categoryType}
+          onCategorySelect={onCategorySelect}
           hasOrder={hasOrder}
           onOrderClick={onOrderClick}
           showOrder={showOrder}

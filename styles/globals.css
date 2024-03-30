@@ -75,6 +75,11 @@ input::-webkit-inner-spin-button {
     @apply text-gray-5 text-xs font-semibold;
   }
 
+  /* text-9 글씨 */
+  .sm-gray-9-text {
+    @apply text-gray-9 font-semibold text-sm;
+  }
+
   /* 파란버튼 색 */
   .primary-btn-style {
     @apply border-primary-1 bg-primary-1 text-white;

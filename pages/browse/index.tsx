@@ -57,32 +57,6 @@ export default function Browse() {
               }}
             />
           ))}
-          <SurveyCard
-            category={"카테고리"}
-            title={`제목 2줄까지`}
-            ismine={true}
-            onDeleteClick={() => {
-              console.log("삭제");
-            }}
-            onUpdateClick={() => {
-              console.log("수정");
-            }}
-            onStartClick={() => {
-              console.log("설문 시작");
-            }}
-          />
-          <SurveyCard
-            category={"카테고리"}
-            title={`제목 2줄까지`}
-            ismine={true}
-            isFinished={true}
-            onDeleteClick={() => {
-              console.log("삭제");
-            }}
-            showResult={() => {
-              console.log("결과 보기");
-            }}
-          />
         </div>
       </div>
       <TabBar />

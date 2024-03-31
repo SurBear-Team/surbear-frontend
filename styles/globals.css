@@ -67,7 +67,7 @@ input::-webkit-inner-spin-button {
   }
 
   .main-input {
-    @apply p-2 w-full border border-gray-4 text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
+    @apply px-2 p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
   }
 
   /* 회색글씨 */
@@ -107,5 +107,9 @@ input::-webkit-inner-spin-button {
 
   .medium-Btn {
     @apply small-Btn px-8;
+  }
+
+  .drop-down-bar {
+    @apply w-full px-2 py-1 justify-center items-center rounded border-[1px] border-gray-4 bg-white;
   }
 }

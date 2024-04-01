@@ -29,14 +29,14 @@ export const MySurveyCard = ({
           <div className="flex gap-2 w-full">
             <button
               onClick={onDeleteClick}
-              className="small-Btn bg-white border-red-1 text-red-1"
+              className="small-Btn w-full bg-white border-red-1 text-red-1"
             >
               삭제
             </button>
 
             <button
               onClick={onUpdateClick}
-              className="small-Btn bg-white border-primary-1 text-primary-1"
+              className="small-Btn w-full bg-white border-primary-1 text-primary-1"
             >
               수정
             </button>
@@ -54,14 +54,14 @@ export const MySurveyCard = ({
           <div className="flex gap-2 w-full">
             <button
               onClick={onDeleteClick}
-              className="small-Btn bg-white border-red-1 text-red-1"
+              className="small-Btn w-full bg-white border-red-1 text-red-1"
             >
               삭제
             </button>
 
             <button
               onClick={onUpdateClick}
-              className="small-Btn bg-white border-primary-1 text-primary-1"
+              className="small-Btn w-full bg-white border-primary-1 text-primary-1"
             >
               수정
             </button>

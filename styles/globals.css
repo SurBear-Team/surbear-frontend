@@ -107,7 +107,7 @@ input::-webkit-inner-spin-button {
   }
 
   .small-Btn {
-    @apply border-[1px] rounded-3xl px-4 py-2 w-full font-semibold;
+    @apply border-[1px] rounded-3xl px-4 py-2 font-semibold whitespace-nowrap;
   }
 
   .medium-Btn {

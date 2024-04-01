@@ -16,7 +16,7 @@ export const Dialog = ({
   isDelete,
 }: DialogProps) => {
   return (
-    <div className="inline-flex w-full flex-col justify-center items-start fixed px-8 py-6 gap-8 rounded-lg bg-white z-20">
+    <div className="inline-flex flex-col justify-center items-start fixed px-8 py-6 gap-8 rounded-lg bg-white z-20">
       <div className="text-gray-9 text-center font-semibold w-full">
         {title}
       </div>

@@ -77,7 +77,7 @@ export const MySurveyCard = ({
         <div className="flex gap-4 w-full">
           <button
             onClick={onDeleteClick}
-            className="small-Btn bg-white border-red-1 text-red-1"
+            className="medium-Btn w-full bg-white border-red-1 text-red-1"
           >
             삭제
           </button>

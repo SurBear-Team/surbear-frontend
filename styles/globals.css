@@ -80,9 +80,14 @@ input::-webkit-inner-spin-button {
     @apply text-gray-9 font-semibold text-sm;
   }
 
-  /* 파란버튼 색 */
+  /* 파란배경 버튼 색 */
   .primary-btn-style {
     @apply border-primary-1 bg-primary-1 text-white;
+  }
+
+  /* 흰배경 파란테두리 버튼 */
+  .white-bg-primary-btn {
+    @apply bg-white border-primary-1 text-primary-1;
   }
 
   .gray-line {
@@ -102,7 +107,7 @@ input::-webkit-inner-spin-button {
   }
 
   .small-Btn {
-    @apply border-[1px] rounded-3xl py-2 w-full font-semibold;
+    @apply border-[1px] rounded-3xl px-4 py-2 w-full font-semibold;
   }
 
   .medium-Btn {

@@ -5,31 +5,25 @@ import { AddSurveyIcon } from "../components/styles/Icons";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
 import { Overlay } from "../components/styles/Overlay";
-import { useRouter } from "next/router";
+import { NewSurveyCard } from "./components/NewSurveyCard";
 
 export default function MySurvey() {
-  const router = useRouter();
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 
+  const [showNewSurveyCard, setShowNewSurveyCard] = useState(false);
   return (
     <>
       <TopBar
         title="내 설문"
         rightSVG={
-          <div
-            onClick={() => {
-              router.push("/my-survey/newSurvey");
-            }}
-            className="flex items-center text-gray-9 text-xs gap-1 font-semibold cursor-pointer"
-          >
+          <div className="flex items-center text-gray-9 text-xs gap-1 font-semibold cursor-pointer">
             <AddSurveyIcon />
             <div>새 설문 만들기</div>
           </div>
         }
         onRightClick={() => {
-          console.log("새 설문 만들기");
+          setShowNewSurveyCard((prev) => !prev);
         }}
         hasShadow={true}
       />
@@ -78,6 +72,8 @@ export default function MySurvey() {
             }}
           />
         </div>
+        {showNewSurveyCard && <NewSurveyCard onCancel={() => setShowNewSurveyCard(false)} />}
+
         {showDeleteDialog && (
           <>
             <Overlay />

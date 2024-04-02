@@ -4,7 +4,11 @@ import { CancleSaveButtonFrame } from "./CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "./TypeDropDown";
 
-export const MakeSurvey = () => {
+interface MakeSurveyProps {
+  addNewSurveyComponent: () => void;
+}
+
+export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
 
   const [showType, setShowType] = useState(false);
@@ -102,7 +106,7 @@ export const MakeSurvey = () => {
           console.log("저장");
         }}
         onSaveAndAddClick={() => {
-          console.log("저장후새질문추가");
+          addNewSurveyComponent();
         }}
       />
     </div>

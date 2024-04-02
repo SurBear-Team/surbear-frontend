@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { TopBar } from "../components/TopBar";
 import { ArrowBackIcon, UpdateIcon } from "../components/styles/Icons";
-
 import { MakeSurvey } from "./components/MakeSurvey";
 import { useState } from "react";
 import { Dialog } from "../components/Dialog";
@@ -11,6 +10,11 @@ export default function NewSurvey() {
   const router = useRouter();
 
   const [showCloseDialog, setShowCloseDialog] = useState(false);
+
+  const [surveyComponents, setSurveyComponents] = useState([{}]);
+  const addNewSurveyComponent = () => {
+    setSurveyComponents((prevSurveys) => [...prevSurveys, {}]);
+  };
   return (
     <>
       <TopBar
@@ -25,8 +29,14 @@ export default function NewSurvey() {
         }}
         hasShadow={true}
       />
-      <div className="screen">
-        <MakeSurvey />
+
+      <div className="screen flex-col pt-14">
+        {surveyComponents.map((_, index) => (
+          <MakeSurvey
+            key={index}
+            addNewSurveyComponent={addNewSurveyComponent}
+          />
+        ))}
 
         {showCloseDialog && (
           <>

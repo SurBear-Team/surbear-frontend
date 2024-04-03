@@ -67,7 +67,7 @@ input::-webkit-inner-spin-button {
   }
 
   .main-input {
-    @apply px-2 p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
+    @apply p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
   }
 
   /* 회색글씨 */

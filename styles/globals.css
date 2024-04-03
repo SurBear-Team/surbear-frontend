@@ -67,7 +67,7 @@ input::-webkit-inner-spin-button {
   }
 
   .main-input {
-    @apply p-2 w-full border border-gray-4 text-gray-4 font-medium placeholder:font-medium placeholder:text-gray-4;
+    @apply p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
   }
 
   /* 회색글씨 */
@@ -80,9 +80,14 @@ input::-webkit-inner-spin-button {
     @apply text-gray-9 font-semibold text-sm;
   }
 
-  /* 파란버튼 색 */
+  /* 파란배경 버튼 색 */
   .primary-btn-style {
     @apply border-primary-1 bg-primary-1 text-white;
+  }
+
+  /* 흰배경 파란테두리 버튼 */
+  .white-bg-primary-btn {
+    @apply bg-white border-primary-1 text-primary-1;
   }
 
   .gray-line {
@@ -102,10 +107,14 @@ input::-webkit-inner-spin-button {
   }
 
   .small-Btn {
-    @apply border-[1px] rounded-3xl py-2 w-full font-semibold;
+    @apply border-[1px] rounded-3xl px-4 py-2 font-semibold whitespace-nowrap;
   }
 
   .medium-Btn {
     @apply small-Btn px-8;
+  }
+
+  .drop-down-bar {
+    @apply w-full px-2 py-1 justify-center items-center rounded border-[1px] border-gray-4 bg-white;
   }
 }

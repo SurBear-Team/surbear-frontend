@@ -3,6 +3,7 @@ import SurveyCard from "../components/SurveyCard";
 import { TabBar } from "../components/TabBar";
 import { TopBar } from "../components/TopBar";
 import { SearchIcon } from "../components/styles/Icons";
+import { Dialog } from "../components/Dialog";
 
 export default function Browse() {
   let SurveyList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
@@ -35,6 +36,8 @@ export default function Browse() {
     setOrderType(selectedOrderType);
     setShowOrder(false);
   };
+
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
   return (
     <>
       <TopBar
@@ -74,7 +77,7 @@ export default function Browse() {
               point={5}
               deadline={`2024년 3월 24일 12시`}
               onReportClick={() => {
-                console.log("신고하기");
+                setShowAlertDialog((prev) => !prev);
               }}
               showDetail={() => {
                 console.log("더보기");
@@ -82,6 +85,22 @@ export default function Browse() {
             />
           ))}
         </div>
+        {showAlertDialog && (
+          <Dialog
+            title="설문을 신고하시겠습니까?"
+            hasTextarea={true}
+            inputTitle="신고 사유"
+            leftText="취소"
+            onLeftClick={() => {
+              setShowAlertDialog((prev) => !prev);
+            }}
+            rightText="신고"
+            onRightClick={() => {
+              console.log("신고");
+            }}
+            isDelete={true}
+          />
+        )}
       </div>
       <TabBar />
     </>

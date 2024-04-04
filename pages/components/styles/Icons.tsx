@@ -340,3 +340,91 @@ export const PlusIcon = () => {
     </svg>
   );
 };
+
+// 체크 아이콘
+export const CheckIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="25"
+      viewBox="0 0 24 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M20 7.5L10 17.5L5 12.5"
+        stroke="#101010"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+// 위 향한 네모세모 순서 화살표 아이콘
+export const OrderUpIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_345_5182)">
+        <rect
+          x="0.5"
+          y="0.5"
+          width="23"
+          height="23"
+          rx="3.5"
+          fill="white"
+          stroke="#9E9E9E"
+        />
+        <path
+          d="M11.134 8.5C11.5189 7.83333 12.4811 7.83333 12.866 8.5L16.3301 14.5C16.715 15.1667 16.2339 16 15.4641 16H8.5359C7.7661 16 7.28497 15.1667 7.66987 14.5L11.134 8.5Z"
+          fill="#9E9E9E"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_345_5182">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
+export const OrderDownIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_345_5199)">
+        <rect
+          x="0.5"
+          y="0.5"
+          width="23"
+          height="23"
+          rx="3.5"
+          fill="white"
+          stroke="#9E9E9E"
+        />
+        <path
+          d="M12.866 15.5C12.4811 16.1667 11.5189 16.1667 11.134 15.5L7.66987 9.5C7.28497 8.83333 7.7661 8 8.5359 8L15.4641 8C16.2339 8 16.715 8.83333 16.3301 9.5L12.866 15.5Z"
+          fill="#9E9E9E"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_345_5199">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};

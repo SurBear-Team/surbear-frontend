@@ -45,7 +45,6 @@ export default function AdministrationInquiry() {
               }}
               isDelete={true}
             />
-            <Overlay />
           </>
         )}
       </div>

@@ -72,11 +72,12 @@ export default function MySurvey() {
             }}
           />
         </div>
-        {showNewSurveyCard && <NewSurveyCard onCancel={() => setShowNewSurveyCard(false)} />}
+        {showNewSurveyCard && (
+          <NewSurveyCard onCancel={() => setShowNewSurveyCard(false)} />
+        )}
 
         {showDeleteDialog && (
           <>
-            <Overlay />
             <Dialog
               title="설문을 삭제하시겠습니까?"
               leftText="취소"
@@ -94,7 +95,6 @@ export default function MySurvey() {
 
         {showUpdateDialog && (
           <>
-            <Overlay />
             <Dialog
               title="설문을 수정하시겠습니까?"
               leftText="취소"

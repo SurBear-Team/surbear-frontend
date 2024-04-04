@@ -41,7 +41,6 @@ export default function ProfileSetting() {
         />
         {showLogoutDialog && (
           <>
-            <Overlay />
             <div className="flex justify-center">
               <Dialog
                 title="로그아웃 하시겠습니까?"
@@ -61,7 +60,6 @@ export default function ProfileSetting() {
 
         {showWithdrawalDialog && (
           <>
-            <Overlay />
             <div className="flex justify-center">
               <Dialog
                 title="회원을 탈퇴하시겠습니까?"

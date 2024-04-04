@@ -24,7 +24,7 @@ export const Dialog = ({
   return (
     <>
       <Overlay />
-      <div className="inline-flex flex-col justify-center items-start fixed px-8 py-6 gap-8 rounded-lg bg-white z-20">
+      <div className="card justify-center fixed px-8 gap-8 bg-white z-20">
         <div className="text-gray-9 text-center font-semibold w-full">
           {title}
         </div>

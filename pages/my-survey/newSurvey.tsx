@@ -40,7 +40,6 @@ export default function NewSurvey() {
 
         {showCloseDialog && (
           <>
-            <Overlay />
             <Dialog
               title="설문 제작을 그만 두시겠습니까?"
               leftText="취소"

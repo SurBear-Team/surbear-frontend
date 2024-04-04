@@ -47,7 +47,6 @@ export default function MemberUpdate() {
 
         {showNicknameDialog && (
           <>
-            <Overlay />
             <div className="flex justify-center">
               <Dialog
                 title="새 닉네임"

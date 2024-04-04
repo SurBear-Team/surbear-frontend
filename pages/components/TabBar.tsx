@@ -10,7 +10,7 @@ export const TabBar = () => {
   const router = useRouter();
   const isActive = (path: string) => router.pathname === path;
   return (
-    <div className="flex w-full left-0 right-0 mx-auto max-w-[36rem] px-3 justify-evenly items-start gap-4 bg-white fixed bottom-0">
+    <div className="flex w-full left-0 right-0 mx-auto px-3 justify-evenly items-start gap-4 bg-white fixed bottom-0">
       <TabBox
         onClick={() => {
           router.push("/browse");

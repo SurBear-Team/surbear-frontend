@@ -92,7 +92,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
           </button>
           <button
             onClick={() => {
-              router.push("my-survey/newSurvey");
+              router.push("my-survey/new-survey");
             }}
             className="medium-Btn primary-btn-style w-full"
           >

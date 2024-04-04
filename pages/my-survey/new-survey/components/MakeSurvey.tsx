@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ShortAnswerType } from "./AnswerType";
-import { CancleSaveButtonFrame } from "./CancleSaveButtonFrame";
+import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
-import { TypeDropDown } from "./TypeDropDown";
+import { TypeDropDown } from "../../components/TypeDropDown";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: () => void;

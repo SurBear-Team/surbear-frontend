@@ -1,10 +1,9 @@
+import { Dialog } from "@/pages/components/Dialog";
+import { TopBar } from "@/pages/components/TopBar";
+import { ArrowBackIcon, UpdateIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
-import { ArrowBackIcon, UpdateIcon } from "../components/styles/Icons";
-import { MakeSurvey } from "./components/MakeSurvey";
 import { useState } from "react";
-import { Dialog } from "../components/Dialog";
-import { Overlay } from "../components/styles/Overlay";
+import { MakeSurvey } from "./components/MakeSurvey";
 
 export default function NewSurvey() {
   const router = useRouter();

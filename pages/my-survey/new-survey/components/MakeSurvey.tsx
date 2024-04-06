@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShortAnswerType } from "./AnswerType";
+import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "../../components/TypeDropDown";

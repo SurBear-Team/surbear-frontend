@@ -1,12 +1,13 @@
 import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar";
-import { ArrowBackIcon, UpdateIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
+import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 
 export default function NewSurvey() {
   const router = useRouter();
+
+  const [title, setTitle] = useState("");
 
   const [showCloseDialog, setShowCloseDialog] = useState(false);
 
@@ -16,19 +17,13 @@ export default function NewSurvey() {
   };
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          setShowCloseDialog(true);
+      <InputTopBar
+        title={title}
+        setTitle={setTitle}
+        onBackClick={() => {
+          setShowCloseDialog((prev) => !prev);
         }}
-        title={`설문제목 2줄까지 길어지면 ... 설문제목 2...`}
-        rightSVG={<UpdateIcon />}
-        onRightClick={() => {
-          console.log("제목 수정");
-        }}
-        hasShadow={true}
       />
-
       <div className="screen flex-col pt-14">
         {surveyComponents.map((_, index) => (
           <MakeSurvey

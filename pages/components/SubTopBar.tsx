@@ -35,63 +35,64 @@ export const SubTopBar = ({
 }: SubTopBarProps) => {
   return (
     <>
-      <div className="pl-[26px] py-1 shadow-xl text-xs">
+      <div className="pl-6 h-8 text-xs">
         <div
-          className={`flex text-center font-semibold relative ${
+          className={`flex text-center font-semibold relative h-full items-center ${
             subTitle ? "justify-between" : "justify-end"
           }`}
         >
           {subTitle}
-          <div className="flex">
+          <div className="flex h-full">
             {hasCategory && (
               <div
                 onClick={onCategoryClick}
-                className="flex justify-center items-center cursor-pointer w-28 grow px-2"
+                className="flex justify-center items-center cursor-pointer w-28 grow px-2 relative"
               >
                 <ArrowDownIcon />
                 <div className="w-full whitespace-nowrap">{categoryType}</div>
+                {showCategory && (
+                  <div className="w-28 bg-white top-full absolute border-[1px] border-gray-3 rounded-b-lg text-gray-9 text-xs text-center font-semibold shadow-md">
+                    {categoryList?.map((data) => (
+                      <div
+                        key={data}
+                        className="px-4 py-2 cursor-pointer border-t-[1px] border-gray-3 "
+                        onClick={() =>
+                          onCategorySelect && onCategorySelect(data)
+                        }
+                      >
+                        {data}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
             {hasOrder && (
               <div
                 onClick={onOrderClick}
-                className="flex justify-center items-center cursor-pointer w-28 grow px-2"
+                className="flex justify-center items-center cursor-pointer w-28 h-full grow px-2 relative"
               >
                 <ArrowDownIcon />
                 <div className="w-full whitespace-nowrap">{orderType}</div>
+                {showOrder && (
+                  <div className="w-28 bg-white top-full absolute border-[1px] border-gray-3 rounded-b-lg text-gray-9 text-xs text-center font-semibold shadow-md">
+                    {orderList?.map((data) => (
+                      <div
+                        key={data}
+                        className="px-4 py-2 cursor-pointer border-t-[1px] border-gray-3 "
+                        onClick={() => onOrderSelect && onOrderSelect(data)}
+                      >
+                        {data}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
-      {showCategory && (
-        <div className="w-28 bg-white right-28 absolute border-[1px] border-gray-3 rounded-b-lg text-gray-9 text-xs text-center font-semibold shadow-md">
-          {categoryList?.map((data) => (
-            <div
-              key={data}
-              className="px-4 py-2 cursor-pointer border-t-[1px] border-gray-3 "
-              onClick={() => onCategorySelect && onCategorySelect(data)}
-            >
-              {data}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {showOrder && (
-        <div className="w-28 bg-white right-0 absolute border-[1px] border-gray-3 rounded-b-lg text-gray-9 text-xs text-center font-semibold shadow-md">
-          {orderList?.map((data) => (
-            <div
-              key={data}
-              className="px-4 py-2 cursor-pointer border-t-[1px] border-gray-3 "
-              onClick={() => onOrderSelect && onOrderSelect(data)}
-            >
-              {data}
-            </div>
-          ))}
-        </div>
-      )}
     </>
   );
 };

@@ -28,7 +28,7 @@ export default function MemberUpdate() {
         }}
         title="회원 정보 수정"
       />
-      <div className="screen flex-col justify-start pt-[66px]">
+      <div className="white-screen flex-col justify-start pt-[50px]">
         <MemberUpdateCard
           title="닉네임"
           content={`user nickname`}

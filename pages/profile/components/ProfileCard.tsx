@@ -16,7 +16,7 @@ export const ProfileCard = ({ title, content, onClick }: ProfileCardProps) => {
         </div>
         <button
           onClick={onClick}
-          className="medium-Btn primary-btn-style px-6 py-2 whitespace-nowrap"
+          className="medium-Btn primary-btn-style py-2 whitespace-nowrap"
         >
           내역 보기
         </button>

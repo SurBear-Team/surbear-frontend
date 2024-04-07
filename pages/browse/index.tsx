@@ -46,6 +46,7 @@ export default function Browse() {
         onRightClick={() => {
           console.log("검색");
         }}
+        hasShadow={true}
         hasSubTopBar={true} // 서브 탑바
         subTitle="전체"
         hasCategory={true} // 카테고리

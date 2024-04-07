@@ -5,7 +5,10 @@ import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "../../components/TypeDropDown";
 
 interface MakeSurveyProps {
-  addNewSurveyComponent: () => void;
+  addNewSurveyComponent: (surveyData: {
+    title: string;
+    choices: string[];
+  }) => void;
 }
 
 export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
@@ -14,16 +17,19 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState("객관식");
 
+  // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
     setTypeType(selectedTypeType);
     setShowType(false);
   };
 
-  const [choices, setChoices] = useState([{}, {}]);
+  const [questionTitle, setQuestionTitle] = useState("");
+  // 답변들 배열, 처음엔 빈 답변 2개
+  const [choices, setChoices] = useState(["", ""]);
 
   // 새 답변 추가
   const addChoice = () => {
-    setChoices([...choices, {}]);
+    setChoices([...choices, ""]);
   };
 
   const deleteChoice = (index: number) => {
@@ -34,6 +40,45 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
     } else {
       alert("답변은 최소 2개");
     }
+  };
+
+  // 답변 onChange
+  const handleChoiceChange = (index: number, newText: string) => {
+    const updatedChoices = choices.map((choice, choiceIndex) => {
+      if (index === choiceIndex) {
+        return newText; // 선택된 답변의 텍스트 업데이트
+      }
+      return choice;
+    });
+    setChoices(updatedChoices); // 변경된 답변 배열로 업데이트
+  };
+
+  // 저장 버튼
+  const handleSave = () => {
+    // 제목이 비어 있는지 확인
+    if (!questionTitle.trim()) {
+      alert("제목 화긴");
+      return; // 함수 실행 중단
+    }
+
+    // 모든 답변이 채워져 있는지 확인
+    const isEmptyAnswer = choices.some((choice) => !choice.trim());
+    if (isEmptyAnswer) {
+      alert("답변 화긴");
+      return; // 함수 실행 중단
+    }
+
+    const surveyData = {
+      title: questionTitle,
+      choices: choices,
+    };
+
+    // surveyData 객체를 함수를 통해 상위로 전달
+    // 이 콜백함수는 MakeSurvey에서 정의됨
+    addNewSurveyComponent(surveyData);
+
+    setQuestionTitle("");
+    setChoices(["", ""]);
   };
 
   return (
@@ -67,6 +112,8 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
         <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
         <input
           className="main-input text-gray-9"
+          value={questionTitle}
+          onChange={(e) => setQuestionTitle(e.target.value)}
           placeholder="제목을 입력해주세요"
         />
       </div>
@@ -80,6 +127,7 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
             choices={choices}
             addChoice={addChoice}
             deleteChoice={deleteChoice}
+            handleChoiceChange={handleChoiceChange}
           />
         </>
       )}
@@ -102,12 +150,8 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
         onCancleClick={() => {
           console.log("취소");
         }}
-        onSaveClick={() => {
-          console.log("저장");
-        }}
-        onSaveAndAddClick={() => {
-          addNewSurveyComponent();
-        }}
+        onSaveClick={handleSave}
+        onSaveAndAddClick={() => {}}
       />
     </div>
   );

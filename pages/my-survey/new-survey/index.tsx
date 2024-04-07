@@ -5,19 +5,39 @@ import { MakeSurvey } from "./components/MakeSurvey";
 import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
 
+interface NewSurveyProps {
+  title: string;
+  choices: string[];
+}
+
 export default function NewSurvey() {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
-
   const [showCloseDialog, setShowCloseDialog] = useState(false);
 
-  const [surveyComponents, setSurveyComponents] = useState([{}]);
-  const addNewSurveyComponent = () => {
-    setSurveyComponents((prevSurveys) => [...prevSurveys, {}]);
+  // 만들어진 설문
+  const [surveyComponents, setSurveyComponents] = useState<NewSurveyProps[]>(
+    []
+  );
+  // 설문 만들기
+  const addNewSurveyComponent = (newComponentData: {
+    title: string;
+    choices: string[];
+  }) => {
+    // 기존 설문 배열에 새 설문 추가
+    setSurveyComponents((prevComponents) => [
+      ...prevComponents,
+      newComponentData,
+    ]);
   };
 
-  let MultipleList = ["ex1", "ex2", "ex3"];
+  // 질문 삭제
+  const deleteQuestion = (index: number) => {
+    setSurveyComponents((prevComponents) =>
+      prevComponents.filter((_, i) => i !== index)
+    );
+  };
   return (
     <>
       <InputTopBar
@@ -28,18 +48,19 @@ export default function NewSurvey() {
         }}
       />
       <div className="screen flex-col pt-14 justify-start">
-        <CreatedQuestion
-          AmswerIndex={1}
-          title={`제목`}
-          AnswerList={MultipleList}
-        />
-
-        {surveyComponents.map((_, index) => (
-          <MakeSurvey
+        {surveyComponents.map((componentData, index) => (
+          // 저장된 설문 표시
+          <CreatedQuestion
             key={index}
-            addNewSurveyComponent={addNewSurveyComponent}
+            AmswerIndex={index + 1}
+            title={componentData?.title}
+            AnswerList={componentData?.choices}
+            onDelete={() => deleteQuestion(index)}
           />
         ))}
+
+        {/* 새 설문 추가 */}
+        <MakeSurvey addNewSurveyComponent={addNewSurveyComponent} />
 
         {showCloseDialog && (
           <>

@@ -6,24 +6,28 @@ import {
 } from "@/pages/components/styles/Icons";
 
 interface MultipleChoiceQuestionProps {
-  choices: any[];
+  choices: string[];
   addChoice: () => void;
   deleteChoice: (index: number) => void;
+  handleChoiceChange: (index: number, newText: string) => void;
 }
 
 export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   choices,
   addChoice,
   deleteChoice,
+  handleChoiceChange,
 }) => {
   return (
     <>
       {/* 답변들 */}
-      {choices.map((_, index) => (
+      {choices.map((choice, index) => (
         <div key={index} className="flex flex-col gap-1">
           <div className="sm-gray-9-text text-base pt-2">답변 {index + 1}</div>
           <input
             className="main-input text-gray-9"
+            value={choice}
+            onChange={(e) => handleChoiceChange(index, e.target.value)}
             placeholder="답변을 입력해주세요"
           />
           <div className="flex gap-2 justify-end">

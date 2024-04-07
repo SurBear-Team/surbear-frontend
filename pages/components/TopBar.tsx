@@ -50,36 +50,38 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white left-0 right-0 mx-auto fixed w-full justify-center ${
+      className={`bg-white left-0 right-0 mx-auto fixed w-full flex justify-center ${
         hasShadow && "shadow-md"
       }`}
     >
-      <div className="flex px-6 py-3 justify-between">
-        <div className={`flex ${leftSVG && "gap-2"} items-center`}>
-          <div onClick={onLeftClick}>{leftSVG}</div>
-          <span className="text-base font-semibold mt-[2px]">{title}</span>
+      <div className="w-full max-w-xl">
+        <div className="flex px-6 py-3 justify-between">
+          <div className={`flex ${leftSVG && "gap-2"} items-center`}>
+            <div onClick={onLeftClick}>{leftSVG}</div>
+            <span className="text-base font-semibold mt-[2px]">{title}</span>
+          </div>
+          <div onClick={onRightClick} className="flex items-center">
+            {rightSVG}
+          </div>
         </div>
-        <div onClick={onRightClick} className="flex items-center">
-          {rightSVG}
-        </div>
+        {hasSubTopBar && (
+          <SubTopBar
+            subTitle={subTitle}
+            hasCategory={hasCategory}
+            onCategoryClick={onCategoryClick}
+            showCategory={showCategory}
+            categoryList={categoryList}
+            categoryType={categoryType}
+            onCategorySelect={onCategorySelect}
+            hasOrder={hasOrder}
+            onOrderClick={onOrderClick}
+            showOrder={showOrder}
+            orderList={orderList || []}
+            orderType={orderType}
+            onOrderSelect={onOrderSelect}
+          />
+        )}
       </div>
-      {hasSubTopBar && (
-        <SubTopBar
-          subTitle={subTitle}
-          hasCategory={hasCategory}
-          onCategoryClick={onCategoryClick}
-          showCategory={showCategory}
-          categoryList={categoryList}
-          categoryType={categoryType}
-          onCategorySelect={onCategorySelect}
-          hasOrder={hasOrder}
-          onOrderClick={onOrderClick}
-          showOrder={showOrder}
-          orderList={orderList || []}
-          orderType={orderType}
-          onOrderSelect={onOrderSelect}
-        />
-      )}
     </div>
   );
 };

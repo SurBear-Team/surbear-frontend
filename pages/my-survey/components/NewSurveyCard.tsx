@@ -86,7 +86,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
         <div className="w-full flex gap-4">
           <button
             onClick={onCancel}
-            className="medium-Btn bg-white text-gray-5 border-gray-5 w-full"
+            className="long-button bg-white text-gray-5 border-gray-5 w-full"
           >
             취소
           </button>
@@ -94,7 +94,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
             onClick={() => {
               router.push("my-survey/new-survey");
             }}
-            className="medium-Btn primary-btn-style w-full"
+            className="long-button primary-btn-style w-full"
           >
             다음
           </button>

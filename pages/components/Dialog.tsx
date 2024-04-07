@@ -24,7 +24,7 @@ export const Dialog = ({
   return (
     <>
       <Overlay />
-      <div className="card justify-center fixed px-8 gap-8 bg-white z-20">
+      <div className="card justify-center fixed px-6 py-8 gap-8 bg-white z-20">
         <div className="text-gray-9 text-center font-semibold w-full">
           {title}
         </div>
@@ -42,13 +42,13 @@ export const Dialog = ({
         <div className="flex justify-center items-center gap-4 w-full">
           <button
             onClick={onLeftClick}
-            className="medium-Btn border-gray-5 bg-white text-gray-5"
+            className="large-Btn border-gray-5 bg-white text-gray-5"
           >
             {leftText}
           </button>
           <button
             onClick={onRightClick}
-            className={`medium-Btn text-white ${
+            className={`large-Btn text-white ${
               isDelete
                 ? "border-red-1 bg-red-1"
                 : "border-primary-1 bg-primary-1"

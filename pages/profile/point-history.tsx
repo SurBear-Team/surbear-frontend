@@ -16,7 +16,7 @@ export default function PointHistory() {
         }}
         title="현재 포인트 내역"
       />
-      <div className="screen flex-col pt-[50px] justify-start">
+      <div className="white-screen flex-col pt-[50px] justify-start">
         {PointList.map((index) => (
           <ListCard
             key={index}

@@ -1,7 +1,7 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
@@ -55,11 +55,15 @@ input::-webkit-inner-spin-button {
 
 @layer components {
   .screen {
-    @apply w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center;
+    @apply w-full mx-auto bg-[#F8F8F8] h-screen items-center flex justify-center;
+  }
+
+  .white-screen {
+    @apply screen bg-white;
   }
 
   .inner-screen {
-    @apply bg-[#F8F8F8] w-full h-screen pt-[120px] pb-[105px] px-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar;
+    @apply max-w-xl w-full h-screen pt-[106px] pb-[105px] px-6 gap-3 flex flex-col overflow-auto hide-scrollbar;
   }
 
   .long-button {
@@ -103,7 +107,7 @@ input::-webkit-inner-spin-button {
   }
 
   .profile-card {
-    @apply card py-4 flex-row w-full items-center bg-white justify-between;
+    @apply card py-4 flex-row w-full max-w-xl items-center bg-white justify-between;
   }
 
   .small-Btn {
@@ -112,6 +116,10 @@ input::-webkit-inner-spin-button {
 
   .medium-Btn {
     @apply small-Btn px-8;
+  }
+
+  .large-Btn {
+    @apply small-Btn px-16;
   }
 
   .drop-down-bar {

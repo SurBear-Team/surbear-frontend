@@ -29,7 +29,7 @@ export default function MySurvey() {
       />
 
       <div className="screen">
-        <div className="inner-screen pt-[88px]">
+        <div className="inner-screen pt-[74px]">
           <MySurveyCard
             category={`카테고리`}
             title={`제목 2줄까지`}

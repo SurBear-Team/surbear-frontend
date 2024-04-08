@@ -1,17 +1,17 @@
 interface CancleSaveProps {
-  isUpdate?: boolean;
+  isEdit?: boolean;
   onCancleClick: () => void;
   onSaveClick?: () => void;
   onSaveAndAddClick?: () => void;
-  onUpdateClick?: () => void;
+  onEditClick?: () => void;
 }
 
 export const CancleSaveButtonFrame = ({
-  isUpdate,
+  isEdit,
   onCancleClick,
   onSaveClick,
   onSaveAndAddClick,
-  onUpdateClick,
+  onEditClick,
 }: CancleSaveProps) => {
   return (
     <div className="flex justify-end p-0 mt-6 gap-2">
@@ -21,10 +21,10 @@ export const CancleSaveButtonFrame = ({
       >
         취소
       </button>
-      {isUpdate ? (
+      {isEdit ? (
         <>
           <button
-            onClick={onUpdateClick}
+            onClick={onEditClick}
             className="small-Btn w-auto primary-btn-style"
           >
             수정

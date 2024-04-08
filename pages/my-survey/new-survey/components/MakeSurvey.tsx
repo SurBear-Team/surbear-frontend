@@ -55,17 +55,12 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
 
   // 저장 버튼
   const handleSave = () => {
-    // 제목이 비어 있는지 확인
-    if (!questionTitle.trim()) {
-      alert("제목 화긴");
-      return; // 함수 실행 중단
-    }
-
-    // 모든 답변이 채워져 있는지 확인
+    const isTitleEmpty = !questionTitle.trim();
     const isEmptyAnswer = choices.some((choice) => !choice.trim());
-    if (isEmptyAnswer) {
-      alert("답변 화긴");
-      return; // 함수 실행 중단
+
+    if (isTitleEmpty || isEmptyAnswer) {
+      alert("제목 혹은 답변을 입력해주세요.");
+      return; // 함수 중단
     }
 
     const surveyData = {

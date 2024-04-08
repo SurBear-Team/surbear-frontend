@@ -2,6 +2,7 @@ interface CreatedQuestionProps {
   AmswerIndex: number;
   title: string;
   AnswerList: string[];
+  onEdit: () => void;
   onDelete: () => void;
 }
 
@@ -9,10 +10,11 @@ export const CreatedQuestion = ({
   AmswerIndex,
   title,
   AnswerList,
+  onEdit,
   onDelete,
 }: CreatedQuestionProps) => {
   return (
-    <div className="px-6">
+    <div className="px-6 w-full">
       {/* 질문제목 */}
       <div className="flex pb-6">
         <div className="sm-gray-9-text text-base pr-2">{`${AmswerIndex}.`}</div>
@@ -32,7 +34,9 @@ export const CreatedQuestion = ({
 
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">
-        <button className="small-Btn white-bg-primary-btn">수정</button>
+        <button onClick={onEdit} className="small-Btn white-bg-primary-btn">
+          수정
+        </button>
         <button
           onClick={onDelete}
           className="small-Btn border-red-1 bg-red-1 text-white"

@@ -1,5 +1,6 @@
 interface CreatedQuestionProps {
   answerIndex: number;
+  type: any;
   title: string;
   answerList?: string[];
   count?: number;
@@ -9,6 +10,7 @@ interface CreatedQuestionProps {
 
 export const CreatedQuestion = ({
   answerIndex,
+  type,
   title,
   answerList,
   count,

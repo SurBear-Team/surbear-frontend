@@ -8,6 +8,7 @@ import { PlusIcon } from "@/pages/components/styles/Icons";
 
 interface NewSurveyProps {
   title: string;
+  type: string;
   choices?: string[];
   count?: number;
 }
@@ -23,7 +24,7 @@ export default function NewSurvey() {
   const [surveyComponents, setSurveyComponents] = useState<NewSurveyProps[]>(
     []
   );
-  console.log(surveyComponents[3].choices);
+
   // (객관식) 설문 만들기
   const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
     // 기존 설문 배열에 새 설문 추가
@@ -59,6 +60,7 @@ export default function NewSurvey() {
           <CreatedQuestion
             key={index}
             answerIndex={index + 1}
+            type={componentData.type}
             title={componentData?.title}
             answerList={componentData?.choices}
             count={componentData.count}

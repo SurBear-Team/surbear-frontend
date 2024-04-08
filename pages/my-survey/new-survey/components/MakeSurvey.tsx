@@ -7,6 +7,7 @@ import { TypeDropDown } from "../../components/TypeDropDown";
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
     title: string;
+    type: string;
     choices?: string[];
     count?: number;
   }) => void;
@@ -55,7 +56,7 @@ export const MakeSurvey = ({ addNewSurveyComponent }: MakeSurveyProps) => {
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(255); // 255는 임시
 
   // (공통) 저장 버튼
   const onSaveClick = () => {

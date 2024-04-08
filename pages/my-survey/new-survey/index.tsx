@@ -8,7 +8,8 @@ import { PlusIcon } from "@/pages/components/styles/Icons";
 
 interface NewSurveyProps {
   title: string;
-  choices: string[];
+  choices?: string[];
+  count?: number;
 }
 
 export default function NewSurvey() {
@@ -22,12 +23,9 @@ export default function NewSurvey() {
   const [surveyComponents, setSurveyComponents] = useState<NewSurveyProps[]>(
     []
   );
-
-  // 설문 만들기
-  const addNewSurveyComponent = (newComponentData: {
-    title: string;
-    choices: string[];
-  }) => {
+  console.log(surveyComponents[3].choices);
+  // (객관식) 설문 만들기
+  const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
     // 기존 설문 배열에 새 설문 추가
     setSurveyComponents((prevComponents) => [
       ...prevComponents,
@@ -35,6 +33,10 @@ export default function NewSurvey() {
     ]);
     setNewSurvey(false);
   };
+
+  // (단답형) 설문 만들기
+
+  // (슬라이더) 설문 만들기
 
   // 질문 삭제
   const deleteQuestion = (index: number) => {
@@ -56,9 +58,10 @@ export default function NewSurvey() {
           // 저장된 설문 표시
           <CreatedQuestion
             key={index}
-            AmswerIndex={index + 1}
+            answerIndex={index + 1}
             title={componentData?.title}
-            AnswerList={componentData?.choices}
+            answerList={componentData?.choices}
+            count={componentData.count}
             onEdit={() => {}}
             onDelete={() => deleteQuestion(index)}
           />
@@ -67,6 +70,7 @@ export default function NewSurvey() {
         {NewSurvey ? (
           <MakeSurvey addNewSurveyComponent={addNewSurveyComponent} />
         ) : (
+          // 새 질문 추가 버튼 보임
           <button
             className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
             onClick={() => {
@@ -76,7 +80,6 @@ export default function NewSurvey() {
             <PlusIcon /> 새 질문 추가
           </button>
         )}
-        {/* 새 설문 추가 */}
 
         {showCloseDialog && (
           <>

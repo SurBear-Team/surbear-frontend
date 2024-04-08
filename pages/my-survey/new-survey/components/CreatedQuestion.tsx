@@ -1,15 +1,17 @@
 interface CreatedQuestionProps {
-  AmswerIndex: number;
+  answerIndex: number;
   title: string;
-  AnswerList: string[];
+  answerList?: string[];
+  count?: number;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 export const CreatedQuestion = ({
-  AmswerIndex,
+  answerIndex,
   title,
-  AnswerList,
+  answerList,
+  count,
   onEdit,
   onDelete,
 }: CreatedQuestionProps) => {
@@ -17,12 +19,12 @@ export const CreatedQuestion = ({
     <div className="px-6 w-full">
       {/* 질문제목 */}
       <div className="flex pb-6">
-        <div className="sm-gray-9-text text-base pr-2">{`${AmswerIndex}.`}</div>
+        <div className="sm-gray-9-text text-base pr-2">{`${answerIndex}.`}</div>
         <div className="sm-gray-9-text text-base">{title}</div>
       </div>
 
       {/* 질문답변 */}
-      {AnswerList.map((answer: string, index: number) => (
+      {answerList?.map((answer: string, index: number) => (
         <div
           key={index}
           className="flex w-full p-2 mb-4 items-center gap-3 border-[1px] border-gray-4 rounded-lg"
@@ -31,7 +33,7 @@ export const CreatedQuestion = ({
           <div className="sm-gray-9-text font-normal">{answer}</div>
         </div>
       ))}
-
+      {count && <div>최대 글자수: {count}</div>}
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">
         <button onClick={onEdit} className="small-Btn white-bg-primary-btn">

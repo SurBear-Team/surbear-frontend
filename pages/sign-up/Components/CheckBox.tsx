@@ -14,7 +14,7 @@ export const Checkbox = ({
   showSheet,
 }: CheckBoxProps) => (
   <div
-    className="flex justify-between items-center gap-4 py-[22px]"
+    className="flex w-full cursor-pointer justify-between items-center gap-4 py-[22px]"
     onClick={onClick}
   >
     <div className="flex gap-4 items-center">

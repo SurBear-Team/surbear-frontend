@@ -63,7 +63,11 @@ input::-webkit-inner-spin-button {
   }
 
   .inner-screen {
-    @apply max-w-xl w-full h-screen pt-[106px] pb-[105px] px-6 gap-3 flex flex-col overflow-auto hide-scrollbar;
+    @apply max-w-xl w-full;
+  }
+
+  .list-screen {
+    @apply inner-screen h-screen pt-[106px] pb-[105px] px-6 gap-3 flex flex-col overflow-auto hide-scrollbar;
   }
 
   .long-button {

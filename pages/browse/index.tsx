@@ -68,7 +68,7 @@ export default function Browse() {
       />
 
       <div className="screen">
-        <div className="inner-screen">
+        <div className="list-screen">
           {SurveyList.map((index) => (
             <SurveyCard
               key={index}

@@ -80,7 +80,7 @@ export default function Clause() {
 
   const handleNextButtonClick = () => {
     if (isButtonActive) {
-      router.push("/sign-up/phoneNum");
+      router.push("/sign-up/authentication");
     } else {
       alert("약관 확인 plz");
     }
@@ -95,8 +95,8 @@ export default function Clause() {
         title="회원가입"
       />
       {/* 본문 */}
-      <div className="screen ">
-        <div className="w-full px-10">
+      <div className="screen">
+        <div className="inner-screen px-10">
           <div className="flex">
             <Checkbox
               inputChecked={isChecked.all}

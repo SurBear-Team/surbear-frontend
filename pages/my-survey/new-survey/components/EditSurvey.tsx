@@ -4,6 +4,7 @@ import { TypeDropDown } from "../../components/TypeDropDown";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { NewSurveyProps } from "..";
+import { Dialog } from "@/pages/components/Dialog";
 
 interface EditSurveyProps {
   initialData: NewSurveyProps;
@@ -32,6 +33,9 @@ export const EditSurvey = ({
     }
   };
 
+  const [alertDialog, setAlertDialog] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
   // (공통) 원래 질문 제목
   const [questionTitle, setQuestionTitle] = useState(initialData?.title);
 
@@ -47,7 +51,8 @@ export const EditSurvey = ({
       if (prevChoices.length > 2) {
         return prevChoices.filter((_, i) => i !== index);
       } else {
-        alert("답변은 최소 2개입니다.");
+        setAlertDialog(true);
+        setAlertText("답변은 최소 2개입니다.");
         return prevChoices;
       }
     });
@@ -64,13 +69,15 @@ export const EditSurvey = ({
   // (공통) 수정 버튼
   const onEditClick = () => {
     if (!questionTitle.trim()) {
-      alert("제목을 입력해주세요.");
+      setAlertDialog(true);
+      setAlertText("제목을 입력해주세요.");
       return;
     }
 
     // (객관식) 답변 배열에 빈 문자열이 있는지 확인
     if (typeType === "객관식" && choices?.some((choice) => !choice.trim())) {
-      alert("답변을 모두 입력해주세요.");
+      setAlertDialog(true);
+      setAlertText("답변을 모두 입력해주세요.");
       return;
     }
 
@@ -158,6 +165,19 @@ export const EditSurvey = ({
         onEditClick={onEditClick}
         isEdit={true}
       />
+
+      <div className="flex justify-center items-center">
+        {alertDialog && (
+          <Dialog
+            title={alertText}
+            onlyOneBtn={true}
+            rightText={"닫기"}
+            onRightClick={() => {
+              setAlertDialog((prev) => !prev);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

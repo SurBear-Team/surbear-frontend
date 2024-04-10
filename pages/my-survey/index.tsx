@@ -29,7 +29,7 @@ export default function MySurvey() {
       />
 
       <div className="screen">
-        <div className="list-screen pt-[74px]">
+        <div className="list-screen pt-[50px]">
           <div className="list">
             <MySurveyCard
               category={`카테고리`}

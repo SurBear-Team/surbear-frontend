@@ -50,7 +50,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white left-0 right-0 mx-auto fixed w-full flex justify-center ${
+      className={`bg-white left-0 right-0 mx-auto fixed w-full flex justify-center z-50 ${
         hasShadow && "shadow-md"
       }`}
     >

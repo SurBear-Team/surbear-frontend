@@ -67,11 +67,11 @@ input::-webkit-inner-spin-button {
   }
 
   .list-screen {
-    @apply inner-screen h-screen pt-[106px] pb-[105px] px-6;
+    @apply max-w-xl w-full h-screen pt-[82px] pb-[81px] gap-3 flex flex-col overflow-scroll hide-scrollbar;
   }
 
   .list {
-    @apply flex flex-col overflow-auto hide-scrollbar gap-3;
+    @apply flex flex-col px-6 py-6 gap-3;
   }
 
   .long-button {

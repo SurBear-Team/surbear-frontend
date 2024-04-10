@@ -1,9 +1,13 @@
 // 뒤로가기 아이콘
-export const ArrowBackIcon = () => {
+interface IIcon {
+  isSmall?: boolean;
+}
+
+export const ArrowBackIcon = ({ isSmall }: IIcon) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width={isSmall ? "16" : "24"}
+      height={isSmall ? "16" : "24"}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

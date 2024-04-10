@@ -29,48 +29,50 @@ export default function MySurvey() {
       />
 
       <div className="screen">
-        <div className="inner-screen pt-[74px]">
-          <MySurveyCard
-            category={`카테고리`}
-            title={`제목 2줄까지`}
-            onDeleteClick={() => {
-              setShowDeleteDialog(true);
-            }}
-            beforeStart={true}
-            onUpdateClick={() => {
-              setShowUpdateDialog(true);
-            }}
-            onBlueBtnClick={() => {
-              console.log("설문 시작");
-            }}
-          />
+        <div className="list-screen pt-[74px]">
+          <div className="list">
+            <MySurveyCard
+              category={`카테고리`}
+              title={`제목 2줄까지`}
+              onDeleteClick={() => {
+                setShowDeleteDialog(true);
+              }}
+              beforeStart={true}
+              onUpdateClick={() => {
+                setShowUpdateDialog(true);
+              }}
+              onBlueBtnClick={() => {
+                console.log("설문 시작");
+              }}
+            />
 
-          <MySurveyCard
-            category={`카테고리`}
-            title={`제목 2줄까지`}
-            onDeleteClick={() => {
-              setShowDeleteDialog(true);
-            }}
-            beforeFinish={true}
-            onUpdateClick={() => {
-              setShowUpdateDialog(true);
-            }}
-            onBlueBtnClick={() => {
-              console.log("설문 종료");
-            }}
-          />
+            <MySurveyCard
+              category={`카테고리`}
+              title={`제목 2줄까지`}
+              onDeleteClick={() => {
+                setShowDeleteDialog(true);
+              }}
+              beforeFinish={true}
+              onUpdateClick={() => {
+                setShowUpdateDialog(true);
+              }}
+              onBlueBtnClick={() => {
+                console.log("설문 종료");
+              }}
+            />
 
-          <MySurveyCard
-            category={`카테고리`}
-            title={`제목 2줄까지`}
-            onDeleteClick={() => {
-              setShowDeleteDialog(true);
-            }}
-            showResult={true}
-            onBlueBtnClick={() => {
-              console.log("결과 보기");
-            }}
-          />
+            <MySurveyCard
+              category={`카테고리`}
+              title={`제목 2줄까지`}
+              onDeleteClick={() => {
+                setShowDeleteDialog(true);
+              }}
+              showResult={true}
+              onBlueBtnClick={() => {
+                console.log("결과 보기");
+              }}
+            />
+          </div>
         </div>
         {showNewSurveyCard && (
           <NewSurveyCard onCancel={() => setShowNewSurveyCard(false)} />

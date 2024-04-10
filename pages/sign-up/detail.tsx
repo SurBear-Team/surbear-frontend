@@ -30,77 +30,79 @@ export default function IdPassword() {
         leftSVG={<ArrowBackIcon />}
         title="회원가입"
       />
-      <div className="screen px-12 flex-col w-full">
-        {/* 닉네임 */}
-        <div className="w-full">
-          <span className="font-semibold">닉네임</span>
-          <input
-            type="text"
-            placeholder="닉네임을 입력해주세요"
-            className="main-input mt-1 mb-10 text-gray-9"
-          />
-        </div>
-        {/* 나이 */}
-        <div className="w-full">
-          <span className="font-semibold">나이</span>
-          <input
-            onClick={() => {
-              setShowSheet(true);
-            }}
-            value={selectedAge}
-            className="main-input text-center mt-1 mb-10 text-gray-9 cursor-pointer"
-          />
-        </div>
-        {/* 성별 */}
-        <div className="w-full">
-          <span className="font-semibold ">성별</span>
-          <div className="flex gap-4 mt-1">
+      <div className="screen">
+        <div className="inner-screen px-12 flex-col">
+          {/* 닉네임 */}
+          <div className="w-full">
+            <span className="font-semibold">닉네임</span>
+            <input
+              type="text"
+              placeholder="닉네임을 입력해주세요"
+              className="main-input mt-1 mb-10 text-gray-9"
+            />
+          </div>
+          {/* 나이 */}
+          <div className="w-full">
+            <span className="font-semibold">나이</span>
+            <input
+              onClick={() => {
+                setShowSheet(true);
+              }}
+              value={selectedAge}
+              className="main-input text-center mt-1 mb-10 text-gray-9 cursor-pointer"
+            />
+          </div>
+          {/* 성별 */}
+          <div className="w-full">
+            <span className="font-semibold ">성별</span>
+            <div className="flex gap-4 mt-1">
+              <button
+                className={`long-button ${
+                  selectedGender === "남자"
+                    ? "primary-btn-style"
+                    : "border-primary-1 text-primary-1"
+                }`}
+                onClick={() => setSelectedGender("남자")}
+              >
+                남자
+              </button>
+              <button
+                className={`long-button ${
+                  selectedGender === "여자"
+                    ? "primary-btn-style"
+                    : "border-primary-1 text-primary-1"
+                }`}
+                onClick={() => setSelectedGender("여자")}
+              >
+                여자
+              </button>
+            </div>
+          </div>
+
+          <div className="gray-line w-full mt-12 mx-10" />
+
+          {/* 다음버튼 */}
+          <div className="w-full">
             <button
-              className={`long-button ${
-                selectedGender === "남자"
-                  ? "primary-btn-style"
-                  : "border-primary-1 text-primary-1"
-              }`}
-              onClick={() => setSelectedGender("남자")}
+              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              onClick={() => {
+                router.push("/sign-up/done");
+              }}
             >
-              남자
-            </button>
-            <button
-              className={`long-button ${
-                selectedGender === "여자"
-                  ? "primary-btn-style"
-                  : "border-primary-1 text-primary-1"
-              }`}
-              onClick={() => setSelectedGender("여자")}
-            >
-              여자
+              다음
             </button>
           </div>
+          {showSheet && (
+            <>
+              <Overlay />
+              <AgeSheet
+                showSheet={showSheet}
+                onClose={toggleShowSheet}
+                onSelected={setSelectedAge}
+              />
+            </>
+          )}
         </div>
-
-        <div className="gray-line w-full mt-12 mx-10" />
-
-        {/* 다음버튼 */}
-        <div className="w-full">
-          <button
-            className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
-            onClick={() => {
-              router.push("/sign-up/complete");
-            }}
-          >
-            다음
-          </button>
-        </div>
-        {showSheet && (
-          <>
-            <Overlay />
-            <AgeSheet
-              showSheet={showSheet}
-              onClose={toggleShowSheet}
-              onSelected={setSelectedAge}
-            />
-          </>
-        )}
       </div>
     </>
   );

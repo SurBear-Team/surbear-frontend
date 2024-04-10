@@ -68,23 +68,25 @@ export default function Browse() {
       />
 
       <div className="screen">
-        <div className="inner-screen">
-          {SurveyList.map((index) => (
-            <SurveyCard
-              key={index}
-              category={"카테고리"}
-              title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
-              nickname={`김치냉장고`}
-              point={5}
-              deadline={`2024년 3월 24일 12시`}
-              onReportClick={() => {
-                setShowAlertDialog((prev) => !prev);
-              }}
-              showDetail={() => {
-                console.log("더보기");
-              }}
-            />
-          ))}
+        <div className="list-screen">
+          <div className="list">
+            {SurveyList.map((index) => (
+              <SurveyCard
+                key={index}
+                category={"카테고리"}
+                title={`제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지 제목 2줄까지`}
+                nickname={`김치냉장고`}
+                point={5}
+                deadline={`2024년 3월 24일 12시`}
+                onReportClick={() => {
+                  setShowAlertDialog((prev) => !prev);
+                }}
+                showDetail={() => {
+                  console.log("더보기");
+                }}
+              />
+            ))}
+          </div>
         </div>
         {showAlertDialog && (
           <Dialog

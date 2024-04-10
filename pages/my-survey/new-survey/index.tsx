@@ -5,8 +5,9 @@ import { MakeSurvey } from "./components/MakeSurvey";
 import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
 import { PlusIcon } from "@/pages/components/styles/Icons";
+import { EditSurvey } from "./components/EditSurvey";
 
-interface NewSurveyProps {
+export interface NewSurveyProps {
   title: string;
   type: string;
   choices?: string[];
@@ -18,7 +19,7 @@ export default function NewSurvey() {
 
   const [title, setTitle] = useState("");
   const [showCloseDialog, setShowCloseDialog] = useState(false);
-  const [NewSurvey, setNewSurvey] = useState(false);
+  const [NewSurvey, setNewSurvey] = useState(false); // 새 설문 만들기 창 여부
 
   // 만들어진 설문
   const [surveyComponents, setSurveyComponents] = useState<NewSurveyProps[]>(
@@ -35,13 +36,16 @@ export default function NewSurvey() {
     setNewSurvey(false);
   };
 
-  // (단답형) 설문 만들기
-
-  // (슬라이더) 설문 만들기
+  // 설문 수정하기
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  // 수정 전 초기 데이타
+  const [editData, setEditData] = useState<NewSurveyProps | null>(null);
 
   // 질문 삭제
   const deleteQuestion = (index: number) => {
+    // prevComponents는 현재 상태
     setSurveyComponents((prevComponents) =>
+      // index가 i와 다른 배열만 새로 생성
       prevComponents.filter((_, i) => i !== index)
     );
   };
@@ -55,22 +59,45 @@ export default function NewSurvey() {
         }}
       />
       <div className="white-screen flex-col pt-14 justify-start">
-        {surveyComponents.map((componentData, index) => (
-          // 저장된 설문 표시
-          <CreatedQuestion
-            key={index}
-            answerIndex={index + 1}
-            type={componentData.type}
-            title={componentData?.title}
-            answerList={componentData?.choices}
-            count={componentData.count}
-            onEdit={() => {}}
-            onDelete={() => deleteQuestion(index)}
-          />
-        ))}
+        {surveyComponents.map((componentData, index) =>
+          editIndex === index && editData ? ( // 수정인지 아닌지
+            <EditSurvey
+              key={index}
+              initialData={editData}
+              onSave={(updatedData) => {
+                const updatedComponents = surveyComponents.map(
+                  (nowItem, nowIndex) =>
+                    nowIndex === editIndex ? updatedData : nowItem
+                );
+                setSurveyComponents(updatedComponents);
+                setEditIndex(null); // 수정 모드 종료
+              }}
+              onCancel={() => {
+                setEditIndex(null); // 수정 취소 및 모드 종료
+              }}
+            />
+          ) : (
+            <CreatedQuestion
+              key={index}
+              answerIndex={index + 1}
+              type={componentData.type}
+              title={componentData.title}
+              answerList={componentData.choices}
+              count={componentData.count}
+              onEdit={() => {
+                setEditIndex(index);
+                setEditData(componentData);
+              }}
+              onDelete={() => deleteQuestion(index)}
+            />
+          )
+        )}
 
         {NewSurvey ? (
-          <MakeSurvey addNewSurveyComponent={addNewSurveyComponent} />
+          <MakeSurvey
+            addNewSurveyComponent={addNewSurveyComponent}
+            onCancel={() => setNewSurvey(false)}
+          />
         ) : (
           // 새 질문 추가 버튼 보임
           <button

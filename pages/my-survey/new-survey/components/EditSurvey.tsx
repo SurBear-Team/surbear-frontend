@@ -1,118 +1,95 @@
 import { useState } from "react";
-import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
-import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "../../components/TypeDropDown";
+import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
+import { ShortAnswerType } from "./ShortAnswerQuestion";
+import { NewSurveyProps } from "..";
 
-interface MakeSurveyProps {
-  addNewSurveyComponent: (surveyData: {
-    title: string;
-    type: string;
-    choices?: string[];
-    count?: number;
-  }) => void;
+interface EditSurveyProps {
+  initialData: NewSurveyProps;
+  onSave: (updatedData: NewSurveyProps) => void;
   onCancel: () => void;
 }
 
-export const MakeSurvey = ({
-  addNewSurveyComponent,
+export const EditSurvey = ({
+  initialData,
+  onSave,
   onCancel,
-}: MakeSurveyProps) => {
+}: EditSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
 
   const [showType, setShowType] = useState(false);
-  const [typeType, setTypeType] = useState("객관식");
+  const [typeType, setTypeType] = useState(initialData?.type);
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
     setTypeType(selectedTypeType);
     setShowType(false);
+
+    // 단답형이나 슬라이더에서 '객관식'으로 변경할 때 choices 초기화
+    if (selectedTypeType === "객관식" && (!choices || choices.length === 0)) {
+      setChoices(["", ""]); // 최소 2개의 빈 답변으로 초기화
+    }
   };
 
-  // (공통) 질문 제목
-  const [questionTitle, setQuestionTitle] = useState("");
+  // (공통) 원래 질문 제목
+  const [questionTitle, setQuestionTitle] = useState(initialData?.title);
 
   // (객관식) 답변들 배열, 처음엔 빈 답변 2개
-  const [choices, setChoices] = useState(["", ""]);
+  const [choices, setChoices] = useState(initialData?.choices);
   // (객관식) 새 답변 추가
   const addChoice = () => {
-    setChoices([...choices, ""]);
+    setChoices((prevChoices = []) => [...prevChoices, ""]);
   };
   // (객관식) 답변 삭제
   const deleteChoice = (index: number) => {
-    // 2개 이상일 때만 삭제
-    if (choices.length > 2) {
-      const newChoices = choices.filter((_, i) => i !== index);
-      setChoices(newChoices);
-    } else {
-      alert("답변은 최소 2개");
-    }
+    setChoices((prevChoices = []) => {
+      if (prevChoices.length > 2) {
+        return prevChoices.filter((_, i) => i !== index);
+      } else {
+        alert("답변은 최소 2개입니다.");
+        return prevChoices;
+      }
+    });
   };
   // (객관식) 답변 onChange
   const handleChoiceChange = (index: number, newText: string) => {
-    const updatedChoices = choices.map((choice, choiceIndex) => {
-      if (index === choiceIndex) {
-        return newText; // 선택된 답변의 텍스트 업데이트
-      }
-      return choice;
-    });
-    setChoices(updatedChoices); // 변경된 답변 배열로 업데이트
+    setChoices((prevChoices = []) =>
+      prevChoices.map((choice, choiceIndex) =>
+        index === choiceIndex ? newText : choice
+      )
+    );
+  };
+
+  // (공통) 수정 버튼
+  const onEditClick = () => {
+    if (!questionTitle.trim()) {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    // (객관식) 답변 배열에 빈 문자열이 있는지 확인
+    if (typeType === "객관식" && choices?.some((choice) => !choice.trim())) {
+      alert("답변을 모두 입력해주세요.");
+      return;
+    }
+
+    // 모든 조건을 충족시킨 경우, 수정된 데이터를 저장
+    const updatedData = {
+      title: questionTitle,
+      type: typeType,
+      choices: typeType === "객관식" ? choices : undefined,
+      count: typeType === "단답형" ? count : undefined,
+    };
+    onSave(updatedData);
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(255); // 255는 임시
-
-  // (공통) 저장 버튼
-  const onSaveClick = () => {
-    const isTitleEmpty = !questionTitle.trim();
-    if (isTitleEmpty) {
-      alert("제목을 입력해주세요.");
-      return; // 함수 중단
-    }
-
-    // (객관식)
-    if (typeType === "객관식") {
-      const isEmptyAnswer = choices.some((choice) => !choice.trim());
-      if (isEmptyAnswer) {
-        alert("답변을 모두 입력해주세요.");
-        return; // 함수 중단
-      }
-
-      const multipleChoiceSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        choices: choices,
-      };
-
-      addNewSurveyComponent(multipleChoiceSurveyData);
-    }
-    // (단답형)
-    else if (typeType === "단답형") {
-      const shortAnswerSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        count: count,
-      };
-      addNewSurveyComponent(shortAnswerSurveyData);
-    }
-    // (슬라이더)
-    else if (typeType === "슬라이더") {
-      const sliderSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        choices: [],
-      };
-      addNewSurveyComponent(sliderSurveyData);
-    }
-
-    // 저장 후 입력 필드 초기화
-    setQuestionTitle("");
-    setChoices(["", ""]);
-  };
+  const [count, setCount] = useState(initialData?.count); // 255는 임시
 
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
-      <div className="sm-gray-9-text text-base pb-4">새 질문 만들기</div>
+      <div className="sm-gray-9-text text-base pb-4">질문 수정</div>
       {/* 형식 필수답변 */}
       <div className="flex justify-center items-center gap-4">
         <div className="flex gap-4 w-full items-center">
@@ -154,7 +131,7 @@ export const MakeSurvey = ({
           {/* 회색선 */}
           <div className="gray-line my-8" />
           <MultipleChoiceQuestion
-            choices={choices}
+            choices={choices || ["", ""]}
             addChoice={addChoice}
             deleteChoice={deleteChoice}
             handleChoiceChange={handleChoiceChange}
@@ -175,11 +152,11 @@ export const MakeSurvey = ({
         </>
       )}
 
-      {/* 취소 저장 저장후새질문추가 */}
+      {/* 취소 수정 */}
       <CancleSaveButtonFrame
         onCancleClick={onCancel}
-        onSaveClick={onSaveClick}
-        onSaveAndAddClick={() => {}}
+        onEditClick={onEditClick}
+        isEdit={true}
       />
     </div>
   );

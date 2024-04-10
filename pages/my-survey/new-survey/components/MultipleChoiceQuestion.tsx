@@ -21,7 +21,7 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   return (
     <>
       {/* 답변들 */}
-      {choices.map((choice, index) => (
+      {choices?.map((choice, index) => (
         <div key={index} className="flex flex-col gap-1">
           <div className="sm-gray-9-text text-base pt-2">답변 {index + 1}</div>
           <input

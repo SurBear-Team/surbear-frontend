@@ -4,8 +4,9 @@ interface DialogProps {
   title: string;
   hasTextarea?: boolean;
   inputTitle?: string;
-  leftText: string;
-  onLeftClick: () => void;
+  onlyOneBtn?: boolean;
+  leftText?: string;
+  onLeftClick?: () => void;
   rightText: string;
   onRightClick: () => void;
   isDelete?: boolean;
@@ -15,6 +16,7 @@ export const Dialog = ({
   title,
   hasTextarea,
   inputTitle,
+  onlyOneBtn,
   leftText,
   onLeftClick,
   rightText,
@@ -40,12 +42,14 @@ export const Dialog = ({
 
         {/* 하단버튼두개 */}
         <div className="flex justify-center items-center gap-4 w-full">
-          <button
-            onClick={onLeftClick}
-            className="large-Btn border-gray-5 bg-white text-gray-5"
-          >
-            {leftText}
-          </button>
+          {!onlyOneBtn && (
+            <button
+              onClick={onLeftClick}
+              className="large-Btn border-gray-5 bg-white text-gray-5"
+            >
+              {leftText}
+            </button>
+          )}
           <button
             onClick={onRightClick}
             className={`large-Btn text-white ${

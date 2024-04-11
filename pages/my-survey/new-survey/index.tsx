@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
 import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
-import { PlusIcon } from "@/pages/components/styles/Icons";
+import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 
 export interface NewSurveyProps {
@@ -59,6 +59,7 @@ export default function NewSurvey() {
         }}
       />
       <div className="white-screen flex-col pt-14 justify-start">
+        <div className="sm-gray-9-text text-base py-6 pl-6 self-start">{`1페이지`}</div>
         {surveyComponents.map((componentData, index) =>
           editIndex === index && editData ? ( // 수정인지 아닌지
             <EditSurvey
@@ -99,16 +100,34 @@ export default function NewSurvey() {
             onCancel={() => setNewSurvey(false)}
           />
         ) : (
-          // 새 질문 추가 버튼 보임
-          <button
-            className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
-            onClick={() => {
-              setNewSurvey((prev) => !prev);
-            }}
-          >
-            <PlusIcon /> 새 질문 추가
-          </button>
+          // 버튼 보임
+          <div className="flex flex-col">
+            <button
+              className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
+              onClick={() => {
+                setNewSurvey((prev) => !prev);
+              }}
+            >
+              <PlusIcon /> 새 질문 추가
+            </button>
+
+            <button
+              className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
+              onClick={() => {}}
+            >
+              <PlusIcon /> 새 페이지 추가
+            </button>
+
+            <button
+              className="medium-Btn border-red-1 text-red-1 self-center w-auto mt-6 flex items-center gap-1"
+              onClick={() => {}}
+            >
+              <MinusIcon /> 이 페이지 삭제
+            </button>
+          </div>
         )}
+
+        <div className="bg-gray-2 h-4 w-full mt-10" />
 
         {showCloseDialog && (
           <>

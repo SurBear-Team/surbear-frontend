@@ -29,21 +29,23 @@ export default function MemberUpdate() {
         title="회원 정보 수정"
       />
       <div className="white-screen flex-col justify-start pt-[50px]">
-        <MemberUpdateCard
-          title="닉네임"
-          content={`user nickname`}
-          onClick={() => {
-            setShowNicknameDialog((prev) => !prev);
-          }}
-        />
+        <div className="inner-screen">
+          <MemberUpdateCard
+            title="닉네임"
+            content={`user nickname`}
+            onClick={() => {
+              setShowNicknameDialog((prev) => !prev);
+            }}
+          />
 
-        <MemberUpdateCard
-          title="나이대"
-          content={`user age big`}
-          onClick={() => {
-            setShowSheet(true);
-          }}
-        />
+          <MemberUpdateCard
+            title="나이대"
+            content={`user age big`}
+            onClick={() => {
+              setShowSheet(true);
+            }}
+          />
+        </div>
 
         {showNicknameDialog && (
           <>

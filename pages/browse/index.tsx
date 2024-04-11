@@ -6,6 +6,7 @@ import { SearchIcon } from "../components/styles/Icons";
 import { Dialog } from "../components/Dialog";
 import Detail from "./components/Detail";
 import { IDummyData, categoryList, dummyData, orderList } from "./data";
+import { AnimatePresence } from "framer-motion";
 
 export default function Browse() {
   const [showCategory, setShowCategory] = useState(false);
@@ -35,6 +36,8 @@ export default function Browse() {
     setDetailData(tempData);
     setShowDetail(true);
   };
+
+  console.log(showDetail);
 
   return (
     <>
@@ -67,17 +70,19 @@ export default function Browse() {
 
       <div className="screen">
         <div className="list-screen">
-          {showDetail ? (
-            <div className="h-full p-6">
+          <AnimatePresence>
+            {showDetail && (
               <Detail
+                key={detailId}
+                layoutId={detailId}
                 data={detailData!}
                 onBackClick={() => setShowDetail(false)}
               />
-            </div>
-          ) : (
+            )}
             <div className="list">
               {data.map((el) => (
                 <SurveyCard
+                  layoutId={el.id}
                   key={el.id}
                   data={el}
                   onReportClick={() => {
@@ -87,7 +92,7 @@ export default function Browse() {
                 />
               ))}
             </div>
-          )}
+          </AnimatePresence>
         </div>
         {showAlertDialog && (
           <Dialog

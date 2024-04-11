@@ -1,7 +1,9 @@
 import { IDummyData } from "../browse/data";
 import { ReportIcon } from "./styles/Icons";
+import { motion } from "framer-motion";
 
 interface SurveyCardProps {
+  layoutId: number;
   data: IDummyData;
   isFinished?: boolean;
   onReportClick?: () => void;
@@ -9,6 +11,7 @@ interface SurveyCardProps {
 }
 
 export default function SurveyCard({
+  layoutId,
   data,
   isFinished,
   onReportClick,
@@ -16,7 +19,10 @@ export default function SurveyCard({
 }: SurveyCardProps) {
   return (
     <>
-      <div className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}>
+      <motion.div
+        layoutId={layoutId + ""}
+        className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}
+      >
         <div className="flex justify-between items-center w-full pb-2">
           <div className="sm-gray-text">{data.category}</div>
           <div
@@ -42,7 +48,7 @@ export default function SurveyCard({
             더보기
           </div>
         </>
-      </div>
+      </motion.div>
     </>
   );
 }

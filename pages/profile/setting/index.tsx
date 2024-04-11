@@ -21,24 +21,26 @@ export default function ProfileSetting() {
         title="설정"
       />
       <div className="white-screen flex-col justify-start pt-[50px]">
-        <SettingCard
-          title="회원 정보 수정"
-          onClick={() => {
-            route.push("/profile/setting/update");
-          }}
-        />
-        <SettingCard
-          title="로그아웃"
-          onClick={() => {
-            setShowLogoutDialog(true);
-          }}
-        />
-        <SettingCard
-          title="회원 탈퇴"
-          onClick={() => {
-            setShowWithdrawalDialog(true);
-          }}
-        />
+        <div className="inner-screen">
+          <SettingCard
+            title="회원 정보 수정"
+            onClick={() => {
+              route.push("/profile/setting/update");
+            }}
+          />
+          <SettingCard
+            title="로그아웃"
+            onClick={() => {
+              setShowLogoutDialog(true);
+            }}
+          />
+          <SettingCard
+            title="회원 탈퇴"
+            onClick={() => {
+              setShowWithdrawalDialog(true);
+            }}
+          />
+        </div>
         {showLogoutDialog && (
           <>
             <div className="flex justify-center">

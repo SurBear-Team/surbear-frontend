@@ -6,6 +6,8 @@ import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar
 import { CreatedQuestion } from "./components/CreatedQuestion";
 import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
+import { useRecoilValue } from "recoil";
+import { newSurveyState } from "../surveyState";
 
 export interface NewSurveyProps {
   title: string;
@@ -17,7 +19,8 @@ export interface NewSurveyProps {
 export default function NewSurvey() {
   const router = useRouter();
 
-  const [title, setTitle] = useState("");
+  const recoilSurvey = useRecoilValue(newSurveyState);
+  const [title, setTitle] = useState(recoilSurvey.surveyTitle);
   const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [NewSurvey, setNewSurvey] = useState(false); // 새 설문 만들기 창 여부
 

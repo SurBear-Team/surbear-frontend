@@ -4,7 +4,6 @@ import { TopBar } from "../components/TopBar";
 import { AddSurveyIcon } from "../components/styles/Icons";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
-import { Overlay } from "../components/styles/Overlay";
 import { NewSurveyCard } from "./components/NewSurveyCard";
 
 export default function MySurvey() {

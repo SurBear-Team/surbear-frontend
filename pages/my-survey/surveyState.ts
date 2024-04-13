@@ -7,7 +7,7 @@ export const newSurveyState = atom({
     surveyDescription: "",
     surveyCategory: "",
     isPrivate: false,
-    maxPerson: 255,
+    maxPerson: "255",
     endTime: "",
   },
 });

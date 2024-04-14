@@ -14,7 +14,8 @@ export default function MySurvey() {
     <>
       <TopBar
         title="내 설문"
-        newSurvey={() => {
+        hasPlus
+        onRightClick={() => {
           setShowNewSurveyCard((prev) => !prev);
         }}
       />

@@ -26,7 +26,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="screen">
+    <div className="white-screen">
       <div className="inner-screen">
         {/* 이거 나중에 루트로 뺌 */}
         <div className="px-12 w-full">

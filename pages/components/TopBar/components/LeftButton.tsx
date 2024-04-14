@@ -4,9 +4,10 @@ import { ArrowBackIcon } from "../../styles/Icons";
 interface IBackButton {
   hasBack?: boolean;
   title: string;
+  onClick?: () => void;
 }
 
-export default function LeftButton({ hasBack, title }: IBackButton) {
+export default function LeftButton({ hasBack, title, onClick }: IBackButton) {
   const router = useRouter();
   const onBackClick = () => {
     router.back();
@@ -15,7 +16,7 @@ export default function LeftButton({ hasBack, title }: IBackButton) {
     <>
       {hasBack ? (
         <div
-          onClick={onBackClick}
+          onClick={onClick ? onClick : onBackClick}
           className="flex gap-2 items-center cursor-pointer"
         >
           <ArrowBackIcon />

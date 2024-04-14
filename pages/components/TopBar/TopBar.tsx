@@ -3,13 +3,18 @@ import LeftButton from "./components/LeftButton";
 import RightButton from "./components/RightButton";
 
 interface TopBarProps {
+  noShadow?: boolean; // 그림자 없애기
+
   title: string;
   hasBack?: boolean; // 뒤로가기 버튼이 있나요?
+  onLeftClick?: () => void; // 버튼 클릭 로직
 
   hasSearch?: boolean; // 검색창이 있나요?
   progress?: number; // 설문 진행도
   hasSetting?: boolean; // 설정 버튼이 있나요?
-  newSurvey?: () => void; // 새 설문 만들기 로직
+  hasPlus?: boolean; // 새 설문 추가 버튼이 있나요?
+  hasUpdate?: boolean; // 수정 버튼이 있나요?
+  onRightClick?: () => void; // 버튼 클릭 로직
 
   subTitle?: string; // 서브 탑바 제목
 
@@ -23,12 +28,16 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
+  noShadow,
   title,
   hasBack,
+  onLeftClick,
   hasSearch,
   progress,
   hasSetting,
-  newSurvey,
+  hasPlus,
+  hasUpdate,
+  onRightClick,
   subTitle,
   categoryList,
   categoryType,
@@ -39,15 +48,19 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white fixed flex-col w-full z-10 shadow-md flex items-center`}
+      className={`bg-white fixed flex-col w-full z-10 flex items-center ${
+        !noShadow && "shadow-md"
+      }`}
     >
       <div className="w-full h-12 max-w-xl pl-6 pr-4 flex justify-between items-center">
-        <LeftButton hasBack={hasBack} title={title!} />
+        <LeftButton hasBack={hasBack} title={title} onClick={onLeftClick} />
         <RightButton
           hasSearch={hasSearch}
           progress={progress}
           hasSetting={hasSetting}
-          newSurvey={newSurvey}
+          hasPlus={hasPlus}
+          hasUpdate={hasUpdate}
+          onClick={onRightClick}
         />
       </div>
       {subTitle && (

@@ -12,7 +12,7 @@ export default function ProfileSetting() {
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
   return (
     <>
-      <TopBar title="설정" hasBack />
+      <TopBar title="설정" hasBack noShadow />
       <div className="white-screen flex-col justify-start pt-[50px]">
         <div className="inner-screen">
           <SettingCard

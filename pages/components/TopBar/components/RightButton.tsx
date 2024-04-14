@@ -1,5 +1,10 @@
 import { useRouter } from "next/router";
-import { AddSurveyIcon, SearchIcon, SettingIcon } from "../../styles/Icons";
+import {
+  AddSurveyIcon,
+  SearchIcon,
+  SettingIcon,
+  UpdateIcon,
+} from "../../styles/Icons";
 
 function SearchBox() {
   return (
@@ -19,7 +24,7 @@ interface IProgressBar {
 
 function ProgressBar({ progress }: IProgressBar) {
   return (
-    <div className="flex items-center gap-1 font-semibold text-[10px] text-gray-9">
+    <div className="flex items-center gap-1 mr-2 font-semibold text-[10px] text-gray-9">
       <span>진행도</span>
       <div className="w-16 h-2 bg-gray-3 rounded-full relative">
         <div
@@ -38,7 +43,7 @@ function SettingButton() {
     router.push("/profile/setting");
   };
   return (
-    <div onClick={onSettingClick}>
+    <div onClick={onSettingClick} className="mr-2">
       <SettingIcon />
     </div>
   );
@@ -52,7 +57,7 @@ function PlusButton({ onClick }: IPlusButton) {
   return (
     <div
       onClick={onClick}
-      className="flex items-center text-gray-9 text-xs gap-1 font-semibold cursor-pointer"
+      className="flex items-center text-gray-9 text-xs gap-1 font-semibold cursor-pointer mr-2"
     >
       <AddSurveyIcon />
       <div>새 설문 만들기</div>
@@ -64,20 +69,29 @@ interface IRightButton {
   hasSearch?: boolean;
   progress?: number;
   hasSetting?: boolean;
-  newSurvey?: () => void;
+  hasPlus?: boolean;
+  hasUpdate?: boolean;
+  onClick?: () => void;
 }
 
 export default function RightButton({
   hasSearch,
   progress,
   hasSetting,
-  newSurvey,
+  hasPlus,
+  hasUpdate,
+  onClick,
 }: IRightButton) {
   return (
     <>
       {hasSearch && <SearchBox />}
       {progress !== undefined && <ProgressBar progress={progress} />}
-      {newSurvey && <PlusButton onClick={newSurvey} />}
+      {hasPlus && <PlusButton onClick={onClick!} />}
+      {hasUpdate && (
+        <div className="cursor-pointer" onClick={onClick}>
+          <UpdateIcon />
+        </div>
+      )}
       {hasSetting && <SettingButton />}
     </>
   );

@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
 import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
 import { ArrowBackIcon } from "../components/styles/Icons";
+import { TopBar } from "../components/TopBar/TopBar";
 
 export default function IdPassword() {
   const router = useRouter();
@@ -25,12 +25,8 @@ export default function IdPassword() {
 
   return (
     <>
-      <TopBar
-        onLeftClick={() => router.back()}
-        leftSVG={<ArrowBackIcon />}
-        title="회원가입"
-      />
-      <div className="screen">
+      <TopBar hasBack noShadow title="회원가입" />
+      <div className="white-screen">
         <div className="inner-screen px-12 flex-col">
           {/* 닉네임 */}
           <div className="w-full">
@@ -94,7 +90,7 @@ export default function IdPassword() {
           </div>
           {showSheet && (
             <>
-              <Overlay />
+              <Overlay onClick={toggleShowSheet} />
               <AgeSheet
                 showSheet={showSheet}
                 onClose={toggleShowSheet}

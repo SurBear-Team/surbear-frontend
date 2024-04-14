@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
-import { TopBar } from "../components/TopBar";
 import { ArrowBackIcon } from "../components/styles/Icons";
+import { TopBar } from "../components/TopBar/TopBar";
 
 type CheckboxName =
   | "all"
@@ -89,13 +89,9 @@ export default function Clause() {
   return (
     <>
       {/* 탑바 */}
-      <TopBar
-        onLeftClick={() => router.back()}
-        leftSVG={<ArrowBackIcon />}
-        title="회원가입"
-      />
+      <TopBar hasBack noShadow title="회원가입" />
       {/* 본문 */}
-      <div className="screen">
+      <div className="white-screen">
         <div className="inner-screen px-10">
           <div className="flex">
             <Checkbox
@@ -176,7 +172,7 @@ export default function Clause() {
         {showSheet && (
           <>
             {/* 오버레이 배경 */}
-            <Overlay />
+            <Overlay onClick={toggleShowSheet} />
             {/* 시트 */}
             <Sheet
               showSheet={showSheet}

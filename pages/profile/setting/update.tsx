@@ -67,7 +67,7 @@ export default function MemberUpdate() {
 
         {showSheet && (
           <>
-            <Overlay />
+            <Overlay onClick={() => setShowNicknameDialog((prev) => !prev)} />
             <AgeSheet
               showSheet={showSheet}
               onClose={toggleShowSheet}

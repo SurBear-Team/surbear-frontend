@@ -1,10 +1,9 @@
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { SettingCard } from "../components/SettingCard";
 import { useState } from "react";
-import { Overlay } from "@/pages/components/styles/Overlay";
 import { Dialog } from "@/pages/components/Dialog";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function ProfileSetting() {
   const route = useRouter();
@@ -13,13 +12,7 @@ export default function ProfileSetting() {
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          route.back();
-        }}
-        title="설정"
-      />
+      <TopBar title="설정" hasBack />
       <div className="white-screen flex-col justify-start pt-[50px]">
         <div className="inner-screen">
           <SettingCard

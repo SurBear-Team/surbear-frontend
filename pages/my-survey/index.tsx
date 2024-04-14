@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { TabBar } from "../components/TabBar";
-import { TopBar } from "../components/TopBar";
-import { AddSurveyIcon } from "../components/styles/Icons";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
-import { Overlay } from "../components/styles/Overlay";
 import { NewSurveyCard } from "./components/NewSurveyCard";
+import { TopBar } from "../components/TopBar/TopBar";
 
 export default function MySurvey() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -16,20 +14,13 @@ export default function MySurvey() {
     <>
       <TopBar
         title="내 설문"
-        rightSVG={
-          <div className="flex items-center text-gray-9 text-xs gap-1 font-semibold cursor-pointer">
-            <AddSurveyIcon />
-            <div>새 설문 만들기</div>
-          </div>
-        }
-        onRightClick={() => {
+        newSurvey={() => {
           setShowNewSurveyCard((prev) => !prev);
         }}
-        hasShadow={true}
       />
 
-      <div className="screen">
-        <div className="list-screen pt-[50px]">
+      <div className="screen pt-[50px]">
+        <div className="list-screen">
           <div className="list">
             <MySurveyCard
               category={`카테고리`}

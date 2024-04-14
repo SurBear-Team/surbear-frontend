@@ -2,6 +2,7 @@ import { ArrowBackIcon, ReportIcon } from "@/pages/components/styles/Icons";
 import { IDummyData } from "../data";
 import { motion } from "framer-motion";
 import { Overlay } from "@/pages/components/styles/Overlay";
+import { useRouter } from "next/router";
 
 interface IDetail {
   layoutId: number;
@@ -10,9 +11,14 @@ interface IDetail {
 }
 
 export default function Detail({ layoutId, data, onBackClick }: IDetail) {
+  const router = useRouter();
+  const onStartClick = () => {
+    router.push(`/browse/${data.id}`);
+  };
+
   return (
     <>
-      <Overlay />
+      <Overlay onClick={onBackClick} />
       <motion.div
         onClick={onBackClick}
         className="fixed top-0 left-auto right-auto w-full max-w-xl h-screen px-6 pt-[106px] pb-[105px] z-50"
@@ -62,7 +68,12 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
           <div className="gray-line" />
           {/* 하단 버튼 */}
           <div className="px-2 pt-4">
-            <button className="primary-btn-style long-button">시작하기</button>
+            <button
+              onClick={onStartClick}
+              className="primary-btn-style long-button"
+            >
+              시작하기
+            </button>
           </div>
         </motion.div>
       </motion.div>

@@ -1,10 +1,9 @@
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { SettingCard } from "../components/SettingCard";
 import { useState } from "react";
-import { Overlay } from "@/pages/components/styles/Overlay";
 import { Dialog } from "@/pages/components/Dialog";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function ProfileSetting() {
   const route = useRouter();
@@ -13,32 +12,28 @@ export default function ProfileSetting() {
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          route.back();
-        }}
-        title="설정"
-      />
+      <TopBar title="설정" hasBack noShadow />
       <div className="white-screen flex-col justify-start pt-[50px]">
-        <SettingCard
-          title="회원 정보 수정"
-          onClick={() => {
-            route.push("/profile/setting/update");
-          }}
-        />
-        <SettingCard
-          title="로그아웃"
-          onClick={() => {
-            setShowLogoutDialog(true);
-          }}
-        />
-        <SettingCard
-          title="회원 탈퇴"
-          onClick={() => {
-            setShowWithdrawalDialog(true);
-          }}
-        />
+        <div className="inner-screen">
+          <SettingCard
+            title="회원 정보 수정"
+            onClick={() => {
+              route.push("/profile/setting/update");
+            }}
+          />
+          <SettingCard
+            title="로그아웃"
+            onClick={() => {
+              setShowLogoutDialog(true);
+            }}
+          />
+          <SettingCard
+            title="회원 탈퇴"
+            onClick={() => {
+              setShowWithdrawalDialog(true);
+            }}
+          />
+        </div>
         {showLogoutDialog && (
           <>
             <div className="flex justify-center">

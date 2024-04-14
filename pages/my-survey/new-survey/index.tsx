@@ -1,9 +1,9 @@
 import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon, UpdateIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function NewSurvey() {
   const router = useRouter();
@@ -17,16 +17,15 @@ export default function NewSurvey() {
   return (
     <>
       <TopBar
-        leftSVG={<ArrowBackIcon />}
+        hasBack
         onLeftClick={() => {
           setShowCloseDialog(true);
         }}
         title={`설문제목 2줄까지 길어지면 ... 설문제목 2...`}
-        rightSVG={<UpdateIcon />}
+        hasUpdate
         onRightClick={() => {
           console.log("제목 수정");
         }}
-        hasShadow={true}
       />
 
       <div className="screen flex-col pt-14">

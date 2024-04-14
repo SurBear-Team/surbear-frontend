@@ -1,19 +1,12 @@
 import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
-import { ArrowBackIcon } from "../components/styles/Icons";
 import { SettingCard } from "../profile/components/SettingCard";
+import { TopBar } from "../components/TopBar/TopBar";
 
 export default function ManagerFunction() {
   const router = useRouter();
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          router.push("/sign-in");
-        }}
-        title="관리자 기능"
-      />
+      <TopBar hasBack title="관리자 기능" />
       <div className="screen flex-col justify-start pt-[66px]">
         <SettingCard
           title="관리자 관리"

@@ -1,22 +1,15 @@
 import { useState } from "react";
-import { TopBar } from "../components/TopBar";
-import { SettingIcon } from "../components/styles/Icons";
 import { useRouter } from "next/router";
 import { ProfileCard } from "./components/ProfileCard";
 import { TabBar } from "../components/TabBar";
+import { TopBar } from "../components/TopBar/TopBar";
 
 export default function Profile() {
   const router = useRouter();
   const [nickname, setNickname] = useState("닉네임n글자까지");
   return (
     <>
-      <TopBar
-        title={nickname}
-        rightSVG={<SettingIcon />}
-        onRightClick={() => {
-          router.push("/profile/setting");
-        }}
-      />
+      <TopBar title={nickname} hasSetting />
       <div className="screen px-6 pt-[66px] bg-[#F8F8F8] flex-col gap-3 justify-start">
         <ProfileCard
           title="현재 포인트"

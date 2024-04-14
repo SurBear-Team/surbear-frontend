@@ -1,4 +1,3 @@
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { MemberUpdateCard } from "../components/MemberUpdateCard";
@@ -6,6 +5,7 @@ import { useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { AgeSheet } from "@/pages/sign-up/Components/AgeSheet";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function MemberUpdate() {
   const route = useRouter();
@@ -21,29 +21,25 @@ export default function MemberUpdate() {
 
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          route.back();
-        }}
-        title="회원 정보 수정"
-      />
+      <TopBar hasBack title="회원 정보 수정" noShadow />
       <div className="white-screen flex-col justify-start pt-[50px]">
-        <MemberUpdateCard
-          title="닉네임"
-          content={`user nickname`}
-          onClick={() => {
-            setShowNicknameDialog((prev) => !prev);
-          }}
-        />
+        <div className="inner-screen">
+          <MemberUpdateCard
+            title="닉네임"
+            content={`user nickname`}
+            onClick={() => {
+              setShowNicknameDialog((prev) => !prev);
+            }}
+          />
 
-        <MemberUpdateCard
-          title="나이대"
-          content={`user age big`}
-          onClick={() => {
-            setShowSheet(true);
-          }}
-        />
+          <MemberUpdateCard
+            title="나이대"
+            content={`user age big`}
+            onClick={() => {
+              setShowSheet(true);
+            }}
+          />
+        </div>
 
         {showNicknameDialog && (
           <>
@@ -65,7 +61,7 @@ export default function MemberUpdate() {
 
         {showSheet && (
           <>
-            <Overlay />
+            <Overlay onClick={() => setShowNicknameDialog((prev) => !prev)} />
             <AgeSheet
               showSheet={showSheet}
               onClose={toggleShowSheet}

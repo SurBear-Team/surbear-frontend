@@ -15,7 +15,7 @@ export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
       initial="hidden"
       animate={showSheet ? "visible" : "hidden"}
       variants={SheetAnimation}
-      className="fixed bottom-0 z-20 bg-white border-1 border-black w-full h-4/5 rounded-2xl px-6 pb-6"
+      className="fixed bottom-0 z-50 bg-white border-1 border-black w-full h-4/5 rounded-2xl px-6 pb-6"
     >
       <div className="flex pt-4 gap-1 cursor-pointer" onClick={onClose}>
         <svg

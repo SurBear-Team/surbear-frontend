@@ -87,12 +87,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     const endTime = new Date(recoilSurvey.endTime);
     const maxPerson = parseInt(recoilSurvey.maxPerson);
 
+    // 공백을 제거한 후의 값들을 검사
+    const titleTrimmed = recoilSurvey.surveyTitle.trim();
+    const descriptionTrimmed = recoilSurvey.surveyDescription.trim();
+
     // 유효성 검사: 설문 주제, 설문 설명, 종료 시간, 최대 인원, 종료 시간
-    if (
-      !recoilSurvey.surveyTitle ||
-      !recoilSurvey.surveyDescription ||
-      !recoilSurvey.endTime
-    ) {
+    if (!titleTrimmed || !descriptionTrimmed || !recoilSurvey.endTime) {
       showDialog("설문 주제, 설문 설명, 종료 시간을 모두 입력해주세요.");
       return;
     } else if (maxPerson !== null && (isNaN(maxPerson) || maxPerson <= 0)) {
@@ -109,7 +109,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   return (
     <>
       <Overlay onClick={() => {}} />
-      <div className="card fixed bg-white w-auto gap-4 shadow-md z-20">
+      <div className="card fixed bg-white w-auto gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
           <div className="sm-gray-9-text text-base">새 설문 주제</div>
@@ -206,7 +206,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
       </div>
 
       {/* 오류 다이얼로그 */}
-      <div className="fixed h-screen flex items-center justify-center z-30">
+      <div className="fixed h-screen flex items-center justify-center z-50">
         {dialog.open && (
           <Dialog
             title={dialog.text}

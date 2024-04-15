@@ -29,9 +29,9 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setRecoilSurvey({
       surveyTitle: "",
       surveyDescription: "",
-      surveyCategory: "전체",
+      surveyCategory: "기타",
       isPrivate: false,
-      maxPerson: "255",
+      maxPerson: "",
       endTime: "",
     });
   }, []);
@@ -50,17 +50,8 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
 
   // 카테고리
   const [showCategory, setShowCategory] = useState(false);
-  const [categoryType, setCategoryType] = useState("전체");
-  let categoryList = [
-    "전체",
-    "사회",
-    "경제",
-    "생활",
-    "취미",
-    "IT",
-    "문화",
-    "기타",
-  ];
+  const [categoryType, setCategoryType] = useState("기타");
+  let categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
   // 카테고리 onChange
   const handleCategorySelect = (selectedCategoryType: string) => {
     setCategoryType(selectedCategoryType);
@@ -104,7 +95,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     ) {
       showDialog("설문 주제, 설문 설명, 종료 시간을 모두 입력해주세요.");
       return;
-    } else if (isNaN(maxPerson) || maxPerson <= 0) {
+    } else if (maxPerson !== null && (isNaN(maxPerson) || maxPerson <= 0)) {
       showDialog("최대 인원을 확인해주세요");
       return;
     } else if (endTime < now) {

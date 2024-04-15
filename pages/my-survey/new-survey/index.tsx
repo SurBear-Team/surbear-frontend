@@ -8,6 +8,7 @@ import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 import { useRecoilValue } from "recoil";
 import { newSurveyState } from "../surveyState";
+import { Overlay } from "@/pages/components/styles/Overlay";
 
 export interface NewSurveyProps {
   title: string;
@@ -52,6 +53,27 @@ export default function NewSurvey() {
       prevComponents.filter((_, i) => i !== index)
     );
   };
+
+  // GPT
+  const [showGTP, setShowGPT] = useState(true);
+  const [questions, setQuestions] = useState([
+    recoilSurvey.surveyTitle,
+    "222",
+    "333",
+  ]);
+  const addGPTClick = () => {
+    if (selectedQuestion) {
+      setShowGPT(false);
+      setNewSurvey(true);
+    }
+  };
+
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+
+  const handleSelectQuestion = (question: any) => {
+    setSelectedQuestion(question);
+  };
+
   return (
     <>
       <InputTopBar
@@ -101,6 +123,7 @@ export default function NewSurvey() {
           <MakeSurvey
             addNewSurveyComponent={addNewSurveyComponent}
             onCancel={() => setNewSurvey(false)}
+            title={selectedQuestion}
           />
         ) : (
           // 버튼 보임
@@ -109,6 +132,7 @@ export default function NewSurvey() {
               className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
               onClick={() => {
                 setNewSurvey((prev) => !prev);
+                setSelectedQuestion(null);
               }}
             >
               <PlusIcon /> 새 질문 추가
@@ -147,6 +171,58 @@ export default function NewSurvey() {
               isDelete={true}
             />
           </>
+        )}
+        {/* GPT */}
+        {showGTP && (
+          <div className="fixed h-screen flex items-center justify-center z-30">
+            <Overlay />
+            <div className="card bg-white flex-col gap-6 z-30 max-w-[400px]">
+              {/* 타이틀 */}
+              <span className="whitespace-nowrap sm-gray-9-text text-base">
+                이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!
+                <div className="whitespace-nowrap sm-gray-9-text text-base pt-2">
+                  마음에 드는 질문을 선택할 수 있어요!
+                </div>
+              </span>
+              {/* 추천 받은 질문들 */}
+              <div className="flex flex-col gap-4">
+                {questions.map((question) => (
+                  <div key={question} className="flex items-center gap-2">
+                    <div
+                      className={`check-box ${
+                        selectedQuestion === question
+                          ? "bg-[#6E7CF2]"
+                          : "bg-white border border-gray-7"
+                      }`}
+                      onClick={() => handleSelectQuestion(question)}
+                    />
+                    {question}
+                  </div>
+                ))}
+              </div>
+
+              {/* 회색선 */}
+              <div className="gray-line my-6" />
+
+              {/* 버튼들 */}
+              <div className="w-full flex gap-4">
+                <button
+                  onClick={() => {
+                    setShowGPT(false);
+                  }}
+                  className="long-button bg-white text-gray-5 border-gray-5 w-full"
+                >
+                  추가하지 않기
+                </button>
+                <button
+                  onClick={addGPTClick}
+                  className="long-button primary-btn-style w-full"
+                >
+                  추가하고 시작!
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>

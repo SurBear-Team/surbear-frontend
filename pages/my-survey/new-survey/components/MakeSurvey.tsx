@@ -13,11 +13,13 @@ interface MakeSurveyProps {
     count?: number;
   }) => void;
   onCancel: () => void;
+  title: string | null;
 }
 
 export const MakeSurvey = ({
   addNewSurveyComponent,
   onCancel,
+  title,
 }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
 
@@ -26,6 +28,8 @@ export const MakeSurvey = ({
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
 
+  const [firstTitle, setFirstTitle] = useState(title);
+
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
     setTypeType(selectedTypeType);
@@ -33,7 +37,11 @@ export const MakeSurvey = ({
   };
 
   // (공통) 질문 제목
-  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionTitle, setQuestionTitle] = useState(firstTitle || "");
+
+  const handleTitleChange = (e: any) => {
+    setQuestionTitle(e.target.value);
+  };
 
   // (객관식) 답변들 배열, 처음엔 빈 답변 2개
   const [choices, setChoices] = useState(["", ""]);
@@ -114,6 +122,7 @@ export const MakeSurvey = ({
     // 저장 후 입력 필드 초기화
     setQuestionTitle("");
     setChoices(["", ""]);
+    setFirstTitle("");
   };
 
   return (
@@ -152,7 +161,7 @@ export const MakeSurvey = ({
           <input
             className="main-input text-gray-9"
             value={questionTitle}
-            onChange={(e) => setQuestionTitle(e.target.value)}
+            onChange={handleTitleChange}
             placeholder="제목을 입력해주세요"
           />
         </div>
@@ -196,7 +205,7 @@ export const MakeSurvey = ({
           <Dialog
             title={alertText}
             onlyOneBtn={true}
-            rightText={"닫기"}
+            rightText="닫기"
             onRightClick={() => {
               setAlertDialog((prev) => !prev);
             }}

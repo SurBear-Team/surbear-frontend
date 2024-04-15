@@ -1,11 +1,7 @@
-import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
 import { useForm } from "react-hook-form";
-import { ArrowBackIcon } from "../components/styles/Icons";
+import { TopBar } from "../components/TopBar/TopBar";
 
 export default function IdPassword() {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -28,12 +24,8 @@ export default function IdPassword() {
 
   return (
     <>
-      <TopBar
-        onLeftClick={() => router.back()}
-        leftSVG={<ArrowBackIcon />}
-        title="회원가입"
-      />
-      <div className="screen px-12 flex-col w-full">
+      <TopBar hasBack noShadow title="회원가입" />
+      <div className="white-screen px-12 flex-col w-full">
         <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
           {/* 아이디 */}
           <div className="w-full relative mb-10">

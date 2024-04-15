@@ -108,7 +108,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
 
   return (
     <>
-      <Overlay />
+      <Overlay onClick={() => {}} />
       <div className="card fixed bg-white w-auto gap-4 shadow-md z-20">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">

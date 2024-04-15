@@ -4,7 +4,7 @@ import CharSVG from "../components/styles/CharSVG";
 export default function CompleteSignUp() {
   const router = useRouter();
   return (
-    <div className="screen flex-col px-12">
+    <div className="white-screen flex-col px-12">
       <div className="flex justify-center mb-8">
         <CharSVG />
       </div>

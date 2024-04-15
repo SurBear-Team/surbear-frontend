@@ -174,9 +174,9 @@ export default function NewSurvey() {
         )}
         {/* GPT */}
         {showGTP && (
-          <div className="fixed h-screen flex items-center justify-center z-30">
-            <Overlay />
-            <div className="card bg-white flex-col gap-6 z-30 max-w-[400px]">
+          <div className="fixed h-screen flex items-center justify-center z-50">
+            <Overlay onClick={() => {}} />
+            <div className="card bg-white flex-col gap-6 z-50 max-w-[400px]">
               {/* 타이틀 */}
               <span className="whitespace-nowrap sm-gray-9-text text-base">
                 이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!

@@ -32,7 +32,7 @@ export const MySurveyCard = ({
           >
             삭제
           </button>
-          {(beforeStart || beforeFinish) && (
+          {beforeStart && (
             <button
               onClick={onUpdateClick}
               className="long-button bg-white border-primary-1 text-primary-1"

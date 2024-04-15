@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
 import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
-import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
+import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 import { useRecoilValue } from "recoil";
 import { newSurveyState } from "../surveyState";
 import { Overlay } from "@/pages/components/styles/Overlay";
+import { SurveyTabBar } from "./components/SurveyTabBar";
 
 export interface NewSurveyProps {
   title: string;
@@ -183,58 +184,25 @@ export default function NewSurvey() {
             )
           )}
 
-          {isNewSurvey ? (
+          {/* 새 질문 */}
+          {isNewSurvey && (
             <MakeSurvey
               addNewSurveyComponent={addNewSurveyComponent}
               onCancel={() => setIsNewSurvey(false)}
               title={selectedQuestion}
             />
-          ) : (
-            // 버튼 보임
-            <div className="flex flex-col">
-              <button
-                className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
-                onClick={() => {
-                  setIsNewSurvey((prev) => !prev);
-                  setSelectedQuestion(null);
-                }}
-              >
-                <PlusIcon /> 새 질문 추가
-              </button>
-
-              <button
-                className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
-                onClick={addNewPage}
-                disabled={surveyPages.some((page) => page.length === 0)}
-              >
-                <PlusIcon /> 새 페이지 추가
-              </button>
-
-              <button
-                className="medium-Btn border-red-1 text-red-1 self-center w-auto mt-6 flex items-center gap-1"
-                onClick={() => {
-                  setAlertDialog(true);
-                  setAlertText("페이지를 삭제하시겠습니까?");
-                }}
-              >
-                <MinusIcon /> 이 페이지 삭제
-              </button>
-            </div>
           )}
 
-          <div className="flex gap-4 p-4 justify-between ">
+          {/* 페이지 삭제 버튼 */}
+          <div className="flex justify-center">
             <button
-              className="medium-Btn white-bg-primary-btn"
-              onClick={goToPrevPage}
-              disabled={currentPage === 0}
+              className="medium-Btn border-red-1 text-red-1 self-center w-auto mt-6 flex items-center gap-1"
+              onClick={() => {
+                setAlertDialog(true);
+                setAlertText("페이지를 삭제하시겠습니까?");
+              }}
             >
-              이전 페이지
-            </button>
-            <button
-              className="medium-Btn white-bg-primary-btn"
-              onClick={goToNextPage}
-            >
-              다음 페이지
+              <MinusIcon /> 페이지 삭제
             </button>
           </div>
 
@@ -322,6 +290,16 @@ export default function NewSurvey() {
           )}
         </div>
       </div>
+
+      {/* 탭바 */}
+      <SurveyTabBar
+        setIsNewSurvey={setIsNewSurvey}
+        addNewPage={addNewPage}
+        goToPrevPage={goToPrevPage}
+        goToNextPage={goToNextPage}
+        saveSurvey={() => {}}
+        canAddPage={!surveyPages.some((page) => page.length === 0)}
+      />
     </>
   );
 }

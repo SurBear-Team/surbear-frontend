@@ -49,6 +49,10 @@ export default function Browse() {
     setCurrentPage(el);
   };
 
+  const CARD_PER_PAGE = 10;
+  const startPoint = (currentPage - 1) * CARD_PER_PAGE;
+  const list = data.slice(startPoint, startPoint + CARD_PER_PAGE);
+
   return (
     <>
       <TopBar
@@ -75,7 +79,7 @@ export default function Browse() {
               />
             )}
             <div className="list">
-              {data.map((el) => (
+              {list.map((el) => (
                 <SurveyCard
                   layoutId={el.id}
                   key={el.id}

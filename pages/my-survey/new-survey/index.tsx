@@ -299,6 +299,7 @@ export default function NewSurvey() {
         goToNextPage={goToNextPage}
         saveSurvey={() => {}}
         canAddPage={!surveyPages.some((page) => page.length === 0)}
+        setSelectedQuestion={setSelectedQuestion}
       />
     </>
   );

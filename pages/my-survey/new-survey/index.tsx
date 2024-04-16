@@ -155,7 +155,7 @@ export default function NewSurvey() {
         onBackClick={() => setShowCloseDialog(!showCloseDialog)}
       />
       <div className="white-screen flex-col pt-14 justify-start">
-        <div className="inner-screen">
+        <div className="inner-screen pb-20">
           <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
             {`${currentPage + 1} 페이지`}
           </div>
@@ -292,15 +292,17 @@ export default function NewSurvey() {
       </div>
 
       {/* 탭바 */}
-      <SurveyTabBar
-        setIsNewSurvey={setIsNewSurvey}
-        addNewPage={addNewPage}
-        goToPrevPage={goToPrevPage}
-        goToNextPage={goToNextPage}
-        saveSurvey={() => {}}
-        canAddPage={!surveyPages.some((page) => page.length === 0)}
-        setSelectedQuestion={setSelectedQuestion}
-      />
+      {editIndex === null && !isNewSurvey && (
+        <SurveyTabBar
+          setIsNewSurvey={setIsNewSurvey}
+          addNewPage={addNewPage}
+          goToPrevPage={goToPrevPage}
+          goToNextPage={goToNextPage}
+          saveSurvey={() => {}}
+          canAddPage={!surveyPages.some((page) => page.length === 0)}
+          setSelectedQuestion={setSelectedQuestion}
+        />
+      )}
     </>
   );
 }

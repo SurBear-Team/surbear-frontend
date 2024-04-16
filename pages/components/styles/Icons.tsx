@@ -385,14 +385,18 @@ export const SmallCheckIcon = () => {
   );
 };
 
+interface OrderIconProps {
+  isActive: boolean;
+}
+
 // 위 향한 네모세모 순서 화살표 아이콘
-export const OrderUpIcon = () => {
+export const OrderUpIcon: React.FC<OrderIconProps> = ({ isActive }) => {
   return (
     <svg
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      fill="none"
+      fill={isActive ? "#6E7CF2" : "#9E9E9E"}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clip-path="url(#clip0_345_5182)">
@@ -403,16 +407,16 @@ export const OrderUpIcon = () => {
           height="23"
           rx="3.5"
           fill="white"
-          stroke="#9E9E9E"
+          stroke={isActive ? "#6E7CF2" : "#9E9E9E"}
         />
         <path
           d="M11.134 8.5C11.5189 7.83333 12.4811 7.83333 12.866 8.5L16.3301 14.5C16.715 15.1667 16.2339 16 15.4641 16H8.5359C7.7661 16 7.28497 15.1667 7.66987 14.5L11.134 8.5Z"
-          fill="#9E9E9E"
+          stroke={isActive ? "#6E7CF2" : "#9E9E9E"}
         />
       </g>
       <defs>
         <clipPath id="clip0_345_5182">
-          <rect width="24" height="24" fill="white" />
+          <rect width="24" height="24" fill="#9E9E9E" />
         </clipPath>
       </defs>
     </svg>
@@ -420,13 +424,13 @@ export const OrderUpIcon = () => {
 };
 
 // 아래 향한 네모세모 순서 화살표 아이콘
-export const OrderDownIcon = () => {
+export const OrderDownIcon: React.FC<OrderIconProps> = ({ isActive }) => {
   return (
     <svg
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      fill="none"
+      fill={isActive ? "#6E7CF2" : "none"}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clip-path="url(#clip0_345_5199)">
@@ -437,11 +441,11 @@ export const OrderDownIcon = () => {
           height="23"
           rx="3.5"
           fill="white"
-          stroke="#9E9E9E"
+          stroke={isActive ? "#6E7CF2" : "#9E9E9E"}
         />
         <path
           d="M12.866 15.5C12.4811 16.1667 11.5189 16.1667 11.134 15.5L7.66987 9.5C7.28497 8.83333 7.7661 8 8.5359 8L15.4641 8C16.2339 8 16.715 8.83333 16.3301 9.5L12.866 15.5Z"
-          fill="#9E9E9E"
+          fill={isActive ? "#6E7CF2" : "#9E9E9E"}
         />
       </g>
       <defs>
@@ -454,14 +458,14 @@ export const OrderDownIcon = () => {
 };
 
 // (새 설문) 새 질문 동그라미플러스 아이콘
-export const AddQuestionIcon = () => {
+export const AddQuestionIcon = (isActive: any) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="32"
       height="32"
       viewBox="0 0 32 32"
-      fill="none"
+      fill={isActive ? "#6E7CF2" : "none"}
     >
       <path
         fillRule="evenodd"

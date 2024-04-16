@@ -87,16 +87,19 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         <PlusIcon /> 새 답변 추가
       </button>
 
-      {orderChangeVisible && (
-        <OrderChangeCard
-          orderTitle="답변 순서 변경"
-          orderContents={choices}
-          onOrderUpClick={handleOrderUp}
-          onOrderDownClick={handleOrderDown}
-          onCancleClick={() => setOrderChangeVisible(false)}
-          onMoveClick={() => setOrderChangeVisible(false)}
-        />
-      )}
+      {/* 답변 순서 변경 */}
+      <div className="flex fixed top-1/3 left-1/2 justify-center z-50">
+        {orderChangeVisible && (
+          <OrderChangeCard
+            orderTitle="답변 순서 변경"
+            orderContents={choices}
+            onOrderUpClick={handleOrderUp}
+            onOrderDownClick={handleOrderDown}
+            onCancleClick={() => setOrderChangeVisible(false)}
+            onMoveClick={() => setOrderChangeVisible(false)}
+          />
+        )}
+      </div>
     </>
   );
 };

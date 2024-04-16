@@ -190,6 +190,7 @@ export default function NewSurvey() {
               addNewSurveyComponent={addNewSurveyComponent}
               onCancel={() => setIsNewSurvey(false)}
               title={selectedQuestion}
+              setIsNewSurvey={setIsNewSurvey}
             />
           )}
 

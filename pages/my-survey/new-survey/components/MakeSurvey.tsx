@@ -14,12 +14,14 @@ interface MakeSurveyProps {
   }) => void;
   onCancel: () => void;
   title: string | null;
+  setIsNewSurvey?: (value: (prevState: boolean) => boolean) => void;
 }
 
 export const MakeSurvey = ({
   addNewSurveyComponent,
   onCancel,
   title,
+  setIsNewSurvey,
 }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
 
@@ -125,6 +127,11 @@ export const MakeSurvey = ({
     setFirstTitle("");
   };
 
+  const onSaveAndAddClick = () => {
+    onSaveClick();
+    setIsNewSurvey?.((prevState) => true);
+  };
+
   return (
     <>
       <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
@@ -197,7 +204,7 @@ export const MakeSurvey = ({
         <CancleSaveButtonFrame
           onCancleClick={onCancel}
           onSaveClick={onSaveClick}
-          onSaveAndAddClick={() => {}}
+          onSaveAndAddClick={onSaveAndAddClick}
         />
       </div>
       <div className="fixed h-screen flex justify-center">

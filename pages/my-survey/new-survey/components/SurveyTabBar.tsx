@@ -13,6 +13,7 @@ interface SurveyTabBarProps {
   goToNextPage: () => void;
   saveSurvey: () => void;
   canAddPage: boolean;
+  setSelectedQuestion: (value: any) => void;
 }
 
 export const SurveyTabBar = ({
@@ -22,12 +23,16 @@ export const SurveyTabBar = ({
   goToNextPage,
   saveSurvey,
   canAddPage,
+  setSelectedQuestion,
 }: SurveyTabBarProps) => {
   return (
     <div className="w-full flex justify-center gap-4 left-0 right-0 mx-auto px-1 bg-white fixed bottom-0">
       <div className="flex w-full max-w-xl justify-between">
         <TabButton
-          onClick={() => setIsNewSurvey((prev) => !prev)}
+          onClick={() => {
+            setIsNewSurvey((prev) => !prev);
+            setSelectedQuestion(null);
+          }}
           icon={<AddQuestionIcon />}
           label="새 질문"
         />

@@ -6,6 +6,7 @@ import Detail from "./components/Detail";
 import { IDummyData, categoryList, dummyData, orderList } from "./data";
 import { AnimatePresence } from "framer-motion";
 import { TopBar } from "../components/TopBar/TopBar";
+import Pagination from "./components/Pagination";
 
 export default function Browse() {
   const [categoryType, setCategoryType] = useState("전체");
@@ -30,6 +31,22 @@ export default function Browse() {
     const [tempData] = data.filter((el) => el.id === id);
     setDetailData(tempData);
     setShowDetail(true);
+  };
+
+  // 페이지네이션
+  const last = Math.ceil(data.length / 10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(last);
+  const onPrevClick = () => {
+    currentPage <= 1 ? setCurrentPage(1) : setCurrentPage((prev) => prev - 1);
+  };
+  const onNextClick = () => {
+    currentPage >= lastPage
+      ? setCurrentPage(lastPage)
+      : setCurrentPage((prev) => prev + 1);
+  };
+  const onNumClick = (el: number) => {
+    setCurrentPage(el);
   };
 
   return (
@@ -89,6 +106,13 @@ export default function Browse() {
           />
         )}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        lastPage={lastPage}
+        onPrevClick={onPrevClick}
+        onNextClick={onNextClick}
+        onNumClick={onNumClick}
+      />
       <TabBar />
     </>
   );

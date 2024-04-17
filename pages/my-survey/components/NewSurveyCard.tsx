@@ -115,6 +115,10 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     router.push("my-survey/new-survey");
   };
 
+  // 콘솔찍기
+  useEffect(() => {
+    console.log("리코일 값:", recoilSurvey);
+  }, [recoilSurvey]);
   return (
     <>
       <Overlay onClick={() => {}} />

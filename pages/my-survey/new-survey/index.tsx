@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { newSurveyState } from "../surveyState";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
+import { OrderChangeCard } from "../components/OrderChangeCard";
 
 export interface NewSurveyProps {
   title: string;
@@ -22,11 +23,71 @@ export default function NewSurvey() {
   const router = useRouter();
 
   const recoilSurvey = useRecoilValue(newSurveyState);
-  const [title, setTitle] = useState(recoilSurvey.surveyTitle);
+  const [title, setTitle] = useState(recoilSurvey.surveyTitle); // 새 설문 카드에서 가져온 제목
   const [showCloseDialog, setShowCloseDialog] = useState(false);
-  const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창 여부
+  const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
+
+  const [showOrderChange, setShowOrderChange] = useState(false);
+
+  // (공통)페이지
+  const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // 순서 변경 전 순서 저장
+  const [originalPage, setOriginalPage] = useState<NewSurveyProps[]>([]);
+
+  // 질문 순서를 위로 이동
+  const handleOrderUp = (index: number) => {
+    // 첫 번째 질문이 아닌 경우
+    if (index > 0) {
+      // 현재 페이지 질문을 복사해 새로운 배열 생성
+      const newPage = [...surveyPages[currentPage]];
+      [newPage[index], newPage[index - 1]] = [
+        newPage[index - 1],
+        newPage[index],
+      ]; // 선택한 질문과 바로 위 질문을 스왑
+      setSurveyPages(
+        surveyPages.map((page, pageIndex) =>
+          pageIndex === currentPage ? newPage : page
+        ) // 변경된 페이지 배열로 업데이트
+      );
+    }
+  };
+
+  // 질문 순서를 아래로 이동
+  const handleOrderDown = (index: number) => {
+    // 마지막 질문이 아닌 경우
+    if (index < surveyPages[currentPage].length - 1) {
+      // 현재 페이지 질문을 복사해 새로운 배열 생성
+      const newPage = [...surveyPages[currentPage]];
+      [newPage[index], newPage[index + 1]] = [
+        newPage[index + 1],
+        newPage[index],
+      ]; // 선택한 질문과 바로 아래 질문을 스왑
+      setSurveyPages(
+        surveyPages.map((page, pageIndex) =>
+          pageIndex === currentPage ? newPage : page
+        ) // 변경된 페이지 배열로 업데이트
+      );
+    }
+  };
+
+  const showOrderChangeModal = () => {
+    // 현재 페이지의 상태를 복사하여 저장
+    setOriginalPage([...surveyPages[currentPage]]);
+    setShowOrderChange(true);
+  };
+
+  const handleCancelOrderChange = () => {
+    setSurveyPages(
+      surveyPages.map((page, idx) =>
+        idx === currentPage ? [...originalPage] : page
+      )
+    ); // 원래 페이지로 복구
+    setShowOrderChange(false);
+  };
 
   // (공통) 설문 만들기
   const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
@@ -74,10 +135,6 @@ export default function NewSurvey() {
     setSurveyPages(updatedPages);
     setEditIndex(null); // 수정 모드 종료
   };
-
-  // (공통)페이지
-  const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
-  const [currentPage, setCurrentPage] = useState(0);
 
   // 다음 페이지 이동
   const goToNextPage = () => {
@@ -180,6 +237,7 @@ export default function NewSurvey() {
                   setEditData(componentData);
                 }}
                 onDelete={() => deleteQuestion(index)}
+                onOrderChange={() => showOrderChangeModal()}
               />
             )
           )}
@@ -218,6 +276,19 @@ export default function NewSurvey() {
               }}
               onRightClick={deleteCurrentPage}
               isDelete={true}
+            />
+          )}
+
+          {showOrderChange && (
+            <OrderChangeCard
+              orderTitle="질문 순서 변경"
+              orderContents={surveyPages[currentPage].map(
+                (question) => question.title
+              )} // 질문 제목만 전달
+              onOrderUpClick={handleOrderUp}
+              onOrderDownClick={handleOrderDown}
+              onCancleClick={handleCancelOrderChange}
+              onMoveClick={() => setShowOrderChange(false)}
             />
           )}
 

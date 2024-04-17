@@ -23,7 +23,7 @@ export const OrderChangeCard = ({
   return (
     <>
       <Overlay onClick={onCancleClick} />
-      <div className="fixed card p-8 flex gap-6 bg-white z-50">
+      <div className="fixed top-1/2 left-1/2 card p-8 flex gap-6 bg-white z-50">
         <div className="sm-gray-9-text text-base">{orderTitle}</div>
 
         <div className="flex flex-col gap-4 w-full">

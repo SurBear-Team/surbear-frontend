@@ -1,10 +1,11 @@
-import { IDummyData } from "../browse/data";
+import { ISurvey, category } from "../browse/data";
+import { getTime } from "../utils";
 import { ReportIcon } from "./styles/Icons";
 import { motion } from "framer-motion";
 
 interface SurveyCardProps {
   layoutId: number;
-  data: IDummyData;
+  data: ISurvey;
   isFinished?: boolean;
   onReportClick?: () => void;
   showDetail?: () => void;
@@ -17,6 +18,7 @@ export default function SurveyCard({
   onReportClick,
   showDetail,
 }: SurveyCardProps) {
+  const { year, month, date, hour, minute } = getTime(data.deadLine);
   return (
     <>
       <motion.div
@@ -24,7 +26,7 @@ export default function SurveyCard({
         className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}
       >
         <div className="flex justify-between items-center w-full pb-2">
-          <div className="sm-gray-text">{data.category}</div>
+          <div className="sm-gray-text">{category[data.surveyType]}</div>
           <div
             onClick={onReportClick}
             className="text-red-1 flex items-center gap-1 text-[10px] cursor-pointer"
@@ -37,9 +39,11 @@ export default function SurveyCard({
 
         <>
           <div className="sm-gray-text">
-            <div>작성자 : {data.user}</div>
+            <div>작성자 : {data.surveyAuthorId}</div>
             <div>지급 포인트 : {data.point} pt</div>
-            <div>설문 마감 : {data.deadline}</div>
+            <div>
+              설문 마감 : {year}년 {month}월 {date}일 {hour}시 {minute}분까지
+            </div>
           </div>
           <div
             onClick={showDetail}

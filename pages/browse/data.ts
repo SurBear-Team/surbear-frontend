@@ -1,3 +1,25 @@
+export interface ISurvey {
+  id: number;
+  ongoingType: string;
+  surveyType:
+    | "ALL"
+    | "SOCIAL"
+    | "ECONOMY"
+    | "LIFE"
+    | "HOBBY"
+    | "IT"
+    | "CULTURE"
+    | "ETC";
+  surveyAuthorId: string;
+  maximumNumberOfPeople: number;
+  title: string;
+  description: string;
+  point: number;
+  openType: boolean;
+  deleted: boolean;
+  deadLine: string;
+}
+
 export interface IDummyData {
   id: number;
   user: string;
@@ -420,18 +442,391 @@ export const dummyData: IDummyData[] = [
     quesCount: 36,
     userCount: 14,
   },
+  {
+    id: 33,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 34,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 35,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 36,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 37,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 38,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 39,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 40,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 41,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 42,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 43,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 44,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 45,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 46,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 47,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 48,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 49,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 50,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 51,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 52,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 53,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 54,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 55,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 56,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 57,
+    user: "김치냉장고",
+    title: "설문조사1",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-10",
+    deadline: "2024-04-13-14",
+    quesCount: 20,
+    userCount: 10,
+  },
+  {
+    id: 58,
+    user: "드럼세탁기",
+    title: "설문조사2",
+    description: "Lorem ipsum dolor sit",
+    category: "사회",
+    point: 15,
+    started: "2024-04-09",
+    deadline: "2024-04-13-14",
+    quesCount: 30,
+    userCount: 20,
+  },
+  {
+    id: 59,
+    user: "김치세탁기",
+    title: "설문조사3",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 5,
+    started: "2024-04-08",
+    deadline: "2024-04-13-14",
+    quesCount: 23,
+    userCount: 16,
+  },
+  {
+    id: 60,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
+  {
+    id: 61,
+    user: "드럼냉장고",
+    title: "설문조사4",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sequi, libero adipisci cumque corrupti laudantium architecto facilis, asperiores eos ipsa perferendis hic vel culpa cum praesentium recusandae nisi! Molestiae, incidunt.",
+    category: "사회",
+    point: 10,
+    started: "2024-04-07",
+    deadline: "2024-04-13-14",
+    quesCount: 36,
+    userCount: 14,
+  },
 ];
 
-export const categoryList = [
-  "전체",
-  "사회",
-  "경제",
-  "생활",
-  "취미",
-  "IT",
-  "문화",
-  "기타",
-];
+export const category = {
+  ALL: "전체",
+  SOCIAL: "사회",
+  ECONOMY: "경제",
+  LIFE: "생활",
+  HOBBY: "취미",
+  IT: "IT",
+  CULTURE: "문화",
+  ETC: "기타",
+};
+
+console.log();
 
 export const orderList = [
   "최신순",

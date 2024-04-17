@@ -15,7 +15,7 @@ export default function PointHistory() {
           {PointList.map((index) => (
             <ListCard
               key={index}
-              getDate={"2024.03.15"}
+              getTime={"2024.03.15"}
               getWay={`설문조사 참여`}
               plusMinus={`+`}
               point={`10pt`}

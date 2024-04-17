@@ -1,12 +1,13 @@
 import { ArrowBackIcon, ReportIcon } from "@/pages/components/styles/Icons";
-import { IDummyData } from "../data";
+import { ISurvey, category } from "../data";
 import { motion } from "framer-motion";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
+import { getTime } from "@/pages/utils";
 
 interface IDetail {
   layoutId: number;
-  data: IDummyData;
+  data: ISurvey;
   onBackClick: () => void;
 }
 
@@ -15,6 +16,7 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
   const onStartClick = () => {
     router.push(`/browse/${data.id}`);
   };
+  const { year, month, date, hour, minute } = getTime(data.deadLine);
 
   return (
     <>
@@ -46,17 +48,20 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
           {/* 설문 정보 */}
           <div className="flex flex-col px-2 gap-2">
             <div className="flex flex-col gap-1">
-              <div className="sm-gray-text">{data.category}</div>
+              <div className="sm-gray-text">{category[data.surveyType]}</div>
               <div className="font-semibold text-base text-gray-9">
                 {data.title}
               </div>
               <div className="flex flex-col sm-gray-text">
-                <span>작성자 : {data.user}</span>
+                <span>작성자 : {data.surveyAuthorId}</span>
                 <span>지급 포인트 : {data.point}pt</span>
-                <span>총 문항 수 : {data.quesCount}개</span>
-                <span>참여한 사람 : {data.userCount}명</span>
+                <span>총 문항 수 : n개</span>
+                <span>참여한 사람 : n명</span>
                 <span>설문 시작일 : 년 월 일</span>
-                <span>설문 마강 : 년 월 일 시</span>
+                <span>
+                  설문 마감 : {year}년 {month}월 {date}일 {hour}시 {minute}
+                  분까지
+                </span>
               </div>
             </div>
           </div>

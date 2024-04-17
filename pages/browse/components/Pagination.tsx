@@ -34,7 +34,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="flex flex-col gap-4 fixed bottom-[97px] z-50 left-1/2 -translate-x-1/2">
+    <div className="flex flex-col gap-4 fixed bottom-[97px] z-30 left-1/2 -translate-x-1/2">
       <div className="flex gap-2">
         <div
           onClick={onPrevClick}
@@ -42,10 +42,11 @@ export default function Pagination({
         >
           <PrevPageIcon />
         </div>
-        {getPages().map((el) =>
+        {getPages().map((el, index) =>
           // 페이지에 1보다 작은 수가 있다면 공간만 차지하게 함
           el >= 1 ? (
             <div
+              key={index}
               onClick={() => onNumClick(el)}
               className={`w-6 h-6 rounded-full justify-center items-center flex cursor-pointer shadow-md ${
                 el === currentPage
@@ -56,7 +57,10 @@ export default function Pagination({
               <div className="text-xs font-semibold mt-[2px]">{el}</div>
             </div>
           ) : (
-            <div className="w-6 h-6 rounded-full justify-center items-center flex" />
+            <div
+              key={index}
+              className="w-6 h-6 rounded-full justify-center items-center flex"
+            />
           )
         )}
 

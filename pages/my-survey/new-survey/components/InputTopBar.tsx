@@ -42,22 +42,24 @@ export const InputTopBar = ({ title, setTitle, onBackClick }: any) => {
   };
 
   return (
-    <div className="bg-white fixed w-full shadow-md flex px-6 py-3 justify-between gap-2">
-      <div onClick={onBackClick}>
-        <ArrowBackIcon />
-      </div>
+    <div className="fixed bg-white flex shadow-md justify-center w-full z-10">
+      <div className="w-full h-12 max-w-xl flex px-6 py-3 justify-between items-center gap-2">
+        <div onClick={onBackClick}>
+          <ArrowBackIcon />
+        </div>
 
-      <input
-        ref={inputRef}
-        value={localTitle}
-        disabled={!inUpdate}
-        onChange={onTitleChange}
-        onBlur={onFocusOut}
-        className={`w-full sm-gray-9-text text-base bg-white`}
-      />
+        <input
+          ref={inputRef}
+          value={localTitle}
+          disabled={!inUpdate}
+          onChange={onTitleChange}
+          onBlur={onFocusOut}
+          className={`w-full sm-gray-9-text text-base bg-white`}
+        />
 
-      <div onClick={toggleUpdate}>
-        {inUpdate ? <CheckIcon /> : <UpdateIcon />}
+        <div onClick={toggleUpdate}>
+          {inUpdate ? <CheckIcon /> : <UpdateIcon />}
+        </div>
       </div>
     </div>
   );

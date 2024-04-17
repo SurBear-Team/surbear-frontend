@@ -11,6 +11,7 @@ interface MultipleChoiceQuestionProps {
   addChoice: () => void;
   deleteChoice: (index: number) => void;
   handleChoiceChange: (index: number, newText: string) => void;
+  isEdit?: boolean;
 }
 
 export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
@@ -18,6 +19,7 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   addChoice,
   deleteChoice,
   handleChoiceChange,
+  isEdit,
 }) => {
   const [orderChangeVisible, setOrderChangeVisible] = useState(false);
 
@@ -56,17 +58,19 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
             placeholder="답변을 입력해주세요"
           />
           <div className="flex gap-2 justify-end">
-            <div
-              onClick={() => {
-                setOrderChangeVisible(true);
-              }}
-              className="flex items-center gap-1 cursor-pointer"
-            >
-              <TwoWayArrowIcon />
-              <div className="text-green-1 font-semibold text-sm">
-                답변 이동
+            {isEdit && (
+              <div
+                onClick={() => {
+                  setOrderChangeVisible(true);
+                }}
+                className="flex items-center gap-1 cursor-pointer"
+              >
+                <TwoWayArrowIcon />
+                <div className="text-green-1 font-semibold text-sm">
+                  답변 이동
+                </div>
               </div>
-            </div>
+            )}
 
             <div
               onClick={() => deleteChoice(index)}

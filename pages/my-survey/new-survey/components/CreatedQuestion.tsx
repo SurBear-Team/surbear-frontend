@@ -38,6 +38,9 @@ export const CreatedQuestion = ({
       {count && <div>최대 글자수: {count}</div>}
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">
+        <button onClick={() => {}} className="small-Btn white-bg-primary-btn">
+          순서 변경
+        </button>
         <button onClick={onEdit} className="small-Btn white-bg-primary-btn">
           수정
         </button>

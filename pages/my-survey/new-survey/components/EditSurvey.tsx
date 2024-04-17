@@ -5,6 +5,7 @@ import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { NewSurveyProps } from "..";
 import { Dialog } from "@/pages/components/Dialog";
+import { MyCheckBox } from "@/pages/components/MyCheckBox";
 
 interface EditSurveyProps {
   initialData: NewSurveyProps;
@@ -31,6 +32,12 @@ export const EditSurvey = ({
     if (selectedTypeType === "객관식" && (!choices || choices.length === 0)) {
       setChoices(["", ""]); // 최소 2개의 빈 답변으로 초기화
     }
+  };
+
+  // 필수 답변 체크 박스
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setIsChecked((isChecked) => !isChecked);
   };
 
   const [alertDialog, setAlertDialog] = useState(false);
@@ -117,7 +124,10 @@ export const EditSurvey = ({
           <div className="sm-gray-9-text text-base whitespace-nowrap">
             필수 답변
           </div>
-          <div className="check-box bg-white border-[1px] border-gray-7" />
+          <MyCheckBox
+            isChecked={isChecked}
+            onCheckClick={handleCheckboxChange}
+          />
         </div>
       </div>
 
@@ -142,6 +152,7 @@ export const EditSurvey = ({
             addChoice={addChoice}
             deleteChoice={deleteChoice}
             handleChoiceChange={handleChoiceChange}
+            isEdit={true}
           />
         </>
       )}

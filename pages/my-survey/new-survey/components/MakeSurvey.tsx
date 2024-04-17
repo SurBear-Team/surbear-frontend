@@ -4,6 +4,7 @@ import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "../../components/TypeDropDown";
 import { Dialog } from "@/pages/components/Dialog";
+import { MyCheckBox } from "@/pages/components/MyCheckBox";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -29,6 +30,12 @@ export const MakeSurvey = ({
   const [typeType, setTypeType] = useState("객관식");
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
+
+  // 필수 답변 체크 박스
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setIsChecked((isChecked) => !isChecked);
+  };
 
   const [firstTitle, setFirstTitle] = useState(title);
 
@@ -158,7 +165,10 @@ export const MakeSurvey = ({
             <div className="sm-gray-9-text text-base whitespace-nowrap">
               필수 답변
             </div>
-            <div className="check-box bg-white border-[1px] border-gray-7" />
+            <MyCheckBox
+              isChecked={isChecked}
+              onCheckClick={handleCheckboxChange}
+            />
           </div>
         </div>
 
@@ -207,7 +217,7 @@ export const MakeSurvey = ({
           onSaveAndAddClick={onSaveAndAddClick}
         />
       </div>
-      <div className="fixed h-screen flex justify-center">
+      <div className="fixed h-screen z-50 flex justify-center">
         {alertDialog && (
           <Dialog
             title={alertText}

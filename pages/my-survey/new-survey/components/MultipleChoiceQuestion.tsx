@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MinusIcon,
   PlusIcon,
   TwoWayArrowIcon,
 } from "@/pages/components/styles/Icons";
+import { OrderChangeCard } from "../../components/OrderChangeCard";
 
 interface MultipleChoiceQuestionProps {
   choices: string[];
@@ -18,6 +19,30 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   deleteChoice,
   handleChoiceChange,
 }) => {
+  const [orderChangeVisible, setOrderChangeVisible] = useState(false);
+
+  const handleOrderUp = (index: number) => {
+    if (index > 0) {
+      let newChoices = [...choices];
+      [newChoices[index - 1], newChoices[index]] = [
+        newChoices[index],
+        newChoices[index - 1],
+      ];
+      newChoices.forEach((choice, i) => handleChoiceChange(i, choice));
+    }
+  };
+
+  const handleOrderDown = (index: number) => {
+    if (index < choices.length - 1) {
+      let newChoices = [...choices];
+      [newChoices[index], newChoices[index + 1]] = [
+        newChoices[index + 1],
+        newChoices[index],
+      ];
+      newChoices.forEach((choice, i) => handleChoiceChange(i, choice));
+    }
+  };
+
   return (
     <>
       {/* 답변들 */}
@@ -33,7 +58,7 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
           <div className="flex gap-2 justify-end">
             <div
               onClick={() => {
-                console.log("답변 이동");
+                setOrderChangeVisible(true);
               }}
               className="flex items-center gap-1 cursor-pointer"
             >
@@ -61,6 +86,20 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
       >
         <PlusIcon /> 새 답변 추가
       </button>
+
+      {/* 답변 순서 변경 */}
+      <div className="flex fixed top-1/3 left-1/2 justify-center z-50">
+        {orderChangeVisible && (
+          <OrderChangeCard
+            orderTitle="답변 순서 변경"
+            orderContents={choices}
+            onOrderUpClick={handleOrderUp}
+            onOrderDownClick={handleOrderDown}
+            onCancleClick={() => setOrderChangeVisible(false)}
+            onMoveClick={() => setOrderChangeVisible(false)}
+          />
+        )}
+      </div>
     </>
   );
 };

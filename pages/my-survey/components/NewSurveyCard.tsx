@@ -85,7 +85,10 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     const now = new Date();
     // 종료 시간 파싱
     const endTime = new Date(recoilSurvey.endTime);
-    const maxPerson = parseInt(recoilSurvey.maxPerson);
+
+    const maxPersonInput =
+      recoilSurvey.maxPerson.trim() === "" ? "255" : recoilSurvey.maxPerson;
+    const parsedMaxPerson = parseInt(maxPersonInput, 10);
 
     // 공백을 제거한 후의 값들을 검사
     const titleTrimmed = recoilSurvey.surveyTitle.trim();
@@ -95,13 +98,19 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     if (!titleTrimmed || !descriptionTrimmed || !recoilSurvey.endTime) {
       showDialog("설문 주제, 설문 설명, 종료 시간을 모두 입력해주세요.");
       return;
-    } else if (maxPerson !== null && (isNaN(maxPerson) || maxPerson <= 0)) {
+    } else if (isNaN(parsedMaxPerson) || parsedMaxPerson <= 0) {
       showDialog("최대 인원을 확인해주세요");
       return;
     } else if (endTime < now) {
       showDialog("종료 시간을 확인해주세요");
       return;
     }
+
+    setRecoilSurvey((prevState) => ({
+      ...prevState,
+      maxPerson: maxPersonInput,
+    }));
+
     // 모든 검사를 통과했으면 다음 페이지로 이동
     router.push("my-survey/new-survey");
   };

@@ -2,7 +2,6 @@ import { Dialog } from "@/pages/components/Dialog";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
-import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
 import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
@@ -11,6 +10,7 @@ import { newSurveyState } from "../surveyState";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
 import { OrderChangeCard } from "../components/OrderChangeCard";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export interface NewSurveyProps {
   title: string;
@@ -206,11 +206,7 @@ export default function NewSurvey() {
   }, [surveyPages]);
   return (
     <>
-      <InputTopBar
-        title={title}
-        setTitle={setTitle}
-        onBackClick={() => setShowCloseDialog(!showCloseDialog)}
-      />
+      <TopBar title={title} hasBack />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
           <div className="sm-gray-9-text text-base py-6 pl-6 self-start">

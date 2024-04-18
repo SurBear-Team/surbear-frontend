@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ArrowDownIcon } from "../styles/Icons";
 import Selection from "./components/Selection";
 
 interface SubTopBarProps {

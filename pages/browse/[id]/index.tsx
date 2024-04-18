@@ -6,16 +6,10 @@ import { useRouter } from "next/router";
 export default function Survey() {
   const router = useRouter();
   const { id } = router.query;
-  const [data] = dummyData.filter((el) => el.id === +id!);
   const [progress, setProgress] = useState(0);
   return (
     <>
-      <TopBar
-        title="설문 그만두기"
-        hasBack
-        progress={progress}
-        subTitle={data.title}
-      />
+      <TopBar title="설문 그만두기" hasBack progress={progress} />
       <button
         className="mt-20"
         onClick={() => {

@@ -6,6 +6,8 @@ import { useRecoilState } from "recoil";
 import { newSurveyState } from "../surveyState";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
+import api from "@/pages/api/config";
+import { getTime } from "@/pages/utils";
 
 export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const router = useRouter();
@@ -29,10 +31,9 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setRecoilSurvey({
       surveyTitle: "",
       surveyDescription: "",
-      surveyCategory: "기타",
+      surveyCategory: "ETC",
       isPrivate: false,
       maxPerson: "",
-      endTime: "",
     });
   }, []);
 
@@ -52,11 +53,26 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const [showCategory, setShowCategory] = useState(false);
   const [categoryType, setCategoryType] = useState("기타");
   let categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
+
+  const categoryMapping: { [key: string]: string } = {
+    기타: "ETC",
+    사회: "SOCIAL",
+    경제: "ECONOMY",
+    생활: "LIFE",
+    취미: "HOBBY",
+    IT: "IT",
+    문화: "CULTURE",
+  };
+
   // 카테고리 onChange
   const handleCategorySelect = (selectedCategoryType: string) => {
+    const englishCategory = categoryMapping[selectedCategoryType] || "ETC";
     setCategoryType(selectedCategoryType);
     setShowCategory(false);
-    setRecoilSurvey({ ...recoilSurvey, surveyCategory: selectedCategoryType });
+    setRecoilSurvey((prevState) => ({
+      ...prevState,
+      surveyCategory: englishCategory,
+    }));
   };
 
   // 결과 비공개 여부 체크박스
@@ -75,16 +91,15 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setRecoilSurvey({ ...recoilSurvey, maxPerson: e.target.value });
   };
 
+  const [deadline, setDeadline] = useState("");
   // 종료 시간 onChange
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecoilSurvey({ ...recoilSurvey, endTime: e.target.value });
+    setDeadline(e.target.value);
   };
 
   // 다음 버튼 클릭
   const nextButtonClick = () => {
     const now = new Date();
-    // 종료 시간 파싱
-    const endTime = new Date(recoilSurvey.endTime);
 
     const maxPersonInput =
       recoilSurvey.maxPerson.trim() === "" ? "255" : recoilSurvey.maxPerson;
@@ -94,14 +109,24 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     const titleTrimmed = recoilSurvey.surveyTitle.trim();
     const descriptionTrimmed = recoilSurvey.surveyDescription.trim();
 
+    const { year, month, date, hour, minute } = getTime(deadline);
+    // 종료 시간 파싱
+    const isoDeadline = new Date(
+      year,
+      month - 1,
+      date,
+      hour,
+      minute
+    ).toISOString();
+
     // 유효성 검사: 설문 주제, 설문 설명, 종료 시간, 최대 인원, 종료 시간
-    if (!titleTrimmed || !descriptionTrimmed || !recoilSurvey.endTime) {
+    if (!titleTrimmed || !descriptionTrimmed || !deadline) {
       showDialog("설문 주제, 설문 설명, 종료 시간을 모두 입력해주세요.");
       return;
     } else if (isNaN(parsedMaxPerson) || parsedMaxPerson <= 0) {
       showDialog("최대 인원을 확인해주세요");
       return;
-    } else if (endTime < now) {
+    } else if (new Date(isoDeadline) < now) {
       showDialog("종료 시간을 확인해주세요");
       return;
     }
@@ -111,8 +136,20 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
       maxPerson: maxPersonInput,
     }));
 
-    // 모든 검사를 통과했으면 다음 페이지로 이동
-    router.push("my-survey/new-survey");
+    api
+      .post("/survey", {
+        surveyType: recoilSurvey.surveyCategory,
+        surveyAuthorId: 3,
+        maximumNumberOfPeople: recoilSurvey.maxPerson,
+        title: recoilSurvey.surveyTitle,
+        description: recoilSurvey.surveyDescription,
+        openType: recoilSurvey.isPrivate,
+        deadLine: isoDeadline,
+      })
+      .then(() => {
+        // 모든 검사를 통과했으면 다음 페이지로 이동
+        router.push("my-survey/new-survey");
+      });
   };
 
   // 콘솔찍기
@@ -191,7 +228,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
             종료 시간
           </div>
           <input
-            value={recoilSurvey.endTime}
+            value={deadline}
             onChange={handleEndTimeChange}
             type="datetime-local"
             className="w-full p-2 border border-gray-4 sm-gray-9-text"

@@ -8,6 +8,5 @@ export const newSurveyState = atom({
     surveyCategory: "",
     isPrivate: false,
     maxPerson: "255",
-    endTime: "",
   },
 });

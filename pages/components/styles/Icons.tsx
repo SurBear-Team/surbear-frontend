@@ -452,7 +452,7 @@ export const OrderDownIcon = () => {
   );
 };
 
-export const PrevPageIcon = () => {
+export const BluePrevIcon = () => {
   return (
     <svg
       width="16"
@@ -469,7 +469,7 @@ export const PrevPageIcon = () => {
   );
 };
 
-export const NextPageIcon = () => {
+export const BlueNextIcon = () => {
   return (
     <svg
       width="16"

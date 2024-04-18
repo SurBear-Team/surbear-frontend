@@ -452,7 +452,7 @@ export const OrderDownIcon = () => {
   );
 };
 
-export const BluePrevIcon = () => {
+/* export const BluePrevIcon = () => {
   return (
     <svg
       width="16"
@@ -485,3 +485,4 @@ export const BlueNextIcon = () => {
     </svg>
   );
 };
+ */

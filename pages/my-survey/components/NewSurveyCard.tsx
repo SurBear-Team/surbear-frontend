@@ -30,10 +30,6 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   useEffect(() => {
     setRecoilSurvey({
       surveyTitle: "",
-      surveyDescription: "",
-      surveyCategory: "ETC",
-      isPrivate: false,
-      maxPerson: "",
     });
   }, []);
 
@@ -42,11 +38,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setRecoilSurvey({ ...recoilSurvey, surveyTitle: e.target.value });
   };
 
+  const [description, setDescription] = useState("");
   // 설명 onChange
   const handleDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setRecoilSurvey({ ...recoilSurvey, surveyDescription: e.target.value });
+    setDescription(e.target.value);
   };
 
   // 카테고리
@@ -64,31 +61,30 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     문화: "CULTURE",
   };
 
+  const [category, setCategory] = useState("ETC");
+
   // 카테고리 onChange
   const handleCategorySelect = (selectedCategoryType: string) => {
     const englishCategory = categoryMapping[selectedCategoryType] || "ETC";
     setCategoryType(selectedCategoryType);
     setShowCategory(false);
-    setRecoilSurvey((prevState) => ({
-      ...prevState,
-      surveyCategory: englishCategory,
-    }));
+    setCategory(englishCategory);
   };
 
   // 결과 비공개 여부 체크박스
   const [isChecked, setIsChecked] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   // 체크박스 onChange
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-    setRecoilSurvey((prevState) => ({
-      ...prevState,
-      isPrivate: !prevState.isPrivate,
-    }));
+    setIsPrivate(isPrivate);
   };
+
+  const [maxPeople, setMaxPeople] = useState("");
 
   // 최대 인원 onChange
   const handleMaxPersonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecoilSurvey({ ...recoilSurvey, maxPerson: e.target.value });
+    setMaxPeople(e.target.value);
   };
 
   const [deadline, setDeadline] = useState("");
@@ -101,13 +97,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const nextButtonClick = () => {
     const now = new Date();
 
-    const maxPersonInput =
-      recoilSurvey.maxPerson.trim() === "" ? "255" : recoilSurvey.maxPerson;
+    const maxPersonInput = maxPeople.trim() === "" ? "10000" : maxPeople;
     const parsedMaxPerson = parseInt(maxPersonInput, 10);
 
     // 공백을 제거한 후의 값들을 검사
     const titleTrimmed = recoilSurvey.surveyTitle.trim();
-    const descriptionTrimmed = recoilSurvey.surveyDescription.trim();
+    const descriptionTrimmed = description.trim();
 
     const { year, month, date, hour, minute } = getTime(deadline);
     // 종료 시간 파싱
@@ -129,6 +124,9 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     } else if (new Date(isoDeadline) < now) {
       showDialog("종료 시간을 확인해주세요");
       return;
+    } else if (dialog.open) {
+      showDialog("진행 중인 다이얼로그를 확인해주세요.");
+      return;
     }
 
     setRecoilSurvey((prevState) => ({
@@ -138,12 +136,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
 
     api
       .post("/survey", {
-        surveyType: recoilSurvey.surveyCategory,
+        surveyType: category,
         surveyAuthorId: 3,
-        maximumNumberOfPeople: recoilSurvey.maxPerson,
+        maximumNumberOfPeople: maxPeople,
         title: recoilSurvey.surveyTitle,
-        description: recoilSurvey.surveyDescription,
-        openType: recoilSurvey.isPrivate,
+        description: description,
+        openType: isPrivate,
         deadLine: isoDeadline,
       })
       .then(() => {
@@ -151,11 +149,6 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
         router.push("my-survey/new-survey");
       });
   };
-
-  // 콘솔찍기
-  useEffect(() => {
-    console.log("리코일 값:", recoilSurvey);
-  }, [recoilSurvey]);
   return (
     <>
       <Overlay onClick={() => {}} />
@@ -175,7 +168,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
         <div className="flex flex-col gap-1 w-full">
           <div className="sm-gray-9-text text-base">설문 설명</div>
           <textarea
-            value={recoilSurvey.surveyDescription}
+            value={description}
             onChange={handleDescriptionChange}
             className="w-auto p-2 items-start border-[1px] border-gray-4 font-normal text-sm resize-none"
           />
@@ -214,7 +207,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
           <div className="flex justify-between w-full items-center gap-2">
             <div className="sm-gray-9-text text-base">최대 인원</div>
             <input
-              value={recoilSurvey.maxPerson}
+              value={maxPeople}
               onChange={handleMaxPersonChange}
               type="number"
               className="w-16 p-2 rounded-lg border-[1px] border-gray-4"

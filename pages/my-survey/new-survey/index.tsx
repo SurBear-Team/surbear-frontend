@@ -17,6 +17,7 @@ export interface NewSurveyProps {
   type: string;
   choices?: string[];
   count?: number;
+  page?: number;
 }
 
 export default function NewSurvey() {
@@ -245,6 +246,7 @@ export default function NewSurvey() {
               onCancel={() => setIsNewSurvey(false)}
               title={selectedQuestion}
               setIsNewSurvey={setIsNewSurvey}
+              page={currentPage + 1}
             />
           )}
 

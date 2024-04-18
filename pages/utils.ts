@@ -1,8 +1,11 @@
+import dayjs from "dayjs";
+
 export const getTime = (time: string) => {
-  const year = time.slice(0, 4);
-  const month = time.slice(5, 7);
-  const date = time.slice(8, 10);
-  const hour = time.slice(11, 13);
-  const minute = time.slice(14, 16);
+  const dayJs = dayjs(time);
+  const year = dayJs.year();
+  const month = dayJs.month() + 1;
+  const date = dayJs.date();
+  const hour = dayJs.hour();
+  const minute = dayJs.minute();
   return { year, month, date, hour, minute };
 };

@@ -7,6 +7,8 @@ import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
 
+const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
+
 export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const router = useRouter();
 
@@ -23,17 +25,15 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setDialog({ open: false, text: "" });
   };
 
-  // NewSurveyCard 나올 때 이전에 recoil에 저장된 값 초기화
-  useEffect(() => {}, []);
-
   // 제목
   const [surveyTitle, setSurveyTitle] = useState("");
 
   // 제목 onChange
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const title = e.target.value;
-    setSurveyTitle(title);
-    localStorage.setItem("surveyTitle", title); // localStorage에 제목 저장
+    setSurveyTitle(e.target.value);
+  };
+  const handleTitleBlur = () => {
+    localStorage.setItem("surveyTitle", surveyTitle);
   };
 
   const [description, setDescription] = useState("");
@@ -47,7 +47,6 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   // 카테고리
   const [showCategory, setShowCategory] = useState(false);
   const [categoryType, setCategoryType] = useState("기타");
-  let categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 
   const categoryMapping: { [key: string]: string } = {
     기타: "ETC",
@@ -71,11 +70,9 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
 
   // 결과 비공개 여부 체크박스
   const [isChecked, setIsChecked] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
   // 체크박스 onChange
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-    setIsPrivate(isPrivate);
   };
 
   const [maxPeople, setMaxPeople] = useState("");
@@ -134,12 +131,16 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
         maximumNumberOfPeople: parsedMaxPerson,
         title: surveyTitle,
         description: description,
-        openType: isPrivate,
+        openType: !isChecked,
         deadLine: isoDeadline,
       })
       .then(() => {
         // 모든 검사를 통과했으면 다음 페이지로 이동
         router.push("my-survey/new-survey");
+      })
+      .catch((error) => {
+        console.error("설문 생성 오류 : ", error);
+        showDialog("설문 생성에 실패했습니다.");
       });
   };
   return (
@@ -152,6 +153,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
           <input
             value={surveyTitle}
             onChange={handleTitleChange}
+            onBlur={handleTitleBlur}
             placeholder="설문 주제를 입력해주세요"
             className="main-input text-gray-9"
           />

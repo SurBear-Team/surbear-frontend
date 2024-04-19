@@ -2,31 +2,91 @@ import { Dialog } from "@/pages/components/Dialog";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
-import { InputTopBar } from "@/pages/my-survey/new-survey/components/InputTopBar";
 import { CreatedQuestion } from "./components/CreatedQuestion";
 import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
-import { useRecoilValue } from "recoil";
-import { newSurveyState } from "../surveyState";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
+import { OrderChangeCard } from "../components/OrderChangeCard";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export interface NewSurveyProps {
   title: string;
   type: string;
   choices?: string[];
   count?: number;
+  page?: number;
 }
 
 export default function NewSurvey() {
   const router = useRouter();
 
-  const recoilSurvey = useRecoilValue(newSurveyState);
-  const [title, setTitle] = useState(recoilSurvey.surveyTitle);
+  const surveyTitle = localStorage.getItem("surveyTitle");
+
   const [showCloseDialog, setShowCloseDialog] = useState(false);
-  const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창 여부
+  const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
+
+  const [showOrderChange, setShowOrderChange] = useState(false);
+
+  // (공통)페이지
+  const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // 순서 변경 전 순서 저장
+  const [originalPage, setOriginalPage] = useState<NewSurveyProps[]>([]);
+
+  // 질문 순서를 위로 이동
+  const handleOrderUp = (index: number) => {
+    // 첫 번째 질문이 아닌 경우
+    if (index > 0) {
+      // 현재 페이지 질문을 복사해 새로운 배열 생성
+      const newPage = [...surveyPages[currentPage]];
+      [newPage[index], newPage[index - 1]] = [
+        newPage[index - 1],
+        newPage[index],
+      ]; // 선택한 질문과 바로 위 질문을 스왑
+      setSurveyPages(
+        surveyPages.map((page, pageIndex) =>
+          pageIndex === currentPage ? newPage : page
+        ) // 변경된 페이지 배열로 업데이트
+      );
+    }
+  };
+
+  // 질문 순서를 아래로 이동
+  const handleOrderDown = (index: number) => {
+    // 마지막 질문이 아닌 경우
+    if (index < surveyPages[currentPage].length - 1) {
+      // 현재 페이지 질문을 복사해 새로운 배열 생성
+      const newPage = [...surveyPages[currentPage]];
+      [newPage[index], newPage[index + 1]] = [
+        newPage[index + 1],
+        newPage[index],
+      ]; // 선택한 질문과 바로 아래 질문을 스왑
+      setSurveyPages(
+        surveyPages.map((page, pageIndex) =>
+          pageIndex === currentPage ? newPage : page
+        ) // 변경된 페이지 배열로 업데이트
+      );
+    }
+  };
+
+  const showOrderChangeModal = () => {
+    // 현재 페이지의 상태를 복사하여 저장
+    setOriginalPage([...surveyPages[currentPage]]);
+    setShowOrderChange(true);
+  };
+
+  const handleCancelOrderChange = () => {
+    setSurveyPages(
+      surveyPages.map((page, idx) =>
+        idx === currentPage ? [...originalPage] : page
+      )
+    ); // 원래 페이지로 복구
+    setShowOrderChange(false);
+  };
 
   // (공통) 설문 만들기
   const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
@@ -75,10 +135,6 @@ export default function NewSurvey() {
     setEditIndex(null); // 수정 모드 종료
   };
 
-  // (공통)페이지
-  const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
-  const [currentPage, setCurrentPage] = useState(0);
-
   // 다음 페이지 이동
   const goToNextPage = () => {
     if (currentPage < surveyPages.length - 1) {
@@ -115,11 +171,7 @@ export default function NewSurvey() {
 
   // GPT
   const [showGTP, setShowGPT] = useState(true);
-  const [questions, setQuestions] = useState([
-    recoilSurvey.surveyTitle,
-    "222",
-    "333",
-  ]);
+  const [questions, setQuestions] = useState([surveyTitle, "222", "333"]);
   const addGPTClick = () => {
     if (selectedQuestion) {
       setShowGPT(false);
@@ -131,6 +183,12 @@ export default function NewSurvey() {
   // GPT 선택한 질문
   const handleSelectQuestion = (question: any) => {
     setSelectedQuestion(question);
+  };
+
+  // 설문조사 저장 버튼
+  const saveSurvey = () => {
+    localStorage.removeItem("surveyTitle");
+    router.push("/my-survey");
   };
 
   // 콘솔 찍기
@@ -149,11 +207,7 @@ export default function NewSurvey() {
   }, [surveyPages]);
   return (
     <>
-      <InputTopBar
-        title={title}
-        setTitle={setTitle}
-        onBackClick={() => setShowCloseDialog(!showCloseDialog)}
-      />
+      <TopBar title={surveyTitle!} hasBack />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
           <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
@@ -180,6 +234,7 @@ export default function NewSurvey() {
                   setEditData(componentData);
                 }}
                 onDelete={() => deleteQuestion(index)}
+                onOrderChange={() => showOrderChangeModal()}
               />
             )
           )}
@@ -190,6 +245,8 @@ export default function NewSurvey() {
               addNewSurveyComponent={addNewSurveyComponent}
               onCancel={() => setIsNewSurvey(false)}
               title={selectedQuestion}
+              setIsNewSurvey={setIsNewSurvey}
+              page={currentPage + 1}
             />
           )}
 
@@ -217,6 +274,19 @@ export default function NewSurvey() {
               }}
               onRightClick={deleteCurrentPage}
               isDelete={true}
+            />
+          )}
+
+          {showOrderChange && (
+            <OrderChangeCard
+              orderTitle="질문 순서 변경"
+              orderContents={surveyPages[currentPage].map(
+                (question) => question.title
+              )} // 질문 제목만 전달
+              onOrderUpClick={handleOrderUp}
+              onOrderDownClick={handleOrderDown}
+              onCancleClick={handleCancelOrderChange}
+              onMoveClick={() => setShowOrderChange(false)}
             />
           )}
 
@@ -298,7 +368,7 @@ export default function NewSurvey() {
           addNewPage={addNewPage}
           goToPrevPage={goToPrevPage}
           goToNextPage={goToNextPage}
-          saveSurvey={() => {}}
+          saveSurvey={saveSurvey}
           canAddPage={!surveyPages.some((page) => page.length === 0)}
           setSelectedQuestion={setSelectedQuestion}
         />

@@ -4,6 +4,8 @@ import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { TypeDropDown } from "../../components/TypeDropDown";
 import { Dialog } from "@/pages/components/Dialog";
+import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import api from "@/pages/api/config";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -14,26 +16,45 @@ interface MakeSurveyProps {
   }) => void;
   onCancel: () => void;
   title: string | null;
+  setIsNewSurvey?: (value: (prevState: boolean) => boolean) => void;
+  page?: number;
 }
 
 export const MakeSurvey = ({
   addNewSurveyComponent,
   onCancel,
   title,
+  setIsNewSurvey,
+  page,
 }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
 
+  const typeMapping: { [key: string]: string } = {
+    객관식: "MULTIPLE_CHOICE",
+    단답형: "SUBJECTIVE",
+    슬라이더: "RATIO",
+  };
+
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState("객관식");
+  const [nowType, setNowType] = useState("MULTIPLE_CHOICE");
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
+
+  // 필수 답변 체크 박스
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setIsChecked((isChecked) => !isChecked);
+  };
 
   const [firstTitle, setFirstTitle] = useState(title);
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
+    const englishType = typeMapping[selectedTypeType] || "MULTIPLE_CHOICE";
     setTypeType(selectedTypeType);
     setShowType(false);
+    setNowType(englishType);
   };
 
   // (공통) 질문 제목
@@ -72,7 +93,7 @@ export const MakeSurvey = ({
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(255); // 255는 임시
+  const [count, setCount] = useState(10000); // 255는 임시
 
   // (공통) 저장 버튼
   const onSaveClick = () => {
@@ -119,10 +140,30 @@ export const MakeSurvey = ({
       addNewSurveyComponent(sliderSurveyData);
     }
 
+    api
+      .post("/survey/question", {
+        answers: choices, // 객관식일때만
+        surveyQuestion: {
+          surveyId: 2, // 임시
+          questionType: nowType,
+          content: questionTitle,
+          page: page,
+          questionOrder: 0, // ㅇㅅㅇ?
+          maxText: 10000, // 임시
+          required: isChecked,
+        },
+      })
+      .then(() => {});
+
     // 저장 후 입력 필드 초기화
     setQuestionTitle("");
     setChoices(["", ""]);
     setFirstTitle("");
+  };
+
+  const onSaveAndAddClick = () => {
+    onSaveClick();
+    setIsNewSurvey?.((prevState) => true);
   };
 
   return (
@@ -151,7 +192,10 @@ export const MakeSurvey = ({
             <div className="sm-gray-9-text text-base whitespace-nowrap">
               필수 답변
             </div>
-            <div className="check-box bg-white border-[1px] border-gray-7" />
+            <MyCheckBox
+              isChecked={isChecked}
+              onCheckClick={handleCheckboxChange}
+            />
           </div>
         </div>
 
@@ -197,10 +241,10 @@ export const MakeSurvey = ({
         <CancleSaveButtonFrame
           onCancleClick={onCancel}
           onSaveClick={onSaveClick}
-          onSaveAndAddClick={() => {}}
+          onSaveAndAddClick={onSaveAndAddClick}
         />
       </div>
-      <div className="fixed h-screen flex justify-center">
+      <div className="fixed h-screen z-50 flex justify-center">
         {alertDialog && (
           <Dialog
             title={alertText}

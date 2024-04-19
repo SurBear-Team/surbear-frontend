@@ -4,7 +4,9 @@ interface MySurveyCardProps {
   onDeleteClick: () => void;
   onUpdateClick?: () => void;
   beforeStart?: boolean;
-  onBlueBtnClick?: () => void;
+  onStartClick?: () => void; // 설문 시작 버튼
+  onFinishClick?: () => void; // 설문 종료 버튼
+  onResultClick?: () => void; // 결과 보기 버튼
   beforeFinish?: boolean;
   showResult?: boolean;
 }
@@ -15,7 +17,9 @@ export const MySurveyCard = ({
   beforeFinish,
   onDeleteClick,
   onUpdateClick,
-  onBlueBtnClick,
+  onStartClick,
+  onFinishClick,
+  onResultClick,
   showResult,
 }: MySurveyCardProps) => {
   return (
@@ -43,7 +47,7 @@ export const MySurveyCard = ({
         </div>
         {beforeStart && (
           <button
-            onClick={onBlueBtnClick}
+            onClick={onStartClick}
             className="long-button w-full primary-btn-style"
           >
             설문 시작
@@ -51,7 +55,7 @@ export const MySurveyCard = ({
         )}
         {beforeFinish && (
           <button
-            onClick={onBlueBtnClick}
+            onClick={onFinishClick}
             className="long-button w-full primary-btn-style"
           >
             설문 종료
@@ -59,7 +63,7 @@ export const MySurveyCard = ({
         )}
         {showResult && (
           <button
-            onClick={onBlueBtnClick}
+            onClick={onResultClick}
             className="long-button primary-btn-style"
           >
             결과 보기

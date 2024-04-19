@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { TypeDropDown } from "./TypeDropDown";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { newSurveyState } from "../surveyState";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
@@ -11,7 +9,6 @@ import { getTime } from "@/pages/utils";
 
 export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const router = useRouter();
-  const [recoilSurvey, setRecoilSurvey] = useRecoilState(newSurveyState);
 
   const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
     open: false,
@@ -27,15 +24,16 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   };
 
   // NewSurveyCard 나올 때 이전에 recoil에 저장된 값 초기화
-  useEffect(() => {
-    setRecoilSurvey({
-      surveyTitle: "",
-    });
-  }, []);
+  useEffect(() => {}, []);
+
+  // 제목
+  const [surveyTitle, setSurveyTitle] = useState("");
 
   // 제목 onChange
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecoilSurvey({ ...recoilSurvey, surveyTitle: e.target.value });
+    const title = e.target.value;
+    setSurveyTitle(title);
+    localStorage.setItem("surveyTitle", title); // localStorage에 제목 저장
   };
 
   const [description, setDescription] = useState("");
@@ -101,7 +99,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     const parsedMaxPerson = parseInt(maxPersonInput, 10);
 
     // 공백을 제거한 후의 값들을 검사
-    const titleTrimmed = recoilSurvey.surveyTitle.trim();
+    const titleTrimmed = surveyTitle.trim();
     const descriptionTrimmed = description.trim();
 
     const { year, month, date, hour, minute } = getTime(deadline);
@@ -129,17 +127,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
       return;
     }
 
-    setRecoilSurvey((prevState) => ({
-      ...prevState,
-      maxPerson: maxPersonInput,
-    }));
-
     api
       .post("/survey", {
         surveyType: category,
         surveyAuthorId: 3,
-        maximumNumberOfPeople: maxPeople,
-        title: recoilSurvey.surveyTitle,
+        maximumNumberOfPeople: parsedMaxPerson,
+        title: surveyTitle,
         description: description,
         openType: isPrivate,
         deadLine: isoDeadline,
@@ -157,7 +150,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
         <div className="flex flex-col gap-1 w-full">
           <div className="sm-gray-9-text text-base">새 설문 주제</div>
           <input
-            value={recoilSurvey.surveyTitle}
+            value={surveyTitle}
             onChange={handleTitleChange}
             placeholder="설문 주제를 입력해주세요"
             className="main-input text-gray-9"

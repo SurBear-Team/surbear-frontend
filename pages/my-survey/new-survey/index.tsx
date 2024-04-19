@@ -5,8 +5,6 @@ import { MakeSurvey } from "./components/MakeSurvey";
 import { CreatedQuestion } from "./components/CreatedQuestion";
 import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
-import { useRecoilValue } from "recoil";
-import { newSurveyState } from "../surveyState";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
 import { OrderChangeCard } from "../components/OrderChangeCard";
@@ -23,8 +21,8 @@ export interface NewSurveyProps {
 export default function NewSurvey() {
   const router = useRouter();
 
-  const recoilSurvey = useRecoilValue(newSurveyState);
-  const [title, setTitle] = useState(recoilSurvey.surveyTitle); // 새 설문 카드에서 가져온 제목
+  const surveyTitle = localStorage.getItem("surveyTitle");
+
   const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
   const [alertDialog, setAlertDialog] = useState(false);
@@ -173,11 +171,7 @@ export default function NewSurvey() {
 
   // GPT
   const [showGTP, setShowGPT] = useState(true);
-  const [questions, setQuestions] = useState([
-    recoilSurvey.surveyTitle,
-    "222",
-    "333",
-  ]);
+  const [questions, setQuestions] = useState([surveyTitle, "222", "333"]);
   const addGPTClick = () => {
     if (selectedQuestion) {
       setShowGPT(false);
@@ -189,6 +183,12 @@ export default function NewSurvey() {
   // GPT 선택한 질문
   const handleSelectQuestion = (question: any) => {
     setSelectedQuestion(question);
+  };
+
+  // 설문조사 저장 버튼
+  const saveSurvey = () => {
+    localStorage.removeItem("surveyTitle");
+    router.push("/my-survey");
   };
 
   // 콘솔 찍기
@@ -207,7 +207,7 @@ export default function NewSurvey() {
   }, [surveyPages]);
   return (
     <>
-      <TopBar title={title} hasBack />
+      <TopBar title={surveyTitle!} hasBack />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
           <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
@@ -368,7 +368,7 @@ export default function NewSurvey() {
           addNewPage={addNewPage}
           goToPrevPage={goToPrevPage}
           goToNextPage={goToNextPage}
-          saveSurvey={() => {}}
+          saveSurvey={saveSurvey}
           canAddPage={!surveyPages.some((page) => page.length === 0)}
           setSelectedQuestion={setSelectedQuestion}
         />

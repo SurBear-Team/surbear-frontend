@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TypeDropDown } from "./TypeDropDown";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
@@ -6,11 +6,61 @@ import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
+const formatDeadline = (deadline: string | number | Date) => {
+  const date = new Date(deadline);
+  const year = date.getFullYear();
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
+  const hour = `0${date.getHours()}`.slice(-2);
+  const minute = `0${date.getMinutes()}`.slice(-2);
+
+  return `${year}-${month}-${day}T${hour}:${minute}`;
+};
+
+interface SurveyData {
+  surveyType: string;
+  maximumNumberOfPeople: number;
+  title: string;
+  description: string;
+  openType: boolean;
+  deadLine: string;
+  surveyAuthorId?: number; // 임시로 number
+}
+
+interface NewSurveyCardProps {
+  onCancel: () => void;
+  surveyId?: string;
+}
+
+export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
+  const isEdit = !!surveyId; // surveyId가 있다면 isEdit은 true
   const router = useRouter();
+
+  // surveyId로 원래 정보 가져오기
+  const fetchSurvey = async () => {
+    const { data } = await api.get(`/survey/management/${surveyId}`);
+    return data;
+  };
+  // surveyId가 바뀔 때마다 새로운 데이터
+  useQuery(["mySurvey", surveyId], fetchSurvey, {
+    enabled: !!surveyId,
+    // onSuccess는 데이터 요청 완료 되었을 때 실행되는 콜백함수
+    onSuccess: (data) => {
+      setSurveyTitle(data.title || "");
+      setDescription(data.description || "");
+      setCategoryType(categoryMapping[data.surveyType] || "기타");
+      setCategory(categoryMapping[data.surveyType] || "ETC");
+      setIsChecked(data.openType === "PRIVATE");
+      setMaxPeople(data.maximumNumberOfPeople.toString() || "");
+      setDeadline(formatDeadline(data.deadLine));
+    },
+  });
 
   const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
     open: false,
@@ -124,32 +174,48 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
       return;
     }
 
-    api
-      .post("/survey", {
-        surveyType: category,
-        surveyAuthorId: 3,
-        maximumNumberOfPeople: parsedMaxPerson,
-        title: surveyTitle,
-        description: description,
-        openType: !isChecked,
-        deadLine: isoDeadline,
-      })
-      .then(() => {
-        // 모든 검사를 통과했으면 다음 페이지로 이동
-        router.push("my-survey/new-survey");
-      })
-      .catch((error) => {
-        console.error("설문 생성 오류 : ", error);
-        showDialog("설문 생성에 실패했습니다.");
-      });
+    const surveyData: SurveyData = {
+      surveyType: category,
+      maximumNumberOfPeople: parsedMaxPerson,
+      title: surveyTitle,
+      description: description,
+      openType: !isChecked,
+      deadLine: isoDeadline,
+    };
+
+    if (isEdit) {
+      axios
+        .put(`${baseUrl}/survey/management/${surveyId}`, surveyData)
+        .then(() => {
+          router.push("/browse");
+        })
+        .catch((error) => {
+          console.error("설문 수정 오류 : ", error);
+          showDialog("설문 수정에 실패했습니다.");
+        });
+    } else {
+      surveyData.surveyAuthorId = 3;
+      api
+        .post("/survey", surveyData)
+        .then(() => {
+          router.push("/my-survey/new-survey");
+        })
+        .catch((error) => {
+          console.error("설문 생성 오류 : ", error);
+          showDialog("설문 생성에 실패했습니다.");
+        });
+    }
   };
+
   return (
     <>
       <Overlay onClick={() => {}} />
       <div className="card fixed bg-white w-auto gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">새 설문 주제</div>
+          <div className="sm-gray-9-text text-base">
+            {isEdit ? "설문 수정하기" : "새 설문 주제"}
+          </div>
           <input
             value={surveyTitle}
             onChange={handleTitleChange}

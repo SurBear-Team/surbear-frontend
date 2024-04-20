@@ -93,17 +93,22 @@ export default function MySurvey() {
   // 새 설문 만들기
   const [showNewSurveyCard, setShowNewSurveyCard] = useState(false);
 
-  // 설문 수정 카드 띄우기
-  const handleEditSurvey = () => {
-    setShowNewSurveyCard((prev) => !prev);
-  };
+  const [selectedSurveyId, setSelectedSurveyId] = useState<string | undefined>(
+    undefined
+  );
 
+  // 설문 수정 카드 띄우기
+  const handleEditSurvey = (id: string) => {
+    setSelectedSurveyId(id); // 선택한 설문의 ID 설정
+    setShowNewSurveyCard(true); // 수정 카드를 보이게 설정
+  };
   return (
     <>
       <TopBar
         title="내 설문"
         hasPlus
         onRightClick={() => {
+          setSelectedSurveyId(undefined); // surveyId 초기화
           setShowNewSurveyCard((prev) => !prev);
         }}
       />
@@ -122,7 +127,7 @@ export default function MySurvey() {
                     beforeStart={data.ongoingType === "PAUSE"} // true면 설문 시작 나옴
                     beforeFinish={data.ongoingType === "PROGRESS"} // true면 설문 종료 나옴
                     showResult={data.ongoingType === "CLOSE"} // true면 결과 보기 나옴
-                    onUpdateClick={() => handleEditSurvey()}
+                    onUpdateClick={() => handleEditSurvey(data.id.toString())}
                     onStartClick={() => handleStartSurvey(data.id)}
                     onFinishClick={() => {}}
                     onResultClick={() => {}}
@@ -132,7 +137,10 @@ export default function MySurvey() {
           </div>
         </div>
         {showNewSurveyCard && (
-          <NewSurveyCard onCancel={() => setShowNewSurveyCard(false)} />
+          <NewSurveyCard
+            onCancel={() => setShowNewSurveyCard(false)}
+            surveyId={selectedSurveyId}
+          />
         )}
 
         {dialog.open && (

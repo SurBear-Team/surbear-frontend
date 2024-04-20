@@ -7,6 +7,7 @@ import { TopBar } from "../components/TopBar/TopBar";
 import api from "../api/config";
 import { ISurvey } from "../browse/data";
 import axios from "axios";
+import { useQuery, useQueryClient } from "react-query";
 
 interface DialogState {
   open: boolean;
@@ -20,6 +21,9 @@ interface DialogState {
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function MySurvey() {
+  const queryClient = useQueryClient();
+
+  // 기본 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
     open: false,
     text: "",
@@ -28,31 +32,36 @@ export default function MySurvey() {
     surveyId: 0, // 이거
   });
 
-  const [mySurveyList, setMySurveyList] = useState<ISurvey[]>();
+  // 내 설문 목록 가져오기
+  const fetchSurveys = async () => {
+    const { data } = await api.get("/survey/management/list/3");
+    return data;
+  };
+  const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys);
 
+  // 이건 콘솔 찍기
   useEffect(() => {
-    api
-      .get("/survey/management/list/3")
-      .then((res) => {
-        setMySurveyList(res.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    console.log(mySurveyData);
+  }, [mySurveyData]);
 
-  // 설문 삭제 버튼
-  const deleteSurvey = (id: number) => {
-    axios
-      .delete(`${baseUrl}/survey/management/${id}`)
-      .then(() => {
-        console.log(id + "삭제");
-        // 현재 목록에서 선택한 id의 항목을 제거
-        setMySurveyList((prev) => prev?.filter((survey) => survey.id !== id));
-        setDialog({ ...dialog, open: false });
-      })
-      .catch((err) => console.log(err));
+  // 설문 삭제 다이얼로그 띄우기
+  const handleDeleteSurvey = (id: number) => {
+    setDialog({
+      open: true,
+      text: "설문을 삭제하시겠습니까?",
+      rightText: "삭제",
+      isDelete: true,
+      surveyId: id,
+    });
   };
 
-  // 설문 시작 버튼
+  // 다이얼로그에서 설문 삭제 클릭
+  const deleteSurveyClick = async (id: number) => {
+    await axios.delete(`${baseUrl}/survey/management/${id}`);
+    queryClient.invalidateQueries("surveys");
+  };
+
+  // 설문 시작 다이얼로그 띄우기
   const handleStartSurvey = (id: number) => {
     setDialog({
       open: true,
@@ -60,25 +69,22 @@ export default function MySurvey() {
       rightText: "시작",
       isDelete: false,
       surveyId: id,
-      onConfirm: () => surveyStarClick(id), // '시작' 버튼 클릭 시 실행될 함수
+      onConfirm: () => startSurveyClick(id), // '시작' 버튼 클릭 시 실행될 함수
     });
   };
 
-  const surveyStarClick = (id: number) => {
+  // 다이얼로그에서 설문 시작 클릭
+  const startSurveyClick = (id: number) => {
     const requestBody = {
       id: id,
       type: "PROGRESS",
     };
 
     axios
-      .put(`${baseUrl}/survey/management/ongoing-type/${id}`, requestBody)
+      .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
         console.log(`${id} 설문 시작`);
-        setMySurveyList((prev) =>
-          prev?.map((survey) =>
-            survey.id === id ? { ...survey, ongoingType: "PROGRESS" } : survey
-          )
-        );
+        queryClient.invalidateQueries("surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
       .catch((err) => console.log(err));
@@ -86,6 +92,12 @@ export default function MySurvey() {
 
   // 새 설문 만들기
   const [showNewSurveyCard, setShowNewSurveyCard] = useState(false);
+
+  // 설문 수정 카드 띄우기
+  const handleEditSurvey = () => {
+    setShowNewSurveyCard((prev) => !prev);
+  };
+
   return (
     <>
       <TopBar
@@ -99,34 +111,18 @@ export default function MySurvey() {
       <div className="screen pt-[50px]">
         <div className="list-screen">
           <div className="list">
-            {mySurveyList?.map(
+            {mySurveyData?.map(
               (data, index) =>
                 !data.deleted && ( // 삭제되지 않은거만 보이게
                   <MySurveyCard
                     key={index}
                     category={data.surveyType}
                     title={data.title}
-                    onDeleteClick={() => {
-                      setDialog({
-                        open: true,
-                        text: "설문을 삭제하시겠습니까?",
-                        rightText: "삭제",
-                        isDelete: true,
-                        surveyId: data.id,
-                      });
-                    }}
+                    onDeleteClick={() => handleDeleteSurvey(data.id)}
                     beforeStart={data.ongoingType === "PAUSE"} // true면 설문 시작 나옴
                     beforeFinish={data.ongoingType === "PROGRESS"} // true면 설문 종료 나옴
                     showResult={data.ongoingType === "CLOSE"} // true면 결과 보기 나옴
-                    onUpdateClick={() => {
-                      setDialog({
-                        open: true,
-                        text: "설문을 수정하시겠습니까?",
-                        rightText: "수정",
-                        isDelete: false,
-                        surveyId: data.id,
-                      });
-                    }}
+                    onUpdateClick={() => handleEditSurvey()}
                     onStartClick={() => handleStartSurvey(data.id)}
                     onFinishClick={() => {}}
                     onResultClick={() => {}}
@@ -150,9 +146,9 @@ export default function MySurvey() {
               rightText={dialog.rightText}
               onRightClick={() => {
                 if (dialog.isDelete && dialog.surveyId) {
-                  deleteSurvey(dialog.surveyId);
+                  deleteSurveyClick(dialog.surveyId);
                 } else if (dialog.onConfirm) {
-                  dialog.onConfirm(); // 다른 조건 없이 onConfirm 호출
+                  dialog.onConfirm(); // 설문 시작 눌렀을 때
                 }
                 setDialog((current) => ({ ...current, open: false })); // 모든 경우 다이얼로그 닫기
               }}

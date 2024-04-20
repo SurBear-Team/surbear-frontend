@@ -16,8 +16,11 @@ export default function Pagination({
   onNumClick,
 }: IPagination) {
   const getPages = () => {
+    if (lastPage === 1) return [-1, -2, 1, -3, -4];
+    else if (lastPage === 2) return [-1, -2, 1, 2, -3];
+    else if (lastPage === 3) return [-1, -2, 1, 2, 3];
     // 최대 페이지 수까지 표시되는 경우
-    if (currentPage >= lastPage - 2) {
+    else if (currentPage >= lastPage - 2) {
       const pages = [
         lastPage - 4,
         lastPage - 3,

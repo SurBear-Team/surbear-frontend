@@ -16,7 +16,9 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
   const onStartClick = () => {
     router.push(`/browse/${data.id}`);
   };
-  const { year, month, date, hour, minute } = getTime(data.deadLine);
+  const startedTime = getTime(data.startDate);
+  const deadline = getTime(data.deadLine);
+  const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
 
   return (
     <>
@@ -48,7 +50,7 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
           {/* 설문 정보 */}
           <div className="flex flex-col px-2 gap-2">
             <div className="flex flex-col gap-1">
-              <div className="sm-gray-text">{category[data.surveyType]}</div>
+              <div className="sm-gray-text">{value}</div>
               <div className="font-semibold text-base text-gray-9">
                 {data.title}
               </div>
@@ -56,10 +58,14 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
                 <span>작성자 : {data.surveyAuthorId}</span>
                 <span>지급 포인트 : {data.point}pt</span>
                 <span>총 문항 수 : n개</span>
-                <span>참여한 사람 : n명</span>
-                <span>설문 시작일 : 년 월 일</span>
+                <span>참여한 사람 : n명 / {data.maximumNumberOfPeople}명</span>
                 <span>
-                  설문 마감 : {year}년 {month}월 {date}일 {hour}시 {minute}
+                  설문 시작일 : {startedTime.year}년 {startedTime.month}월{" "}
+                  {startedTime.date}일
+                </span>
+                <span>
+                  설문 마감 : {deadline.year}년 {deadline.month}월{" "}
+                  {deadline.date}일 {deadline.hour}시 {deadline.minute}
                   분까지
                 </span>
               </div>

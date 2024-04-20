@@ -8,24 +8,42 @@ import { AnimatePresence } from "framer-motion";
 import { TopBar } from "../components/TopBar/TopBar";
 import Pagination from "./components/Pagination";
 import api from "../api/config";
+import { useRecoilState } from "recoil";
+import { categoryTypeAtom } from "../atoms";
 
 export default function Browse() {
   const [data, setData] = useState<ISurvey[]>();
+
+  // 페이지네이션
+  const [currentPage, setCurrentPage] = useState(0);
+  const [lastPage, setLastPage] = useState(0);
+  const CARD_PER_PAGE = 10;
+  const onPrevClick = () => {
+    currentPage <= 0 ? setCurrentPage(0) : setCurrentPage((prev) => prev - 1);
+  };
+  const onNextClick = () => {
+    currentPage >= lastPage - 1
+      ? setCurrentPage(lastPage - 1)
+      : setCurrentPage((prev) => prev + 1);
+  };
+  const onNumClick = (el: number) => {
+    setCurrentPage(el - 1);
+  };
+
   useEffect(() => {
     api
-      .get("/survey/list")
+      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}`)
       .then((res) => {
-        setData(
-          res.data.filter((el: ISurvey) => el.ongoingType === "PROGRESS")
-        );
+        setData(res.data.content);
+        setLastPage(res.data.totalPages);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [currentPage]);
 
-  const [categoryType, setCategoryType] = useState("전체");
-  const handleCategorySelect = (selectedCategoryType: string) => {
-    setCategoryType(selectedCategoryType);
-  };
+  const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
+  useEffect(() => {
+    setCategoryType("ALL");
+  }, []);
 
   const [orderType, setOrderType] = useState("최신순");
   const handleOrderSelect = (selectedOrderType: string) => {
@@ -45,42 +63,14 @@ export default function Browse() {
     setShowDetail(true);
   };
 
-  // 페이지네이션
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(0);
-  const [list, setList] = useState<ISurvey[]>();
-  const onPrevClick = () => {
-    currentPage <= 1 ? setCurrentPage(1) : setCurrentPage((prev) => prev - 1);
-  };
-  const onNextClick = () => {
-    currentPage >= lastPage
-      ? setCurrentPage(lastPage)
-      : setCurrentPage((prev) => prev + 1);
-  };
-  const onNumClick = (el: number) => {
-    setCurrentPage(el);
-  };
-
-  useEffect(() => {
-    if (data !== undefined) {
-      const last = Math.ceil(data.length / 10);
-      setLastPage(last);
-      const CARD_PER_PAGE = 10;
-      const startPoint = (currentPage - 1) * CARD_PER_PAGE;
-      const list = data.slice(startPoint, startPoint + CARD_PER_PAGE);
-      setList(list);
-    }
-  }, [data]);
-
   return (
     <>
       <TopBar
         title="설문 둘러보기"
         hasSearch
         subTitle="전체"
-        categoryList={Object.values(category)}
+        categoryList={category.map((el) => el.value)}
         categoryType={categoryType}
-        onCategorySelect={(selected: string) => handleCategorySelect(selected)}
         orderList={orderList}
         orderType={orderType}
         onOrderSelect={(selected: string) => handleOrderSelect(selected)}
@@ -98,7 +88,7 @@ export default function Browse() {
               />
             )}
             <div className="list">
-              {list?.map((el) => (
+              {data?.map((el) => (
                 <SurveyCard
                   layoutId={el.id}
                   key={el.id}
@@ -130,7 +120,7 @@ export default function Browse() {
         )}
       </div>
       <Pagination
-        currentPage={currentPage}
+        currentPage={currentPage + 1}
         lastPage={lastPage}
         onPrevClick={onPrevClick}
         onNextClick={onNextClick}

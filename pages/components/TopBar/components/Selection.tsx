@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowDownIcon } from "../../styles/Icons";
+import { ICategory } from "@/pages/browse/data";
 
 interface ISelection {
   type?: string;

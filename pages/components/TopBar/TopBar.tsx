@@ -66,11 +66,6 @@ export const TopBar: React.FC<TopBarProps> = ({
       {subTitle && (
         <SubTopBar
           subTitle={subTitle}
-          categoryList={categoryList}
-          categoryType={categoryType}
-          onCategorySelect={(selected: string) =>
-            onCategorySelect && onCategorySelect(selected)
-          }
           orderList={orderList}
           orderType={orderType}
           onOrderSelect={(selected: string) =>

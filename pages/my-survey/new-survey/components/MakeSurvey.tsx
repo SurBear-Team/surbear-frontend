@@ -93,7 +93,7 @@ export const MakeSurvey = ({
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(10000); // 255는 임시
+  const [count, setCount] = useState(7883); // 255는 임시
 
   // (공통) 저장 버튼
   const onSaveClick = () => {
@@ -144,12 +144,12 @@ export const MakeSurvey = ({
       .post("/survey/question", {
         answers: choices, // 객관식일때만
         surveyQuestion: {
-          surveyId: 2, // 임시
+          surveyId: 3, // 임시
           questionType: nowType,
           content: questionTitle,
           page: page,
           questionOrder: 0, // ㅇㅅㅇ?
-          maxText: 10000, // 임시
+          maxText: 7883, // 임시
           required: isChecked,
         },
       })

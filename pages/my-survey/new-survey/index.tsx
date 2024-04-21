@@ -323,7 +323,7 @@ export default function NewSurvey() {
                   {questions.map((question) => (
                     <div key={question} className="flex items-center gap-2">
                       <div
-                        className={`check-box ${
+                        className={`check-box min-w-4 ${
                           selectedQuestion === question
                             ? "bg-[#6E7CF2]"
                             : "bg-white border border-gray-7"

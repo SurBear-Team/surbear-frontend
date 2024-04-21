@@ -22,12 +22,24 @@ export const MySurveyCard = ({
   onResultClick,
   showResult,
 }: MySurveyCardProps) => {
+  const categoryMapping: { [key: string]: string } = {
+    ETC: "기타",
+    SOCIAL: "사회",
+    ECONOMY: "경제",
+    LIFE: "생활",
+    HOBBY: "취미",
+    IT: "IT",
+    CULTURE: "문화",
+  };
+  const translatedCategory = categoryMapping[category];
   return (
     <div className={`card ${showResult ? "bg-gray-1" : "bg-white"}`}>
       <div className="flex items-center w-full pb-1">
-        <div className="sm-gray-text">{category}</div>
+        <div className="sm-gray-text">{translatedCategory}</div>
       </div>
-      <div className="text-gray-9 font-semibold pb-4">{title}</div>
+      <div className="text-gray-9 font-semibold pb-4 truncated-title">
+        {title}
+      </div>
       <div className="flex gap-4 w-full">
         <div className="flex gap-2 w-full">
           <button

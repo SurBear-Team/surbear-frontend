@@ -31,8 +31,8 @@ export const MakeSurvey = ({
 
   const typeMapping: { [key: string]: string } = {
     객관식: "MULTIPLE_CHOICE",
-    단답형: "SUBJECTIVE",
-    슬라이더: "RATIO",
+    단답형: "SHORT_ANSWER",
+    슬라이더: "SLIDER",
   };
 
   const [showType, setShowType] = useState(false);

@@ -57,7 +57,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       setDescription(data.description || "");
       setCategoryType(categoryMapping[data.surveyType] || "기타");
       setCategory(categoryMapping[data.surveyType] || "ETC");
-      setIsChecked(data.openType === "PRIVATE");
+      setIsChecked(data.openType === true);
       setMaxPeople(data.maximumNumberOfPeople.toString() || "");
       setDeadline(formatDeadline(data.deadLine));
     },
@@ -180,7 +180,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       maximumNumberOfPeople: parsedMaxPerson,
       title: surveyTitle,
       description: description,
-      openType: !isChecked,
+      openType: isChecked,
       deadLine: isoDeadline,
     };
   };

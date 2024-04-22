@@ -144,25 +144,23 @@ export default function MySurvey() {
         )}
 
         {dialog.open && (
-          <>
-            <Dialog
-              title={dialog.text}
-              leftText="취소"
-              onLeftClick={() =>
-                setDialog((current) => ({ ...current, open: false }))
+          <Dialog
+            title={dialog.text}
+            leftText="취소"
+            onLeftClick={() =>
+              setDialog((current) => ({ ...current, open: false }))
+            }
+            rightText={dialog.rightText}
+            onRightClick={() => {
+              if (dialog.isDelete && dialog.surveyId) {
+                deleteSurveyClick(dialog.surveyId);
+              } else if (dialog.onConfirm) {
+                dialog.onConfirm(); // 설문 시작 눌렀을 때
               }
-              rightText={dialog.rightText}
-              onRightClick={() => {
-                if (dialog.isDelete && dialog.surveyId) {
-                  deleteSurveyClick(dialog.surveyId);
-                } else if (dialog.onConfirm) {
-                  dialog.onConfirm(); // 설문 시작 눌렀을 때
-                }
-                setDialog((current) => ({ ...current, open: false })); // 모든 경우 다이얼로그 닫기
-              }}
-              isDelete={dialog.isDelete}
-            />
-          </>
+              setDialog((current) => ({ ...current, open: false })); // 모든 경우 다이얼로그 닫기
+            }}
+            isDelete={dialog.isDelete}
+          />
         )}
       </div>
 

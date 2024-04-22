@@ -19,6 +19,7 @@ export default function SurveyCard({
   showDetail,
 }: SurveyCardProps) {
   const { year, month, date, hour, minute } = getTime(data.deadLine);
+  const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
   return (
     <>
       <motion.div
@@ -26,7 +27,7 @@ export default function SurveyCard({
         className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}
       >
         <div className="flex justify-between items-center w-full pb-2">
-          <div className="sm-gray-text">{category[data.surveyType]}</div>
+          <div className="sm-gray-text">{value}</div>
           <div
             onClick={onReportClick}
             className="text-red-1 flex items-center gap-1 text-[10px] cursor-pointer"

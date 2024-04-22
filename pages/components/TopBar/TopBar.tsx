@@ -18,9 +18,7 @@ interface TopBarProps {
 
   subTitle?: string; // 서브 탑바 제목
 
-  categoryList?: string[]; // 카테고리 목록
-  categoryType?: string; // 현재 카테고리가 뭐로 됐는지
-  onCategorySelect?: (selectedCategory: string) => void; // 선택한 카테고리
+  hasCategory?: boolean;
 
   orderList?: string[]; // 정렬 목록
   orderType?: string; // 현재 정렬이 뭐로 됐는지
@@ -39,9 +37,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   hasUpdate,
   onRightClick,
   subTitle,
-  categoryList,
-  categoryType,
-  onCategorySelect,
+  hasCategory,
   orderList,
   orderType,
   onOrderSelect,
@@ -66,11 +62,7 @@ export const TopBar: React.FC<TopBarProps> = ({
       {subTitle && (
         <SubTopBar
           subTitle={subTitle}
-          categoryList={categoryList}
-          categoryType={categoryType}
-          onCategorySelect={(selected: string) =>
-            onCategorySelect && onCategorySelect(selected)
-          }
+          hasCategory={hasCategory}
           orderList={orderList}
           orderType={orderType}
           onOrderSelect={(selected: string) =>

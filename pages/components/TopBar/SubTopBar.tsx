@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 interface SubTopBarProps {
   subTitle?: string;
 
+  hasCategory?: boolean;
+
   orderList?: string[];
   orderType?: string;
   onOrderSelect?: (selectedOrder: string) => void;
@@ -14,6 +16,7 @@ interface SubTopBarProps {
 
 export const SubTopBar = ({
   subTitle,
+  hasCategory,
   orderList,
   orderType,
   onOrderSelect,
@@ -33,7 +36,7 @@ export const SubTopBar = ({
         <div className="flex font-semibold relative h-full items-center justify-between">
           {subTitle}
           <div className="flex h-full">
-            {categoryList && (
+            {hasCategory && (
               <Selection
                 type={categoryValue}
                 list={categoryList}

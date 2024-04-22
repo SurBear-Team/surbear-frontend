@@ -69,8 +69,7 @@ export default function Browse() {
         title="설문 둘러보기"
         hasSearch
         subTitle="전체"
-        categoryList={category.map((el) => el.value)}
-        categoryType={categoryType}
+        hasCategory
         orderList={orderList}
         orderType={orderType}
         onOrderSelect={(selected: string) => handleOrderSelect(selected)}

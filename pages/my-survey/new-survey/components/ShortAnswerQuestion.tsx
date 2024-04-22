@@ -1,3 +1,5 @@
+import { MyCheckBox } from "@/pages/components/MyCheckBox";
+
 // 단답형
 interface ShortAnswerProps {
   setCount: (value: number) => void;
@@ -6,7 +8,12 @@ interface ShortAnswerProps {
 export const ShortAnswerType = ({ setCount }: ShortAnswerProps) => {
   return (
     <div className="flex justify-between gap-2 items-center pt-4">
-      <div className="check-box bg-white border-[1px] border-gray-7" />
+      <MyCheckBox
+        isChecked={false}
+        onCheckClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
 
       <div className="flex justify-between w-full items-center">
         <div className="sm-gray-9-text text-base">최대 글자수 제한</div>

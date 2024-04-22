@@ -28,6 +28,8 @@ export default function NewSurvey() {
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
 
+  const [saveDialog, setSaveDialog] = useState(false);
+
   const [showOrderChange, setShowOrderChange] = useState(false);
 
   // (공통)페이지
@@ -187,6 +189,10 @@ export default function NewSurvey() {
 
   // 설문조사 저장 버튼
   const saveSurvey = () => {
+    setSaveDialog((prev) => !prev);
+  };
+
+  const onSaveClick = () => {
     localStorage.removeItem("surveyTitle");
     router.push("/my-survey");
   };
@@ -207,7 +213,13 @@ export default function NewSurvey() {
   }, [surveyPages]);
   return (
     <>
-      <TopBar title={surveyTitle!} hasBack />
+      <TopBar
+        title={surveyTitle!}
+        hasBack
+        onLeftClick={() => {
+          setShowCloseDialog((prev) => !prev);
+        }}
+      />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
           <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
@@ -276,6 +288,36 @@ export default function NewSurvey() {
               isDelete={true}
             />
           )}
+          {saveDialog && (
+            <Dialog
+              title={"설문이 저장되었어요"}
+              rightText={"이동"}
+              onlyOneBtn
+              onRightClick={onSaveClick}
+            />
+          )}
+          {showCloseDialog && (
+            <>
+              <Dialog
+                title={
+                  <>
+                    {"설문 제작을 그만 두시겠습니까?"}
+                    <br />
+                    {"진행과정은 저장돼요"}
+                  </>
+                }
+                leftText="취소"
+                onLeftClick={() => {
+                  setShowCloseDialog((prev) => !prev);
+                }}
+                rightText="예"
+                onRightClick={() => {
+                  router.back();
+                }}
+                isDelete={true}
+              />
+            </>
+          )}
 
           {showOrderChange && (
             <OrderChangeCard
@@ -290,22 +332,6 @@ export default function NewSurvey() {
             />
           )}
 
-          {showCloseDialog && (
-            <>
-              <Dialog
-                title="설문 제작을 그만 두시겠습니까?"
-                leftText="취소"
-                onLeftClick={() => {
-                  setShowCloseDialog((prev) => !prev);
-                }}
-                rightText="저장하지 않고 종료"
-                onRightClick={() => {
-                  router.back();
-                }}
-                isDelete={true}
-              />
-            </>
-          )}
           {/* GPT */}
           {showGTP && (
             <>
@@ -323,7 +349,7 @@ export default function NewSurvey() {
                   {questions.map((question) => (
                     <div key={question} className="flex items-center gap-2">
                       <div
-                        className={`check-box ${
+                        className={`check-box min-w-4 ${
                           selectedQuestion === question
                             ? "bg-[#6E7CF2]"
                             : "bg-white border border-gray-7"

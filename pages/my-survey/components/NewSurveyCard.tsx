@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TypeDropDown } from "./TypeDropDown";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
@@ -6,21 +6,71 @@ import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
+// get으로 가져온 시간 보여주기 위해
+const formatDeadline = (deadline: string | number | Date) => {
+  const date = new Date(deadline);
+  const year = date.getFullYear();
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
+  const hour = `0${date.getHours()}`.slice(-2);
+  const minute = `0${date.getMinutes()}`.slice(-2);
+
+  return `${year}-${month}-${day}T${hour}:${minute}`;
+};
+
+interface SurveyData {
+  surveyType: string;
+  maximumNumberOfPeople: number;
+  title: string;
+  description: string;
+  openType: boolean;
+  deadLine: string;
+  surveyAuthorId?: number; // 임시로 number
+}
+
+interface NewSurveyCardProps {
+  onCancel: () => void;
+  surveyId?: string;
+}
+
+export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
+  const isEdit = !!surveyId; // surveyId가 있다면 isEdit은 true
   const router = useRouter();
 
+  // surveyId로 원래 정보 가져오기
+  const fetchSurvey = async () => {
+    const { data } = await api.get(`/survey/management/${surveyId}`);
+    return data;
+  };
+  // surveyId가 바뀔 때마다 새로운 데이터
+  useQuery(["mySurvey", surveyId], fetchSurvey, {
+    enabled: !!surveyId,
+    // onSuccess는 데이터 요청 완료 되었을 때 실행되는 콜백함수
+    onSuccess: (data) => {
+      setSurveyTitle(data.title || "");
+      setDescription(data.description || "");
+      setCategoryType(categoryMapping[data.surveyType] || "기타");
+      setCategory(categoryMapping[data.surveyType] || "ETC");
+      setIsChecked(data.openType === true);
+      setMaxPeople(data.maximumNumberOfPeople.toString() || "");
+      setDeadline(formatDeadline(data.deadLine));
+    },
+  });
+
+  // 다이얼로그
   const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
     open: false,
     text: "",
   });
-
   const showDialog = (message: string) => {
     setDialog({ open: true, text: message });
   };
-
   const hideDialog = () => {
     setDialog({ open: false, text: "" });
   };
@@ -32,10 +82,12 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSurveyTitle(e.target.value);
   };
+  // 제목 input에서 벗어났을 때 로컬에 제목 저장
   const handleTitleBlur = () => {
     localStorage.setItem("surveyTitle", surveyTitle);
   };
 
+  // 설명
   const [description, setDescription] = useState("");
   // 설명 onChange
   const handleDescriptionChange = (
@@ -88,19 +140,22 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
     setDeadline(e.target.value);
   };
 
-  // 다음 버튼 클릭
-  const nextButtonClick = () => {
+  // 유효성 검사
+  // false를 반환할 수 있음
+  const validateFormData = (): SurveyData | false => {
     const now = new Date();
-
-    const maxPersonInput = maxPeople.trim() === "" ? "10000" : maxPeople;
+    // 최대 인원 빈값이면 7883 전송
+    const maxPersonInput = maxPeople.trim() === "" ? "7883" : maxPeople;
     const parsedMaxPerson = parseInt(maxPersonInput, 10);
-
-    // 공백을 제거한 후의 값들을 검사
     const titleTrimmed = surveyTitle.trim();
-    const descriptionTrimmed = description.trim();
+    const descriptionTrimmed = description.trim(); // 앞뒤 공백 제거
+
+    if (!deadline) {
+      showDialog("종료 시간을 입력해주세요.");
+      return false;
+    }
 
     const { year, month, date, hour, minute } = getTime(deadline);
-    // 종료 시간 파싱
     const isoDeadline = new Date(
       year,
       month - 1,
@@ -109,47 +164,65 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
       minute
     ).toISOString();
 
-    // 유효성 검사: 설문 주제, 설문 설명, 종료 시간, 최대 인원, 종료 시간
-    if (!titleTrimmed || !descriptionTrimmed || !deadline) {
-      showDialog("설문 주제, 설문 설명, 종료 시간을 모두 입력해주세요.");
-      return;
+    if (!titleTrimmed || !descriptionTrimmed) {
+      showDialog("설문 주제와 설문 설명을 입력해주세요");
+      return false;
     } else if (isNaN(parsedMaxPerson) || parsedMaxPerson <= 0) {
-      showDialog("최대 인원을 확인해주세요");
-      return;
+      showDialog("유효한 최대 인원 수를 입력해주세요");
+      return false;
     } else if (new Date(isoDeadline) < now) {
-      showDialog("종료 시간을 확인해주세요");
-      return;
-    } else if (dialog.open) {
-      showDialog("진행 중인 다이얼로그를 확인해주세요.");
-      return;
+      showDialog("종료 시간은 현재 이후로 입력해주세요");
+      return false;
     }
 
-    api
-      .post("/survey", {
-        surveyType: category,
-        surveyAuthorId: 3,
-        maximumNumberOfPeople: parsedMaxPerson,
-        title: surveyTitle,
-        description: description,
-        openType: !isChecked,
-        deadLine: isoDeadline,
-      })
-      .then(() => {
-        // 모든 검사를 통과했으면 다음 페이지로 이동
-        router.push("my-survey/new-survey");
-      })
-      .catch((error) => {
-        console.error("설문 생성 오류 : ", error);
-        showDialog("설문 생성에 실패했습니다.");
-      });
+    return {
+      surveyType: category,
+      maximumNumberOfPeople: parsedMaxPerson,
+      title: surveyTitle,
+      description: description,
+      openType: isChecked,
+      deadLine: isoDeadline,
+    };
   };
+
+  // 다음 버튼 클릭
+  const nextButtonClick = () => {
+    const validData = validateFormData();
+    if (!validData) return;
+
+    if (isEdit) {
+      axios
+        .put(`${baseUrl}/survey/management/${surveyId}`, validData)
+        .then(() => {
+          alert("수정했어요 원래는 이동해야해요");
+        })
+        .catch((error) => {
+          console.error("설문 수정 오류 : ", error);
+          showDialog("설문 수정에 실패했습니다.");
+        });
+    } else {
+      validData.surveyAuthorId = 3; // 실제 유저 들어오면 수정
+      api
+        .post("/survey", validData)
+        .then(() => {
+          router.push("/my-survey/new-survey");
+        })
+        .catch((error) => {
+          console.error("설문 생성 오류 : ", error);
+          showDialog("설문 생성에 실패했습니다.");
+        });
+    }
+  };
+
   return (
     <>
       <Overlay onClick={() => {}} />
       <div className="card fixed bg-white w-auto gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">새 설문 주제</div>
+          <div className="sm-gray-9-text text-base">
+            {isEdit ? "설문 수정하기" : "새 설문 주제"}
+          </div>
           <input
             value={surveyTitle}
             onChange={handleTitleChange}
@@ -202,7 +275,7 @@ export const NewSurveyCard = ({ onCancel }: { onCancel: () => void }) => {
           <div className="flex justify-between w-full items-center gap-2">
             <div className="sm-gray-9-text text-base">최대 인원</div>
             <input
-              value={maxPeople}
+              value={maxPeople === "7883" ? "" : maxPeople}
               onChange={handleMaxPersonChange}
               type="number"
               className="w-16 p-2 rounded-lg border-[1px] border-gray-4"

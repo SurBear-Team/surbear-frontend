@@ -1,7 +1,7 @@
 import { Overlay } from "./styles/Overlay";
 
 interface DialogProps {
-  title: string;
+  title: string | React.ReactNode;
   hasTextarea?: boolean;
   inputTitle?: string;
   onlyOneBtn?: boolean;

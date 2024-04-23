@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";

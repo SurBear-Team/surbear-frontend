@@ -1,11 +1,19 @@
 import { useRouter } from "next/router";
 import CharSVG from "../components/styles/CharSVG";
-import { useRecoilValue } from "recoil";
-import { userNicknameAtom } from "./userState";
+import { useRecoilState } from "recoil";
+import {
+  userEmailAtom,
+  userIdAtom,
+  userNicknameAtom,
+  userPasswordAtom,
+} from "./userState";
 
 export default function CompleteSignUp() {
   const router = useRouter();
-  const nickname = useRecoilValue(userNicknameAtom);
+  const [nickname, setNickname] = useRecoilState(userNicknameAtom);
+  const [, setPassword] = useRecoilState(userPasswordAtom);
+  const [, setUserEmail] = useRecoilState(userEmailAtom);
+  const [, setUserId] = useRecoilState(userIdAtom);
   return (
     <div className="white-screen flex-col px-12">
       <div className="flex justify-center mb-8">
@@ -20,6 +28,11 @@ export default function CompleteSignUp() {
         className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
         onClick={() => {
           router.push("/sign-in");
+
+          setNickname("");
+          setPassword("");
+          setUserEmail("");
+          setUserId("");
         }}
       >
         로그인 페이지로

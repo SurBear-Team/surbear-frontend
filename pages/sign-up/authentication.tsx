@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import axios from "axios";
 import { TopBar } from "../components/TopBar/TopBar";
 import { Dialog } from "../components/Dialog";
 import api from "../api/config";
@@ -17,7 +16,7 @@ export default function PhoneNum() {
   const [isVerified, setIsVerified] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
 
-  const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
+  const [, setUserEmail] = useRecoilState(userEmailAtom);
 
   interface DialogState {
     open: boolean;

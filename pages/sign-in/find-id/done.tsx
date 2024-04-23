@@ -1,17 +1,29 @@
 import CharSVG from "@/pages/components/styles/CharSVG";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { findIdAtom } from "../findStatus";
+import api from "@/pages/api/config";
 
 export default function FoundId() {
   const router = useRouter();
+
+  const userEmail = useRecoilValue(findIdAtom);
+  const [userId, setUserId] = useState("");
+
+  api.get(`/member/userId?email=${userEmail}`).then((data) => {
+    setUserId(data.data);
+  });
+
   return (
     <div className="screen flex-col px-12">
       <div className="flex justify-center mb-8">
         <CharSVG />
       </div>
       <div className="text-center font-semibold text-xl text-gray-9">
-        {`${"임직찬"} 님의 아이디는`}
+        {`회원님의 아이디는`}
         <br />
-        {`${"gachon1234"} 입니다`}
+        {`${userId} 입니다`}
       </div>
       <div className="gray-line mt-12" />
       <button

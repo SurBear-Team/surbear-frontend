@@ -1,8 +1,11 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { Dialog } from "@/pages/components/Dialog";
+import api from "@/pages/api/config";
+import { useRecoilState } from "recoil";
+import { findIdAtom } from "../findStatus";
 
 interface DialogState {
   open: boolean;
@@ -13,16 +16,21 @@ export default function FindId() {
   const router = useRouter();
 
   const [inputEmail, setInputEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [inputVeriCode, setInputVeriCode] = useState("");
+  const [veriCode, setVeriCode] = useState("");
+
   const [isVerified, setIsVerified] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
+
+  const [, setUserId] = useRecoilState(findIdAtom);
 
   const [dialog, setDialog] = useState<DialogState>({
     open: false,
     title: "",
   });
 
-  const handleSendCode = async () => {
+  // 가입한 메일인지 찾기
+  const veriEmail = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
       setDialog({
@@ -32,8 +40,32 @@ export default function FindId() {
       return;
     }
     try {
-      // 인증번호 전송 API 호출
-      await axios.post("/surbear-veri-post", { inputEmail });
+      const response = await api.get(
+        `/member/certification/email?email=${inputEmail}`
+      );
+
+      if (response.status === 200) {
+        handleSendCode();
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 404) {
+        setDialog({
+          open: true,
+          title: "존재하지 않는 이메일이에요",
+        });
+      }
+    }
+  };
+
+  const handleSendCode = async () => {
+    try {
+      const response = await api.post("/mail", {
+        email: inputEmail,
+      });
+      setVeriCode(response.data); // 상태 업데이트
+      console.log("인증번호 : ", response.data); // 여기로 이동
       setDialog({
         open: true,
         title: "인증번호가 전송되었어요",
@@ -50,8 +82,14 @@ export default function FindId() {
 
   const handleVerifyCode = async () => {
     try {
-      const response = await axios.get(`/surbear-vier-get`);
-      if (response.data.success) {
+      const response = await api.post(`/mail/certification`, {
+        userCertification: inputVeriCode,
+        serverCertification: veriCode,
+      });
+
+      console.log("서버 응답 : ", response.data);
+
+      if (response.status === 200) {
         setIsVerified(true);
         setDialog({
           open: true,
@@ -64,7 +102,7 @@ export default function FindId() {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error("Axios 요청 에러:", error);
       setDialog({
         open: true,
         title: "네트워크 오류가 발생했어요",
@@ -73,13 +111,14 @@ export default function FindId() {
   };
 
   const handleNext = () => {
-    {
-      isVerified
-        ? router.push("/")
-        : setDialog({
-            open: true,
-            title: "이메일 인증을 완료해주세요",
-          });
+    if (isVerified) {
+      setUserId(inputEmail);
+      router.push("/sign-in/find-id/done");
+    } else {
+      setDialog({
+        open: true,
+        title: "이메일 인증을 완료해주세요",
+      });
     }
   };
 
@@ -100,7 +139,7 @@ export default function FindId() {
             />
             <button
               className="long-button bg-white border-primary-1 text-primary-1"
-              onClick={handleSendCode}
+              onClick={veriEmail}
             >
               {codeSent ? "인증번호 재발급" : "인증번호 받기"}
             </button>
@@ -109,15 +148,15 @@ export default function FindId() {
           <div className="w-full">
             <span className="font-semibold">인증번호</span>
             <input
-              type="number"
+              type="text"
               placeholder="인증번호를 입력해주세요"
               className={`main-input mt-1 mb-2 text-gray-9`}
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
+              value={inputVeriCode}
+              onChange={(e) => setInputVeriCode(e.target.value)}
             />
             <button
               className={`long-button bg-white ${
-                verificationCode
+                inputVeriCode
                   ? "border-primary-1 text-primary-1"
                   : "border-gray-5 text-gray-5"
               }`}

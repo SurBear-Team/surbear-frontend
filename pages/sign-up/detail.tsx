@@ -2,11 +2,32 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
-import { ArrowBackIcon } from "../components/styles/Icons";
 import { TopBar } from "../components/TopBar/TopBar";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  userEmailAtom,
+  userIdAtom,
+  userNicknameAtom,
+  userPasswordAtom,
+} from "./userState";
+import { AxiosError } from "axios";
+import api from "../api/config";
 
 export default function IdPassword() {
   const router = useRouter();
+
+  useEffect(() => {
+    setUserNickname("");
+  }, []);
+
+  const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
+  const userEmail = useRecoilValue(userEmailAtom);
+  const userId = useRecoilValue(userIdAtom);
+  const userPassword = useRecoilValue(userPasswordAtom);
+
+  const onNicknameChange = (e: any) => {
+    setUserNickname(e.target.value);
+  };
 
   const [selectedAge, setSelectedAge] = useState("20대");
   const [showSheet, setShowSheet] = useState(false);
@@ -17,11 +38,54 @@ export default function IdPassword() {
 
   const [selectedGender, setSelectedGender] = useState("남자");
 
-  // 콘솔찍기
-  useEffect(() => {
-    console.log("나이", selectedAge);
-    console.log("성별", selectedGender);
-  }, [selectedAge, selectedGender]);
+  const ageMapping: { [key: string]: string } = {
+    "20대 미만": "UNDER_TWENTY",
+    "20대": "TWENTIES",
+    "30대": "THIRTIES",
+    "40대": "FOURTIES",
+    "50대": "FIFTIES",
+    "60대 이상": "OVER_SIXTIES",
+  };
+
+  const genderMapping: { [key: string]: string } = {
+    남자: "MALE",
+    여자: "FEMALE",
+  };
+
+  const submitData = {
+    age: ageMapping[selectedAge], // 매핑된 값을 사용
+    gender: genderMapping[selectedGender], // 매핑된 값을 사용
+    userId: userId,
+    password: userPassword,
+    email: userEmail,
+    point: 0,
+    nickname: userNickname,
+    deleted: false,
+  };
+
+  const onNextClick = async () => {
+    if (!userNickname.trim()) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await api.post("/member/signup", submitData);
+      console.log(response.data);
+
+      if (response.status === 200) {
+        router.push("/sign-up/done"); // 성공 시 '/sign-up/done' 페이지로 이동
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 409) {
+        alert("이미 가입한 계정이에요");
+      } else {
+        alert("회원가입에 실패했습니다. 다시 시도해주세요");
+      }
+    }
+  };
 
   return (
     <>
@@ -33,6 +97,8 @@ export default function IdPassword() {
             <span className="font-semibold">닉네임</span>
             <input
               type="text"
+              value={userNickname}
+              onChange={onNicknameChange}
               placeholder="닉네임을 입력해주세요"
               className="main-input mt-1 mb-10 text-gray-9"
             />
@@ -81,9 +147,7 @@ export default function IdPassword() {
           <div className="w-full">
             <button
               className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
-              onClick={() => {
-                router.push("/sign-up/done");
-              }}
+              onClick={onNextClick}
             >
               다음
             </button>

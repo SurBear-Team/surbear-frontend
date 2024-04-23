@@ -3,14 +3,21 @@ import { useState } from "react";
 import axios from "axios";
 import { TopBar } from "../components/TopBar/TopBar";
 import { Dialog } from "../components/Dialog";
+import api from "../api/config";
+import { useRecoilState } from "recoil";
+import { userEmailAtom } from "./userState";
 
 export default function PhoneNum() {
   const router = useRouter();
 
   const [inputEmail, setInputEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [inputVeriCode, setInputVeriCode] = useState("");
+  const [veriCode, setVeriCode] = useState("");
+
   const [isVerified, setIsVerified] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
+
+  const [userEmail, setUserEmail] = useRecoilState(userEmailAtom);
 
   interface DialogState {
     open: boolean;
@@ -33,8 +40,11 @@ export default function PhoneNum() {
       return;
     }
     try {
-      // 인증번호 전송 API 호출
-      await axios.post("/surbear-veri-post", { inputEmail });
+      const response = await api.post("/mail", {
+        email: inputEmail,
+      });
+      setVeriCode(response.data); // 상태 업데이트
+      console.log("인증번호 : ", response.data); // 여기로 이동
       setDialog({
         open: true,
         title: "인증번호가 전송되었어요",
@@ -51,13 +61,20 @@ export default function PhoneNum() {
 
   const handleVerifyCode = async () => {
     try {
-      const response = await axios.get(`/surbear-vier-get`);
-      if (response.data.success) {
+      const response = await api.post(`/mail/certification`, {
+        userCertification: inputVeriCode,
+        serverCertification: veriCode,
+      });
+
+      console.log("서버 응답 : ", response.data);
+
+      if (response.status === 200) {
         setIsVerified(true);
         setDialog({
           open: true,
           title: "인증에 성공했어요",
         });
+        setUserEmail(inputEmail);
       } else {
         setDialog({
           open: true,
@@ -65,7 +82,7 @@ export default function PhoneNum() {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error("Axios 요청 에러:", error);
       setDialog({
         open: true,
         title: "네트워크 오류가 발생했어요",
@@ -110,15 +127,15 @@ export default function PhoneNum() {
           <div className="w-full">
             <span className="font-semibold">인증번호</span>
             <input
-              type="number"
+              type="text"
               placeholder="인증번호를 입력해주세요"
               className={`main-input mt-1 mb-2 text-gray-9`}
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
+              value={inputVeriCode}
+              onChange={(e) => setInputVeriCode(e.target.value)}
             />
             <button
               className={`long-button bg-white ${
-                verificationCode
+                inputVeriCode
                   ? "border-primary-1 text-primary-1"
                   : "border-gray-5 text-gray-5"
               }`}

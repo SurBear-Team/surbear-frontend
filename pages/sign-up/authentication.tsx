@@ -1,29 +1,51 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "../components/styles/Icons";
 import { TopBar } from "../components/TopBar/TopBar";
+import { Dialog } from "../components/Dialog";
 
 export default function PhoneNum() {
   const router = useRouter();
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
 
+  interface DialogState {
+    open: boolean;
+    title: string;
+  }
+
+  // 다이얼로그
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
+
   const handleSendCode = async () => {
-    if (!phoneNumber || phoneNumber.length < 11) {
-      alert("유효하지 않은 전화번호입니다.");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(inputEmail)) {
+      setDialog({
+        open: true,
+        title: "유효하지 않은 이메일이에요",
+      });
       return;
     }
     try {
       // 인증번호 전송 API 호출
-      await axios.post("/surbear-veri-post", { phoneNumber });
-      alert("인증번호가 전송되었습니다.");
+      await axios.post("/surbear-veri-post", { inputEmail });
+      setDialog({
+        open: true,
+        title: "인증번호가 전송되었어요",
+      });
       setCodeSent(true);
     } catch (error) {
       console.error(error);
+      setDialog({
+        open: true,
+        title: "네트워크 오류가 발생했어요",
+      });
     }
   };
 
@@ -32,20 +54,33 @@ export default function PhoneNum() {
       const response = await axios.get(`/surbear-vier-get`);
       if (response.data.success) {
         setIsVerified(true);
-        alert("인증에 성공했습니다.");
+        setDialog({
+          open: true,
+          title: "인증에 성공했어요",
+        });
       } else {
-        alert("인증에 실패했습니다.");
+        setDialog({
+          open: true,
+          title: "인증에 실패했어요",
+        });
       }
     } catch (error) {
       console.error(error);
+      setDialog({
+        open: true,
+        title: "네트워크 오류가 발생했어요",
+      });
     }
   };
 
   const handleNext = () => {
-    if (!isVerified) {
-      alert("먼저 전화번호 인증을 완료해 주세요.");
-    } else {
-      alert("인증 성공! 다음 단계로 진행합니다.");
+    {
+      isVerified
+        ? router.push("/sign-up")
+        : setDialog({
+            open: true,
+            title: "이메일 인증을 완료해주세요",
+          });
     }
   };
 
@@ -54,15 +89,15 @@ export default function PhoneNum() {
       <TopBar hasBack noShadow title="회원가입" />
       <div className="white-screen">
         <div className="inner-screen px-12 flex-col">
-          {/* 전화번호 */}
+          {/* 이메일 */}
           <div className="mb-10 w-full">
-            <span className="font-semibold">전화번호</span>
+            <span className="font-semibold">이메일</span>
             <input
-              type="number"
-              placeholder="'-'를 제외한 전화번호를 입력해주세요"
+              type="email"
+              placeholder="이메일을 입력해주세요"
               className="main-input mt-1 mb-2 text-gray-9"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={inputEmail}
+              onChange={(e) => setInputEmail(e.target.value)}
             />
             <button
               className="long-button bg-white border-primary-1 text-primary-1"
@@ -103,6 +138,17 @@ export default function PhoneNum() {
               다음
             </button>
           </div>
+
+          {dialog.open && (
+            <Dialog
+              title={dialog.title}
+              rightText="확인"
+              onRightClick={() => {
+                setDialog((current) => ({ ...current, open: false }));
+              }}
+              onlyOneBtn
+            />
+          )}
         </div>
       </div>
     </>

@@ -4,9 +4,20 @@ import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
 import api from "../api/config";
 import { AxiosError } from "axios";
+import { Dialog } from "../components/Dialog";
+
+interface DialogState {
+  open: boolean;
+  title: string;
+}
 
 export default function SignIn() {
   const router = useRouter();
+
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
 
   const [inputId, setInputId] = useState("");
   const [inputPassword, setInputPassword] = useState("");
@@ -34,9 +45,15 @@ export default function SignIn() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 404) {
-        alert("아이디 혹은 비밀번호를 확인해주세요");
+        setDialog({
+          open: true,
+          title: "아이디 혹은 비밀번호를 확인해주세요",
+        });
       } else {
-        alert("네트워크 에러. 다시 시도해주세요");
+        setDialog({
+          open: true,
+          title: "네트워크 에러. 다시 시도해주세요",
+        });
       }
     }
   };
@@ -109,6 +126,17 @@ export default function SignIn() {
             로그인 없이 시작
           </button>
         </div>
+
+        {dialog.open && (
+          <Dialog
+            title={dialog.title}
+            rightText="확인"
+            onRightClick={() => {
+              setDialog((current) => ({ ...current, open: false }));
+            }}
+            onlyOneBtn
+          />
+        )}
       </div>
     </div>
   );

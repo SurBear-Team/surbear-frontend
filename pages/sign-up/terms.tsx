@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
-import { ArrowBackIcon } from "../components/styles/Icons";
+
 import { TopBar } from "../components/TopBar/TopBar";
+import { Dialog } from "../components/Dialog";
 
 type CheckboxName =
   | "all"
@@ -14,8 +15,18 @@ type CheckboxName =
   | "terms4"
   | "terms5";
 
+interface DialogState {
+  open: boolean;
+  title: string;
+}
+
 export default function Clause() {
   const router = useRouter();
+
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
 
   const [isChecked, setIsChecked] = useState<Record<CheckboxName, boolean>>({
     all: false,
@@ -82,7 +93,10 @@ export default function Clause() {
     if (isButtonActive) {
       router.push("/sign-up/authentication");
     } else {
-      alert("약관 확인 plz");
+      setDialog({
+        open: true,
+        title: "약관 동의를 진행해주세요",
+      });
     }
   };
 
@@ -168,6 +182,17 @@ export default function Clause() {
           >
             다음
           </button>
+
+          {dialog.open && (
+            <Dialog
+              title={dialog.title}
+              rightText="확인"
+              onRightClick={() => {
+                setDialog((current) => ({ ...current, open: false }));
+              }}
+              onlyOneBtn
+            />
+          )}
         </div>
         {showSheet && (
           <>

@@ -103,11 +103,19 @@ export default function FindPwd() {
         });
       }
     } catch (error) {
-      console.error("Axios 요청 에러:", error);
-      setDialog({
-        open: true,
-        title: "네트워크 오류가 발생했어요",
-      });
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 401) {
+        setDialog({
+          open: true,
+          title: "인증 번호를 확인해주세요",
+        });
+      } else {
+        setDialog({
+          open: true,
+          title: "네트워크 오류가 발생했어요",
+        });
+      }
     }
   };
 

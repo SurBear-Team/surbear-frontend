@@ -12,9 +12,20 @@ import {
 } from "./userState";
 import { AxiosError } from "axios";
 import api from "../api/config";
+import { Dialog } from "../components/Dialog";
+
+interface DialogState {
+  open: boolean;
+  title: string;
+}
 
 export default function IdPassword() {
   const router = useRouter();
+
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
 
   useEffect(() => {
     setUserNickname("");
@@ -65,7 +76,10 @@ export default function IdPassword() {
 
   const onNextClick = async () => {
     if (!userNickname.trim()) {
-      alert("닉네임을 입력해주세요.");
+      setDialog({
+        open: true,
+        title: "닉네임을 입력해주세요",
+      });
       return;
     }
 
@@ -80,9 +94,15 @@ export default function IdPassword() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 409) {
-        alert("이미 가입한 계정이에요");
+        setDialog({
+          open: true,
+          title: "이미 가입한 계정이에요",
+        });
       } else {
-        alert("회원가입에 실패했습니다. 다시 시도해주세요");
+        setDialog({
+          open: true,
+          title: "회원가입에 실패했습니다. 다시 시도해주세요",
+        });
       }
     }
   };
@@ -161,6 +181,17 @@ export default function IdPassword() {
                 onSelected={setSelectedAge}
               />
             </>
+          )}
+
+          {dialog.open && (
+            <Dialog
+              title={dialog.title}
+              rightText="확인"
+              onRightClick={() => {
+                setDialog((current) => ({ ...current, open: false }));
+              }}
+              onlyOneBtn
+            />
           )}
         </div>
       </div>

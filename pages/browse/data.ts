@@ -7,7 +7,7 @@ export interface ISurvey {
   id: number;
   ongoingType: string;
   surveyType: string;
-  surveyAuthorId: string;
+  surveyAuthorId: number;
   maximumNumberOfPeople: number;
   title: string;
   description: string;

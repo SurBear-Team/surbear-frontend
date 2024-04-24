@@ -37,8 +37,8 @@ export default function SignIn() {
   const onSubmit = async () => {
     try {
       const response = await api.post("/member/login", submitData);
-
       if (response.status === 200) {
+        localStorage.setItem("surbearToken", response?.data?.accessToken);
         router.push("/browse");
       }
     } catch (error) {

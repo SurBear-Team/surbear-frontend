@@ -72,6 +72,16 @@ export default function FindPwd() {
         title: "인증번호가 전송되었어요",
       });
       setCodeSent(true);
+
+      // 5분 후 인증번호 초기화 및 세션 만료 알림
+      setTimeout(() => {
+        setVeriCode("");
+        setDialog({
+          open: true,
+          title: "세션이 만료됐어요 다시 인증해주세요",
+        });
+        setInputVeriCode("");
+      }, 5 * 60 * 1000); // 5분
     } catch (error) {
       console.error(error);
       setDialog({

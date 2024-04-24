@@ -8,6 +8,8 @@ import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { surveyIdAtom } from "../surveyState";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -42,6 +44,9 @@ interface NewSurveyCardProps {
 export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   const isEdit = !!surveyId; // surveyId가 있다면 isEdit은 true
   const router = useRouter();
+
+  // surveyId저장
+  const [, setRecoilSurveyId] = useRecoilState(surveyIdAtom);
 
   // surveyId로 원래 정보 가져오기
   const fetchSurvey = async () => {
@@ -186,7 +191,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   };
 
   // 다음 버튼 클릭
-  const nextButtonClick = () => {
+  const nextButtonClick = async () => {
     const validData = validateFormData();
     if (!validData) return;
 
@@ -201,16 +206,23 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           showDialog("설문 수정에 실패했습니다.");
         });
     } else {
-      validData.surveyAuthorId = 3; // 실제 유저 들어오면 수정
-      api
-        .post("/survey", validData)
-        .then(() => {
+      try {
+        validData.surveyAuthorId = 100; // 실제 유저 들어오면 수정
+        const response = await api.post("/survey", validData);
+        // .then(() => {
+        //   // router.push("/my-survey/new-survey");
+        // });
+        console.log("리스폰스", response.data);
+        if (response.status === 200) {
+          setRecoilSurveyId(response.data);
           router.push("/my-survey/new-survey");
-        })
-        .catch((error) => {
-          console.error("설문 생성 오류 : ", error);
+        } else {
           showDialog("설문 생성에 실패했습니다.");
-        });
+        }
+      } catch (error) {
+        console.error(error);
+        showDialog("설문 생성에 실패했습니다.");
+      }
     }
   };
 

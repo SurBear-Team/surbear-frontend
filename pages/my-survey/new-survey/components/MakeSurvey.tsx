@@ -6,6 +6,8 @@ import { TypeDropDown } from "../../components/TypeDropDown";
 import { Dialog } from "@/pages/components/Dialog";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import api from "@/pages/api/config";
+import { useRecoilValue } from "recoil";
+import { surveyIdAtom } from "../../surveyState";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -28,6 +30,8 @@ export const MakeSurvey = ({
   page,
 }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
+
+  const surveyId = useRecoilValue(surveyIdAtom);
 
   const typeMapping: { [key: string]: string } = {
     객관식: "MULTIPLE_CHOICE",
@@ -144,12 +148,12 @@ export const MakeSurvey = ({
       .post("/survey/question", {
         answers: choices, // 객관식일때만
         surveyQuestion: {
-          surveyId: 3, // 임시
+          surveyId: surveyId,
           questionType: nowType,
           content: questionTitle,
           page: page,
           questionOrder: 0, // ㅇㅅㅇ?
-          maxText: 7883, // 임시
+          maxText: count, // 임시
           required: isChecked,
         },
       })

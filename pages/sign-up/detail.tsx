@@ -34,6 +34,34 @@ export default function SignUpDetail() {
   const userId = useRecoilValue(userIdAtom);
   const userPassword = useRecoilValue(userPasswordAtom);
 
+  // 닉네임 중복 확인
+  const checkDuplicate = async () => {
+    // 유효성검사 추가
+    try {
+      const response = await api.post("/member/verification/duplicate", {
+        type: "nickname",
+        value: userNickname,
+      });
+      if (response.data === true) {
+        onNextClick();
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      // (409) 이미 가입한 닉네임이면
+      if (axiosError.response && axiosError.response.status === 409) {
+        setDialog({
+          open: true,
+          title: "이미 가입한 닉네임이에요",
+        });
+      } else {
+        setDialog({
+          open: true,
+          title: "네트워크 오류가 발생했어요",
+        });
+      }
+    }
+  };
+
   // 닉네임 onChange
   const onNicknameChange = (e: any) => {
     setUserNickname(e.target.value);
@@ -171,7 +199,7 @@ export default function SignUpDetail() {
           <div className="w-full">
             <button
               className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
-              onClick={onNextClick}
+              onClick={checkDuplicate}
             >
               회원가입 완료
             </button>

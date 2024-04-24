@@ -30,8 +30,8 @@ export default function Authentication() {
     title: "",
   });
 
-  // 인증번호 받기
-  const handleSendCode = async () => {
+  // 가입된 메일인지 확인
+  const checkDuplicate = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
       setDialog({
@@ -40,6 +40,40 @@ export default function Authentication() {
       });
       return; // 잘못된 이메일 입력하고 버튼 누르면 함수 종료
     }
+    try {
+      const response = await api.post("/member/verification/duplicate", {
+        type: "email",
+        value: inputEmail,
+      });
+
+      if (response.data === true) {
+        handleSendCode();
+      } else {
+        setDialog({
+          open: true,
+          title: "인증번호 전송에 실패했어요",
+        });
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      // (409) 이미 가입한 이메일이면
+      if (axiosError.response && axiosError.response.status === 409) {
+        setDialog({
+          open: true,
+          title: "이미 가입한 이메일이에요",
+        });
+      } else {
+        setDialog({
+          open: true,
+          title: "네트워크 오류가 발생했어요",
+        });
+      }
+    }
+  };
+
+  // 인증번호 받기
+  const handleSendCode = async () => {
     try {
       const response = await api.post("/mail", {
         email: inputEmail,
@@ -128,7 +162,7 @@ export default function Authentication() {
             />
             <button
               className="long-button bg-white border-primary-1 text-primary-1"
-              onClick={handleSendCode}
+              onClick={checkDuplicate}
             >
               {codeSent ? "인증번호 재발급" : "인증번호 받기"}
             </button>

@@ -3,6 +3,8 @@ import { TopBar } from "../components/TopBar/TopBar";
 import { useRecoilState } from "recoil";
 import { userIdAtom, userPasswordAtom } from "./userState";
 import { useRouter } from "next/router";
+import api from "../api/config";
+import { AxiosError } from "axios";
 
 export default function IdPassword() {
   const router = useRouter();
@@ -10,6 +12,7 @@ export default function IdPassword() {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -18,10 +21,36 @@ export default function IdPassword() {
   const [, setUserId] = useRecoilState(userIdAtom);
   const [, setUserPassword] = useRecoilState(userPasswordAtom);
 
+  // 아이디 중복검사
+  const checkUserIdDuplication = async (username: string) => {
+    if (!username) return false;
+    try {
+      await api.post("/member/verification/duplicate", {
+        type: "userid",
+        value: username,
+      });
+      return true;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 409) {
+        setError("username", {
+          type: "duplicate",
+          message: "이미 사용 중인 아이디입니다.",
+        });
+      } else {
+        setError("username", {
+          type: "server",
+          message: "서버 오류로 중복 검사를 완료할 수 없습니다.",
+        });
+      }
+      return false;
+    }
+  };
+
   // 아이디 유효성 검사
   const validateUsername = (username: string) => {
     const isValidContent = /^[A-Za-z0-9]+$/.test(username);
-    const isUnique = true; // 여기에 중복검사 들어감
     return isValidContent || "아이디는 영문과 숫자만 포함시켜주세요";
   };
 
@@ -34,11 +63,13 @@ export default function IdPassword() {
   };
 
   // 모든 유효성 검사 통과하고 다음 버튼 누르면 실행되는 함수
-  const onSubmit = (data: any) => {
-    setUserId(data.username);
-    setUserPassword(data.password);
-
-    router.push("/sign-up/detail");
+  const onSubmit = async (data: any) => {
+    const isUnique = await checkUserIdDuplication(data.username);
+    if (isUnique) {
+      setUserId(data.username);
+      setUserPassword(data.password);
+      router.push("/sign-up/detail");
+    }
   };
   return (
     <>
@@ -56,6 +87,7 @@ export default function IdPassword() {
                   value: 6,
                   message: "아이디는 최소 6자 이상이어야 합니다.",
                 },
+                onBlur: (e) => checkUserIdDuplication(e.target.value),
               })}
               type="text"
               placeholder="아이디를 입력해주세요"

@@ -7,22 +7,22 @@ import { useRecoilState } from "recoil";
 import { userEmailAtom } from "./userState";
 import { AxiosError } from "axios";
 
-export default function PhoneNum() {
+interface DialogState {
+  open: boolean;
+  title: string;
+}
+
+export default function Authentication() {
   const router = useRouter();
 
-  const [inputEmail, setInputEmail] = useState("");
-  const [inputVeriCode, setInputVeriCode] = useState("");
-  const [veriCode, setVeriCode] = useState("");
+  const [inputEmail, setInputEmail] = useState(""); // 입력 이메일
+  const [inputVeriCode, setInputVeriCode] = useState(""); // 입력 인증번호
+  const [veriCode, setVeriCode] = useState(""); // POST하고 받은 인증번호
 
-  const [isVerified, setIsVerified] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false); // 인증이 됐나요?
+  const [codeSent, setCodeSent] = useState(false); // 번호가 갔나요?
 
   const [, setUserEmail] = useRecoilState(userEmailAtom);
-
-  interface DialogState {
-    open: boolean;
-    title: string;
-  }
 
   // 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
@@ -30,6 +30,7 @@ export default function PhoneNum() {
     title: "",
   });
 
+  // 인증번호 받기
   const handleSendCode = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
@@ -37,19 +38,19 @@ export default function PhoneNum() {
         open: true,
         title: "유효하지 않은 이메일이에요",
       });
-      return;
+      return; // 잘못된 이메일 입력하고 버튼 누르면 함수 종료
     }
     try {
       const response = await api.post("/mail", {
         email: inputEmail,
       });
-      setVeriCode(response.data); // 상태 업데이트
-      console.log("인증번호 : ", response.data); // 여기로 이동
+      setVeriCode(response.data); // POST하고 받은 번호 저장
+
       setDialog({
         open: true,
         title: "인증번호가 전송되었어요",
       });
-      setCodeSent(true);
+      setCodeSent(true); // 코드 받았음 true
     } catch (error) {
       console.error(error);
       setDialog({
@@ -59,6 +60,7 @@ export default function PhoneNum() {
     }
   };
 
+  // 인증번호 확인
   const handleVerifyCode = async () => {
     try {
       const response = await api.post(`/mail/certification`, {
@@ -66,15 +68,13 @@ export default function PhoneNum() {
         serverCertification: veriCode,
       });
 
-      console.log("서버 응답 : ", response.data);
-
       if (response.status === 200) {
-        setIsVerified(true);
+        setIsVerified(true); // 인증성공 true
         setDialog({
           open: true,
           title: "인증에 성공했어요",
         });
-        setUserEmail(inputEmail);
+        setUserEmail(inputEmail); // recoil에 이메일 저장
       } else {
         setDialog({
           open: true,
@@ -84,6 +84,7 @@ export default function PhoneNum() {
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
+      // (401) 인증번호 틀리면
       if (axiosError.response && axiosError.response.status === 401) {
         setDialog({
           open: true,
@@ -98,6 +99,7 @@ export default function PhoneNum() {
     }
   };
 
+  // 다음 버튼
   const handleNext = () => {
     {
       isVerified

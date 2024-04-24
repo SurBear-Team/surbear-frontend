@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
 import { TopBar } from "../components/TopBar/TopBar";
@@ -19,7 +19,7 @@ interface DialogState {
   title: string;
 }
 
-export default function IdPassword() {
+export default function SignUpDetail() {
   const router = useRouter();
 
   const [dialog, setDialog] = useState<DialogState>({
@@ -27,27 +27,21 @@ export default function IdPassword() {
     title: "",
   });
 
-  useEffect(() => {
-    setUserNickname("");
-  }, []);
-
+  // 사용자가 입력하는 닉네임
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
+  // recoil로 가져오는 것들, post에 쓰임
   const userEmail = useRecoilValue(userEmailAtom);
   const userId = useRecoilValue(userIdAtom);
   const userPassword = useRecoilValue(userPasswordAtom);
 
+  // 닉네임 onChange
   const onNicknameChange = (e: any) => {
     setUserNickname(e.target.value);
   };
 
+  // 나이대
   const [selectedAge, setSelectedAge] = useState("20대");
   const [showSheet, setShowSheet] = useState(false);
-
-  const toggleShowSheet = () => {
-    setShowSheet(!showSheet);
-  };
-
-  const [selectedGender, setSelectedGender] = useState("남자");
 
   const ageMapping: { [key: string]: string } = {
     "20대 미만": "UNDER_TWENTY",
@@ -58,14 +52,23 @@ export default function IdPassword() {
     "60대 이상": "OVER_SIXTIES",
   };
 
+  // 시트 보였다 말았다
+  const toggleShowSheet = () => {
+    setShowSheet(!showSheet);
+  };
+
+  // 성별
+  const [selectedGender, setSelectedGender] = useState("남자");
+
   const genderMapping: { [key: string]: string } = {
     남자: "MALE",
     여자: "FEMALE",
   };
 
+  // post할 데이터
   const submitData = {
-    age: ageMapping[selectedAge], // 매핑된 값을 사용
-    gender: genderMapping[selectedGender], // 매핑된 값을 사용
+    age: ageMapping[selectedAge],
+    gender: genderMapping[selectedGender],
     userId: userId,
     password: userPassword,
     email: userEmail,
@@ -74,6 +77,7 @@ export default function IdPassword() {
     deleted: false,
   };
 
+  // 다음 버튼
   const onNextClick = async () => {
     if (!userNickname.trim()) {
       setDialog({
@@ -85,14 +89,14 @@ export default function IdPassword() {
 
     try {
       const response = await api.post("/member/signup", submitData);
-      console.log(response.data);
 
       if (response.status === 200) {
-        router.push("/sign-up/done"); // 성공 시 '/sign-up/done' 페이지로 이동
+        router.push("/sign-up/done");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
+      // (409) 중복
       if (axiosError.response && axiosError.response.status === 409) {
         setDialog({
           open: true,
@@ -163,13 +167,13 @@ export default function IdPassword() {
 
           <div className="gray-line w-full mt-12 mx-10" />
 
-          {/* 다음버튼 */}
+          {/* 회원가입 완료 버튼 */}
           <div className="w-full">
             <button
               className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
               onClick={onNextClick}
             >
-              다음
+              회원가입 완료
             </button>
           </div>
           {showSheet && (

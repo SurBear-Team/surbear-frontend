@@ -20,7 +20,7 @@ interface DialogState {
   title: string;
 }
 
-export default function Clause() {
+export default function Terms() {
   const router = useRouter();
 
   const [dialog, setDialog] = useState<DialogState>({
@@ -89,6 +89,7 @@ export default function Clause() {
     setIsButtonActive(terms1 && terms2 && terms3 && terms4 && terms5 && all);
   }, [isChecked]);
 
+  // 모든 필수 약관을 체크해야 다음으로 보내줌
   const handleNextButtonClick = () => {
     if (isButtonActive) {
       router.push("/sign-up/authentication");

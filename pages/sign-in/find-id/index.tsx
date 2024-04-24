@@ -15,12 +15,12 @@ interface DialogState {
 export default function FindId() {
   const router = useRouter();
 
-  const [inputEmail, setInputEmail] = useState("");
-  const [inputVeriCode, setInputVeriCode] = useState("");
-  const [veriCode, setVeriCode] = useState("");
+  const [inputEmail, setInputEmail] = useState(""); // 입력 이메일
+  const [inputVeriCode, setInputVeriCode] = useState(""); // 입력 인증번호
+  const [veriCode, setVeriCode] = useState(""); // POST하고 받은 인증번호
 
-  const [isVerified, setIsVerified] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false); // 인증이 됐나?
+  const [codeSent, setCodeSent] = useState(false); // 번호가 갔나?
 
   const [, setUserId] = useRecoilState(findIdAtom);
 
@@ -41,7 +41,7 @@ export default function FindId() {
     }
     try {
       const response = await api.get(
-        `/member/certification/email?email=${inputEmail}`
+        `/member/verification/email?email=${inputEmail}`
       );
 
       if (response.status === 200) {
@@ -65,7 +65,6 @@ export default function FindId() {
         email: inputEmail,
       });
       setVeriCode(response.data);
-      console.log("인증번호 : ", response.data);
       setDialog({
         open: true,
         title: "인증번호가 전송되었어요",
@@ -87,8 +86,6 @@ export default function FindId() {
         userCertification: inputVeriCode,
         serverCertification: veriCode,
       });
-
-      console.log("서버 응답 : ", response.data);
 
       if (response.status === 200) {
         setIsVerified(true);

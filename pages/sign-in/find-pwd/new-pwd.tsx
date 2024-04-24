@@ -38,7 +38,7 @@ export default function NewPwd() {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await api.post("/member/password", {
+      const response = await api.put("/member/password", {
         email: userEmail,
         newPassword: data.password,
       });

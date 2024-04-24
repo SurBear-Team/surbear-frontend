@@ -42,7 +42,7 @@ export default function FindPwd() {
     }
     try {
       const response = await api.get(
-        `/member/certification/password?userId=${inputId}&email=${inputEmail}`
+        `/member/verification/password?userId=${inputId}&email=${inputEmail}`
       );
 
       if (response.status === 200) {

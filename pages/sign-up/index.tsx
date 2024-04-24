@@ -15,13 +15,13 @@ export default function IdPassword() {
     mode: "onChange",
   });
 
-  const [userId, setUserId] = useRecoilState(userIdAtom);
-  const [userPassword, setUserPassword] = useRecoilState(userPasswordAtom);
+  const [, setUserId] = useRecoilState(userIdAtom);
+  const [, setUserPassword] = useRecoilState(userPasswordAtom);
 
   // 아이디 유효성 검사
   const validateUsername = (username: string) => {
     const isValidContent = /^[A-Za-z0-9]+$/.test(username);
-    const isUnique = true; // 실제 앱에서는 중복 검사 로직 필요
+    const isUnique = true; // 여기에 중복검사 들어감
     return isValidContent || "아이디는 영문과 숫자만 포함시켜주세요";
   };
 
@@ -33,11 +33,10 @@ export default function IdPassword() {
     );
   };
 
+  // 모든 유효성 검사 통과하고 다음 버튼 누르면 실행되는 함수
   const onSubmit = (data: any) => {
-    console.log(data);
     setUserId(data.username);
     setUserPassword(data.password);
-    console.log("리코일:", userId, userPassword);
 
     router.push("/sign-up/detail");
   };
@@ -125,7 +124,6 @@ export default function IdPassword() {
             <button
               type="submit"
               className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
-              onClick={() => {}}
             >
               다음
             </button>

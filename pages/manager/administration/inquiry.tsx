@@ -1,10 +1,9 @@
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { InquiryCard } from "./components/InquiryCard";
 import { useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function AdministrationInquiry() {
   const router = useRouter();
@@ -13,23 +12,19 @@ export default function AdministrationInquiry() {
   const [showPopUp, setShowPopUp] = useState(false);
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          router.back();
-        }}
-        title="관리자 조회"
-      />
-      <div className="screen flex-col justify-start pt-[66px]">
-        {ManagerList.map((index) => (
-          <InquiryCard
-            key={index}
-            onClick={() => {
-              setShowPopUp((prev) => !prev);
-            }}
-            title={`${index}`}
-          />
-        ))}
+      <TopBar hasBack noShadow title="관리자 조회" />
+      <div className="white-screen flex-col justify-start pt-12">
+        <div className="inner-screen">
+          {ManagerList.map((index) => (
+            <InquiryCard
+              key={index}
+              onClick={() => {
+                setShowPopUp((prev) => !prev);
+              }}
+              title={`${index}`}
+            />
+          ))}
+        </div>
         {showPopUp && (
           <>
             <Dialog

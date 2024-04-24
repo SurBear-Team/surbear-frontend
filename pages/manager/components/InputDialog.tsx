@@ -16,18 +16,21 @@ export const InputDialog = ({
   onRightClick,
 }: DialogProps) => {
   return (
-    <div className="inline-flex flex-col py-8 px-6 rounded-lg max-w-xl z-20 bg-white shadow-md">
+    <div className="w-3/4 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col py-8 px-6 rounded-lg z-50 bg-white shadow-md">
       <div className="text-gray-9 font-semibold">{title}</div>
-      <input placeholder={placeholder} className="main-input" />
+      <input placeholder={placeholder} className="main-input text-gray-9" />
       <div className="gray-line my-6" />
       <div className="flex justify-between w-full gap-4">
         <button
           onClick={onLeftClick}
-          className="small-Btn border-gray-5 text-gray-5"
+          className="long-button border-gray-5 text-gray-5"
         >
           {leftText}
         </button>
-        <button onClick={onRightClick} className="small-Btn primary-btn-style">
+        <button
+          onClick={onRightClick}
+          className="long-button primary-btn-style"
+        >
           {rightText}
         </button>
       </div>

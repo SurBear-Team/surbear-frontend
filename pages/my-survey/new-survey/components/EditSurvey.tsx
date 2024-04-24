@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { TypeDropDown } from "../../components/TypeDropDown";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
@@ -64,6 +64,14 @@ export const EditSurvey = ({
       }
     });
   };
+  // (객관식) 중복된 답변 체크
+  const [hasDuplicates, setHasDuplicates] = useState(false);
+
+  // 객관식 답변들의 상태가 변경될 때마다 중복 체크
+  useEffect(() => {
+    const uniqueChoices = new Set(choices);
+    setHasDuplicates(uniqueChoices.size !== choices?.length);
+  }, [choices]);
   // (객관식) 답변 onChange
   const handleChoiceChange = (index: number, newText: string) => {
     setChoices((prevChoices = []) =>
@@ -78,6 +86,12 @@ export const EditSurvey = ({
     if (!questionTitle.trim()) {
       setAlertDialog(true);
       setAlertText("제목을 입력해주세요.");
+      return;
+    }
+
+    if (hasDuplicates) {
+      setAlertDialog(true);
+      setAlertText("중복된 답변이 있습니다. 다시 확인해주세요.");
       return;
     }
 

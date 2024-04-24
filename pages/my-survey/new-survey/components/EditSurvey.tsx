@@ -18,7 +18,13 @@ export const EditSurvey = ({
   onSave,
   onCancel,
 }: EditSurveyProps) => {
-  const typeList = ["객관식", "단답형", "슬라이더"];
+  const typeList = [
+    "객관식 - 단일 선택",
+    "객관식 - 다중 선택",
+    "단답형",
+    "슬라이더",
+    "주관식",
+  ];
 
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState(initialData?.type);
@@ -27,10 +33,15 @@ export const EditSurvey = ({
   const handleTypeSelect = (selectedTypeType: string) => {
     setTypeType(selectedTypeType);
     setShowType(false);
-
-    // 단답형이나 슬라이더에서 '객관식'으로 변경할 때 choices 초기화
-    if (selectedTypeType === "객관식" && (!choices || choices.length === 0)) {
-      setChoices(["", ""]); // 최소 2개의 빈 답변으로 초기화
+    if (
+      selectedTypeType === "객관식 - 단일 선택" ||
+      selectedTypeType === "객관식 - 다중 선택"
+    ) {
+      if (!choices || choices.length < 2) {
+        setChoices(["", ""]); // 객관식 선택 시 최소 2개의 빈 답변으로 초기화
+      }
+    } else {
+      setChoices([]); // 객관식이 아닌 경우 선택지를 비움
     }
   };
 
@@ -89,7 +100,10 @@ export const EditSurvey = ({
       return;
     }
 
-    if (hasDuplicates) {
+    if (
+      hasDuplicates &&
+      (typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택")
+    ) {
       setAlertDialog(true);
       setAlertText("중복된 답변이 있습니다. 다시 확인해주세요.");
       return;
@@ -106,7 +120,10 @@ export const EditSurvey = ({
     const updatedData = {
       title: questionTitle,
       type: typeType,
-      choices: typeType === "객관식" ? choices : undefined,
+      choices:
+        typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택"
+          ? choices
+          : undefined,
       count: typeType === "단답형" ? count : undefined,
     };
     onSave(updatedData);
@@ -157,7 +174,8 @@ export const EditSurvey = ({
       </div>
 
       {/* 답변들 */}
-      {typeType === "객관식" && (
+      {(typeType === "객관식 - 단일 선택" ||
+        typeType === "객관식 - 다중 선택") && (
         <>
           {/* 회색선 */}
           <div className="gray-line my-8" />
@@ -171,7 +189,7 @@ export const EditSurvey = ({
         </>
       )}
 
-      {typeType === "단답형" && (
+      {(typeType === "단답형" || typeType === "주관식") && (
         <>
           <ShortAnswerType setCount={setCount} />
           <div className="gray-line mt-8" />

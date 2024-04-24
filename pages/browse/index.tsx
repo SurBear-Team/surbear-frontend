@@ -3,7 +3,7 @@ import SurveyCard from "../components/SurveyCard";
 import { TabBar } from "../components/TabBar";
 import { Dialog } from "../components/Dialog";
 import Detail from "./components/Detail";
-import { ISurvey, category, orderList } from "./data";
+import { ISurvey, orderList } from "./data";
 import { AnimatePresence } from "framer-motion";
 import { TopBar } from "../components/TopBar/TopBar";
 import Pagination from "./components/Pagination";
@@ -32,7 +32,7 @@ export default function Browse() {
 
   useEffect(() => {
     api
-      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}`)
+      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}?type=ALL`)
       .then((res) => {
         setData(res.data.content);
         setLastPage(res.data.totalPages);
@@ -62,6 +62,8 @@ export default function Browse() {
     setDetailData(tempData);
     setShowDetail(true);
   };
+
+  console.log(data);
 
   return (
     <>

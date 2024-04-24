@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { SettingCard } from "../components/SettingCard";
 import { useState } from "react";

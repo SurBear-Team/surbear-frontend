@@ -6,6 +6,12 @@ import { TopBar } from "../components/TopBar/TopBar";
 
 export default function Profile() {
   const router = useRouter();
+  // 로그인 여부 감지
+  const checkToken = localStorage.getItem("surbearToken");
+  if (checkToken === null) {
+    router.push("/sign-in");
+  }
+
   const [nickname, setNickname] = useState("닉네임n글자까지");
   return (
     <>

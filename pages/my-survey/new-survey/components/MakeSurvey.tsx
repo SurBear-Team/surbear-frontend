@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
@@ -6,6 +6,8 @@ import { TypeDropDown } from "../../components/TypeDropDown";
 import { Dialog } from "@/pages/components/Dialog";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import api from "@/pages/api/config";
+import { useRecoilValue } from "recoil";
+import { surveyIdAtom } from "../../surveyState";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -28,6 +30,8 @@ export const MakeSurvey = ({
   page,
 }: MakeSurveyProps) => {
   const typeList = ["객관식", "단답형", "슬라이더"];
+
+  const surveyId = useRecoilValue(surveyIdAtom);
 
   const typeMapping: { [key: string]: string } = {
     객관식: "MULTIPLE_CHOICE",
@@ -70,6 +74,15 @@ export const MakeSurvey = ({
   const addChoice = () => {
     setChoices([...choices, ""]);
   };
+  // (객관식) 중복된 답변 체크
+  const [hasDuplicates, setHasDuplicates] = useState(false);
+
+  // 객관식 답변들의 상태가 변경될 때마다 중복 체크
+  useEffect(() => {
+    const uniqueChoices = new Set(choices);
+    setHasDuplicates(uniqueChoices.size !== choices.length);
+  }, [choices]);
+
   // (객관식) 답변 삭제
   const deleteChoice = (index: number) => {
     // 2개 이상일 때만 삭제
@@ -102,6 +115,12 @@ export const MakeSurvey = ({
       setAlertDialog(true);
       setAlertText("제목을 입력해주세요.");
       return; // 함수 중단
+    }
+
+    if (hasDuplicates) {
+      setAlertDialog(true);
+      setAlertText("중복된 답변이 있습니다. 다시 확인해주세요.");
+      return;
     }
 
     // (객관식)
@@ -144,12 +163,12 @@ export const MakeSurvey = ({
       .post("/survey/question", {
         answers: choices, // 객관식일때만
         surveyQuestion: {
-          surveyId: 3, // 임시
+          surveyId: surveyId,
           questionType: nowType,
           content: questionTitle,
           page: page,
           questionOrder: 0, // ㅇㅅㅇ?
-          maxText: 7883, // 임시
+          maxText: count, // 임시
           required: isChecked,
         },
       })

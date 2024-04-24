@@ -10,9 +10,22 @@ import Pagination from "./components/Pagination";
 import api from "../api/config";
 import { useRecoilState } from "recoil";
 import { categoryTypeAtom } from "../atoms";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 export default function Browse() {
   const [data, setData] = useState<ISurvey[]>();
+
+  // 유저 토큰
+  const [token, setToken] = useState<number | null>(null);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      const decoded = jwtDecode<JwtPayload>(storedToken);
+      if (decoded && decoded.sub) {
+        setToken(parseInt(decoded.sub));
+      }
+    }
+  }, []);
 
   // 페이지네이션
   const [currentPage, setCurrentPage] = useState(0);
@@ -83,6 +96,7 @@ export default function Browse() {
             {showDetail && (
               <Detail
                 key={detailId}
+                token={token}
                 layoutId={detailId}
                 data={detailData!}
                 onBackClick={() => setShowDetail(false)}
@@ -93,6 +107,7 @@ export default function Browse() {
                 <SurveyCard
                   layoutId={el.id}
                   key={el.id}
+                  token={token}
                   data={el}
                   onReportClick={() => {
                     setShowAlertDialog((prev) => !prev);

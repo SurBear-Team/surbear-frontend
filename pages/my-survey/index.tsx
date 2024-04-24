@@ -8,13 +8,14 @@ import api from "../api/config";
 import { ISurvey } from "../browse/data";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 interface DialogState {
   open: boolean;
   text: string;
   rightText: string;
   isDelete: boolean;
-  surveyId: number; // 진짜 id 들어오면 string으로 바꿈
+  surveyId: number;
   onConfirm?: () => void;
 }
 
@@ -22,6 +23,18 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function MySurvey() {
   const queryClient = useQueryClient();
+
+  // 유저 토큰
+  const [token, setToken] = useState<number | null>(null);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      const decoded = jwtDecode<JwtPayload>(storedToken);
+      if (decoded && decoded.sub) {
+        setToken(parseInt(decoded.sub));
+      }
+    }
+  }, []);
 
   // 기본 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
@@ -34,15 +47,12 @@ export default function MySurvey() {
 
   // 내 설문 목록 가져오기
   const fetchSurveys = async () => {
-    const { data } = await api.get("/survey/management/list/3");
+    const { data } = await api.get(`/survey/management/list/${token}`);
     return data;
   };
-  const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys);
-
-  // 이건 콘솔 찍기
-  useEffect(() => {
-    console.log(mySurveyData);
-  }, [mySurveyData]);
+  const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
+    enabled: !!token,
+  });
 
   // 설문 삭제 다이얼로그 띄우기
   const handleDeleteSurvey = (id: number) => {

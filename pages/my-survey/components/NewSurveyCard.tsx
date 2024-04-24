@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TypeDropDown } from "./TypeDropDown";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
@@ -8,6 +8,9 @@ import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { surveyIdAtom } from "../surveyState";
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -31,7 +34,7 @@ interface SurveyData {
   description: string;
   openType: boolean;
   deadLine: string;
-  surveyAuthorId?: number; // 임시로 number
+  surveyAuthorId?: any;
 }
 
 interface NewSurveyCardProps {
@@ -42,6 +45,21 @@ interface NewSurveyCardProps {
 export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   const isEdit = !!surveyId; // surveyId가 있다면 isEdit은 true
   const router = useRouter();
+
+  // 유저 토큰
+  const [token, setToken] = useState(0);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      const decoded = jwtDecode<JwtPayload>(storedToken);
+      if (decoded && decoded.sub) {
+        setToken(parseInt(decoded.sub));
+      }
+    }
+  }, []);
+
+  // surveyId저장
+  const [, setRecoilSurveyId] = useRecoilState(surveyIdAtom);
 
   // surveyId로 원래 정보 가져오기
   const fetchSurvey = async () => {
@@ -185,14 +203,20 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     };
   };
 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("surbearToken")}`,
+    },
+  };
+
   // 다음 버튼 클릭
-  const nextButtonClick = () => {
+  const nextButtonClick = async () => {
     const validData = validateFormData();
     if (!validData) return;
 
     if (isEdit) {
       axios
-        .put(`${baseUrl}/survey/management/${surveyId}`, validData)
+        .put(`${baseUrl}/survey/management/${surveyId}`, validData, config)
         .then(() => {
           alert("수정했어요 원래는 이동해야해요");
         })
@@ -201,16 +225,23 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           showDialog("설문 수정에 실패했습니다.");
         });
     } else {
-      validData.surveyAuthorId = 3; // 실제 유저 들어오면 수정
-      api
-        .post("/survey", validData)
-        .then(() => {
+      try {
+        validData.surveyAuthorId = token;
+        const response = await axios.post(
+          `${baseUrl}/survey`,
+          validData,
+          config
+        );
+        if (response.status === 200) {
+          setRecoilSurveyId(response.data);
           router.push("/my-survey/new-survey");
-        })
-        .catch((error) => {
-          console.error("설문 생성 오류 : ", error);
+        } else {
           showDialog("설문 생성에 실패했습니다.");
-        });
+        }
+      } catch (error) {
+        console.error(error);
+        showDialog("설문 생성에 실패했습니다.");
+      }
     }
   };
 

@@ -75,7 +75,10 @@ export default function IdPassword() {
     <>
       <TopBar hasBack noShadow title="회원가입" />
       <div className="white-screen px-12 flex-col w-full">
-        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="inner-screen px-12 flex-col"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* 아이디 */}
           <div className="w-full relative mb-10">
             <span className="font-semibold">아이디</span>

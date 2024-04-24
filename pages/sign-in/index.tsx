@@ -1,27 +1,60 @@
-import React from "react";
-import axios from "axios";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
+import api from "../api/config";
+import { AxiosError } from "axios";
+import { Dialog } from "../components/Dialog";
+
+interface DialogState {
+  open: boolean;
+  title: string;
+}
 
 export default function SignIn() {
-  const { register, handleSubmit } = useForm();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
-    try {
-      const response = await axios.post("http://surbear.com", data);
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
 
-      // 로그인 성공 시 'survey-list'로 이동
+  const [inputId, setInputId] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+
+  const onInputIdChange = (e: any) => {
+    setInputId(e.target.value);
+  };
+  const onPasswordChange = (e: any) => {
+    setInputPassword(e.target.value);
+  };
+
+  const submitData = {
+    userId: inputId,
+    password: inputPassword,
+  };
+
+  const onSubmit = async () => {
+    try {
+      const response = await api.post("/member/login", submitData);
+
       if (response.status === 200) {
-        router.push("/survey-list");
-      } else {
-        alert("아이디 혹은 비밀번호를 확인해주세요.");
+        router.push("/browse");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      alert("네트워크 에러");
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 404) {
+        setDialog({
+          open: true,
+          title: "아이디 혹은 비밀번호를 확인해주세요",
+        });
+      } else {
+        setDialog({
+          open: true,
+          title: "네트워크 에러. 다시 시도해주세요",
+        });
+      }
     }
   };
 
@@ -33,27 +66,25 @@ export default function SignIn() {
           <div className="flex justify-center mb-8">
             <LogoSVG />
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-2 mb-6">
-              <input
-                className="main-input text-gray-9"
-                placeholder="아이디를 입력해주세요"
-                id="username"
-                {...register("username")}
-              />
 
-              <input
-                className="main-input text-gray-9"
-                placeholder="비밀번호를 입력해주세요"
-                id="password"
-                type="password"
-                {...register("password")}
-              />
-            </div>
-            <button className="long-button primary-btn-style" type="submit">
-              로그인
-            </button>
-          </form>
+          <div className="flex flex-col gap-2 mb-6">
+            <input
+              className="main-input text-gray-9"
+              placeholder="아이디를 입력해주세요"
+              type="text"
+              onChange={onInputIdChange}
+            />
+
+            <input
+              className="main-input text-gray-9"
+              placeholder="비밀번호를 입력해주세요"
+              type="password"
+              onChange={onPasswordChange}
+            />
+          </div>
+          <button onClick={onSubmit} className="long-button primary-btn-style">
+            로그인
+          </button>
 
           {/* 아찾 비찾 회가 */}
           <div className="flex mt-4 justify-center gap-6">
@@ -68,7 +99,7 @@ export default function SignIn() {
               href="/sign-in/find-pwd"
               className="text-gray-7 text-xs whitespace-nowrap"
             >
-              비밀번호 찾기
+              비밀번호 재설정
             </Link>
             <Link
               href="/sign-up/terms"
@@ -95,6 +126,17 @@ export default function SignIn() {
             로그인 없이 시작
           </button>
         </div>
+
+        {dialog.open && (
+          <Dialog
+            title={dialog.title}
+            rightText="확인"
+            onRightClick={() => {
+              setDialog((current) => ({ ...current, open: false }));
+            }}
+            onlyOneBtn
+          />
+        )}
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
 import { OrderChangeCard } from "../components/OrderChangeCard";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
+import { useRecoilState } from "recoil";
+import { surveyIdAtom } from "../surveyState";
 
 export interface NewSurveyProps {
   title: string;
@@ -20,6 +22,8 @@ export interface NewSurveyProps {
 
 export default function NewSurvey() {
   const router = useRouter();
+
+  const [, setSurveyId] = useRecoilState(surveyIdAtom);
 
   const surveyTitle = localStorage.getItem("surveyTitle");
 
@@ -194,6 +198,7 @@ export default function NewSurvey() {
 
   const onSaveClick = () => {
     localStorage.removeItem("surveyTitle");
+    setSurveyId("");
     router.push("/my-survey");
   };
 

@@ -34,7 +34,7 @@ export default function MySurvey() {
 
   // 내 설문 목록 가져오기
   const fetchSurveys = async () => {
-    const { data } = await api.get("/survey/management/list/3");
+    const { data } = await api.get("/survey/management/list/100");
     return data;
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys);

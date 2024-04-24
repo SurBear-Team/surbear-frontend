@@ -6,7 +6,7 @@ import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 
 export default function ProfileSetting() {
-  const route = useRouter();
+  const router = useRouter();
 
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
@@ -18,7 +18,7 @@ export default function ProfileSetting() {
           <SettingCard
             title="회원 정보 수정"
             onClick={() => {
-              route.push("/profile/setting/update");
+              router.push("/profile/setting/update");
             }}
           />
           <SettingCard
@@ -45,7 +45,8 @@ export default function ProfileSetting() {
                 }}
                 rightText="확인"
                 onRightClick={() => {
-                  console.log("로그아웃");
+                  localStorage.removeItem("surbearToken");
+                  router.push("/sign-in");
                 }}
                 isDelete={true}
               />

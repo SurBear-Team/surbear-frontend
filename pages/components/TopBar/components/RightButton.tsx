@@ -32,7 +32,7 @@ function ProgressBar({ progress }: IProgressBar) {
           className="h-full rounded-full bg-primary-1 absolute top-0 left-0"
         />
       </div>
-      <span>{progress}%</span>
+      <span className="w-7 flex justify-end">{progress}%</span>
     </div>
   );
 }

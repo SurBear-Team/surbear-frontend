@@ -29,19 +29,27 @@ export const MakeSurvey = ({
   setIsNewSurvey,
   page,
 }: MakeSurveyProps) => {
-  const typeList = ["객관식", "단답형", "슬라이더"];
+  const typeList = [
+    "객관식 - 단일 선택",
+    "객관식 - 다중 선택",
+    "단답형",
+    "슬라이더",
+    "주관식",
+  ];
 
   const surveyId = useRecoilValue(surveyIdAtom);
 
   const typeMapping: { [key: string]: string } = {
-    객관식: "MULTIPLE_CHOICE",
+    "객관식 - 단일 선택": "SINGLE_CHOICE",
+    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
     단답형: "SHORT_ANSWER",
     슬라이더: "SLIDER",
+    주관식: "SUBJECTIVE",
   };
 
   const [showType, setShowType] = useState(false);
-  const [typeType, setTypeType] = useState("객관식");
-  const [nowType, setNowType] = useState("MULTIPLE_CHOICE");
+  const [typeType, setTypeType] = useState("객관식 - 단일 선택");
+  const [nowType, setNowType] = useState("SINGLE_CHOICE");
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
 
@@ -55,7 +63,7 @@ export const MakeSurvey = ({
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
-    const englishType = typeMapping[selectedTypeType] || "MULTIPLE_CHOICE";
+    const englishType = typeMapping[selectedTypeType] || "SINGLE_CHOICE";
     setTypeType(selectedTypeType);
     setShowType(false);
     setNowType(englishType);
@@ -79,9 +87,17 @@ export const MakeSurvey = ({
 
   // 객관식 답변들의 상태가 변경될 때마다 중복 체크
   useEffect(() => {
-    const uniqueChoices = new Set(choices);
-    setHasDuplicates(uniqueChoices.size !== choices.length);
-  }, [choices]);
+    if (
+      typeType === "객관식 - 단일 선택" ||
+      typeType === "객관식 - 다중 선택"
+    ) {
+      const uniqueChoices = new Set(choices);
+      setHasDuplicates(uniqueChoices.size !== choices.length);
+    } else {
+      // 중복 체크가 필요없는 유형일 경우 중복 상태를 false로 설정
+      setHasDuplicates(false);
+    }
+  }, [choices, typeType]);
 
   // (객관식) 답변 삭제
   const deleteChoice = (index: number) => {
@@ -124,14 +140,16 @@ export const MakeSurvey = ({
     }
 
     // (객관식)
-    if (typeType === "객관식") {
+    if (
+      typeType === "객관식 - 단일 선택" ||
+      typeType === "객관식 - 다중 선택"
+    ) {
       const isEmptyAnswer = choices.some((choice) => !choice.trim());
       if (isEmptyAnswer) {
         setAlertDialog(true);
         setAlertText("답변을 모두 입력해주세요.");
         return; // 함수 중단
       }
-
       const multipleChoiceSurveyData = {
         type: typeType,
         title: questionTitle,
@@ -141,7 +159,7 @@ export const MakeSurvey = ({
       addNewSurveyComponent(multipleChoiceSurveyData);
     }
     // (단답형)
-    else if (typeType === "단답형") {
+    else if (typeType === "단답형" || typeType === "주관식") {
       const shortAnswerSurveyData = {
         type: typeType,
         title: questionTitle,
@@ -230,7 +248,8 @@ export const MakeSurvey = ({
         </div>
 
         {/* 답변들 */}
-        {typeType === "객관식" && (
+        {(typeType === "객관식 - 단일 선택" ||
+          typeType === "객관식 - 다중 선택") && (
           <>
             {/* 회색선 */}
             <div className="gray-line my-8" />

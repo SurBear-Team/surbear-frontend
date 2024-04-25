@@ -7,11 +7,17 @@ import { getTime } from "@/pages/utils";
 
 interface IDetail {
   layoutId: number;
+  token?: number | null;
   data: ISurvey;
   onBackClick: () => void;
 }
 
-export default function Detail({ layoutId, data, onBackClick }: IDetail) {
+export default function Detail({
+  layoutId,
+  token,
+  data,
+  onBackClick,
+}: IDetail) {
   const router = useRouter();
   const onStartClick = () => {
     router.push(`/browse/${data.id}`);
@@ -41,10 +47,14 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
               <ArrowBackIcon isSmall={true} />
               <span className="sm-gray-9-text">뒤로가기</span>
             </div>
-            <div className="flex items-center gap-1 cursor-pointer">
-              <ReportIcon />
-              <span className="font-semibold text-xs text-red-1">신고하기</span>
-            </div>
+            {token !== data.surveyAuthorId && (
+              <div className="flex items-center gap-1 cursor-pointer">
+                <ReportIcon />
+                <span className="font-semibold text-xs text-red-1">
+                  신고하기
+                </span>
+              </div>
+            )}
           </div>
           <div className="gray-line mt-2 mb-4" />
           {/* 설문 정보 */}
@@ -78,14 +88,16 @@ export default function Detail({ layoutId, data, onBackClick }: IDetail) {
           </div>
           <div className="gray-line" />
           {/* 하단 버튼 */}
-          <div className="px-2 pt-4">
-            <button
-              onClick={onStartClick}
-              className="primary-btn-style long-button"
-            >
-              시작하기
-            </button>
-          </div>
+          {token !== data.surveyAuthorId && (
+            <div className="px-2 pt-4">
+              <button
+                onClick={onStartClick}
+                className="primary-btn-style long-button"
+              >
+                시작하기
+              </button>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </>

@@ -23,6 +23,8 @@ interface TopBarProps {
   orderList?: string[]; // 정렬 목록
   orderType?: string; // 현재 정렬이 뭐로 됐는지
   onOrderSelect?: (selectedOrder: string) => void; // 선택한 정렬
+
+  page?: number[];
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -41,6 +43,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   orderList,
   orderType,
   onOrderSelect,
+  page,
 }) => {
   return (
     <div
@@ -68,6 +71,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           onOrderSelect={(selected: string) =>
             onOrderSelect && onOrderSelect(selected)
           }
+          page={page}
         />
       )}
     </div>

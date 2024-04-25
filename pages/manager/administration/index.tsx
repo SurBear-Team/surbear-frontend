@@ -5,6 +5,7 @@ import { useState } from "react";
 import { InputDialog } from "../components/InputDialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { Overlay } from "@/pages/components/styles/Overlay";
+import api from "@/pages/api/config";
 
 export default function ManagerAdministration() {
   const router = useRouter();
@@ -39,8 +40,20 @@ export default function ManagerAdministration() {
                 setShowPopUp((prev) => !prev);
               }}
               rightText="추가"
-              onRightClick={() => {
-                console.log("추가");
+              onRightClick={(data: any) => {
+                if (data.nickname !== undefined) {
+                  const nickname = data.nickname;
+                  api
+                    .post(`/role?nickname=${nickname}`)
+                    .then((res) => {
+                      alert(`${nickname} 님을 관리자로 등록하였습니다.`);
+                      setShowPopUp((prev) => !prev);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      alert(err.response.data.message);
+                    });
+                }
               }}
             />
             <Overlay onClick={() => {}} />

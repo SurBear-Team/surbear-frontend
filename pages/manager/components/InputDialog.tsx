@@ -1,10 +1,13 @@
+import api from "@/pages/api/config";
+import { useForm } from "react-hook-form";
+
 interface DialogProps {
   title: string;
   placeholder: string;
   leftText: string;
   onLeftClick: () => void;
   rightText: string;
-  onRightClick: () => void;
+  onRightClick: (data?: any) => void;
 }
 
 export const InputDialog = ({
@@ -15,13 +18,25 @@ export const InputDialog = ({
   rightText,
   onRightClick,
 }: DialogProps) => {
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    onRightClick(data);
+  };
   return (
-    <div className="w-3/4 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col py-8 px-6 rounded-lg z-50 bg-white shadow-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-3/4 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col py-8 px-6 rounded-lg z-50 bg-white shadow-md"
+    >
       <div className="text-gray-9 font-semibold">{title}</div>
-      <input placeholder={placeholder} className="main-input text-gray-9" />
+      <input
+        {...register("nickname")}
+        placeholder={placeholder}
+        className="main-input text-gray-9"
+      />
       <div className="gray-line my-6" />
       <div className="flex justify-between w-full gap-4">
         <button
+          type="submit"
           onClick={onLeftClick}
           className="long-button border-gray-5 text-gray-5"
         >
@@ -34,6 +49,6 @@ export const InputDialog = ({
           {rightText}
         </button>
       </div>
-    </div>
+    </form>
   );
 };

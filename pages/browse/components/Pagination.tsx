@@ -57,7 +57,7 @@ export default function Pagination({
                   : "border bg-white border-primary-1 text-primary-1"
               }`}
             >
-              <div className="text-xs font-semibold mt-[2px]">{el}</div>
+              <div className="text-xs font-semibold">{el}</div>
             </div>
           ) : (
             <div

@@ -43,16 +43,6 @@ export default function Browse() {
     setCurrentPage(el - 1);
   };
 
-  useEffect(() => {
-    api
-      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}?type=ALL`)
-      .then((res) => {
-        setData(res.data.content);
-        setLastPage(res.data.totalPages);
-      })
-      .catch((err) => console.log(err));
-  }, [currentPage]);
-
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
   useEffect(() => {
     setCategoryType("ALL");
@@ -62,6 +52,20 @@ export default function Browse() {
   const handleOrderSelect = (selectedOrderType: string) => {
     setOrderType(selectedOrderType);
   };
+
+  useEffect(() => {
+    if (categoryType !== "") {
+      api
+        .get(
+          `/survey/management/${currentPage}/${CARD_PER_PAGE}?type=${categoryType}`
+        )
+        .then((res) => {
+          setData(res.data.content);
+          setLastPage(res.data.totalPages);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [currentPage, categoryType]);
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
@@ -75,8 +79,6 @@ export default function Browse() {
     setDetailData(tempData);
     setShowDetail(true);
   };
-
-  console.log(data);
 
   return (
     <>

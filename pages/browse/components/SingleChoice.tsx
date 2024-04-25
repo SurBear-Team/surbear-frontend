@@ -6,7 +6,7 @@ interface ISingleChoice {
   options: string[];
   required: boolean;
   onSelect: (selected: string) => void;
-  initial: number[];
+  initial: string[];
 }
 
 export default function SingleChoice({
@@ -19,7 +19,8 @@ export default function SingleChoice({
 }: ISingleChoice) {
   const [selected, setSelected] = useState(-1);
   useEffect(() => {
-    setSelected(initial[0]);
+    const index = options.findIndex((el) => el === initial[0]);
+    setSelected(index);
   }, [initial]);
   const onOptionClick = (index: number) => {
     setSelected(index);

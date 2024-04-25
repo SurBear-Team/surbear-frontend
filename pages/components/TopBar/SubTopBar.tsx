@@ -12,6 +12,8 @@ interface SubTopBarProps {
   orderList?: string[];
   orderType?: string;
   onOrderSelect?: (selectedOrder: string) => void;
+
+  page?: number[];
 }
 
 export const SubTopBar = ({
@@ -20,6 +22,7 @@ export const SubTopBar = ({
   orderList,
   orderType,
   onOrderSelect,
+  page,
 }: SubTopBarProps) => {
   const categoryList = category.map((el) => el.value);
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
@@ -32,9 +35,14 @@ export const SubTopBar = ({
 
   return (
     <>
-      <div className="w-full max-w-xl pl-6 h-8 text-xs">
+      <div className="w-full max-w-xl pl-6 pr-4 h-8 text-xs">
         <div className="flex font-semibold relative h-full items-center justify-between">
-          {subTitle}
+          <div className="flex w-full h-full justify-between items-center">
+            <span>{subTitle}</span>
+            {page !== undefined && (
+              <span className="font-medium text-xs">{`${page[0]} 페이지 / ${page[1]} 페이지`}</span>
+            )}
+          </div>
           <div className="flex h-full">
             {hasCategory && (
               <Selection

@@ -1,39 +1,51 @@
-import { TopBar } from "@/pages/components/TopBar";
 import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { InquiryCard } from "./components/InquiryCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
+import api from "@/pages/api/config";
+
+interface IManagerList {
+  memberId: number;
+  nickname: string;
+  roleId: number;
+}
 
 export default function AdministrationInquiry() {
   const router = useRouter();
-  let ManagerList = ["관리자1", "관리자2", "관리자3"];
+  const [managerList, setManagerList] = useState<IManagerList[]>();
+  const [selectedManager, setSelectedManager] = useState<IManagerList>();
+  const [updateList, setUpdateList] = useState(0);
+
+  useEffect(() => {
+    api.get("/role/list").then((res) => {
+      setManagerList(res.data);
+    });
+  }, [updateList]);
 
   const [showPopUp, setShowPopUp] = useState(false);
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          router.back();
-        }}
-        title="관리자 조회"
-      />
-      <div className="screen flex-col justify-start pt-[66px]">
-        {ManagerList.map((index) => (
-          <InquiryCard
-            key={index}
-            onClick={() => {
-              setShowPopUp((prev) => !prev);
-            }}
-            title={`${index}`}
-          />
-        ))}
+      <TopBar hasBack noShadow title="관리자 조회" />
+      <div className="white-screen flex-col justify-start pt-12">
+        <div className="inner-screen">
+          {managerList !== undefined &&
+            managerList.map((el) => (
+              <InquiryCard
+                key={el.roleId}
+                onClick={() => {
+                  setSelectedManager(el);
+                  setShowPopUp((prev) => !prev);
+                }}
+                title={`${el.nickname}`}
+              />
+            ))}
+        </div>
         {showPopUp && (
           <>
             <Dialog
-              title={`${`관리자1 님을 
+              title={`${`${selectedManager?.nickname} 님을 
               관리자에서 삭제하시겠습니까?`}`}
               leftText="취소"
               onLeftClick={() => {
@@ -41,7 +53,16 @@ export default function AdministrationInquiry() {
               }}
               rightText="확인"
               onRightClick={() => {
-                console.log("관리자 삭제");
+                api
+                  .delete(`/role/${selectedManager?.roleId}`)
+                  .then((res) => {
+                    alert(
+                      `${selectedManager?.nickname} 님의 관리자 권한을 삭제하였습니다.`
+                    );
+                    setShowPopUp((prev) => !prev);
+                    setUpdateList((prev) => prev + 1);
+                  })
+                  .catch((err) => alert("관리자 삭제에 실패하였습니다."));
               }}
               isDelete={true}
             />

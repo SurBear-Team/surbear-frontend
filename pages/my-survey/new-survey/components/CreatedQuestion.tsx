@@ -1,6 +1,6 @@
 interface CreatedQuestionProps {
   answerIndex: number;
-  type: any;
+  type: string;
   title: string;
   answerList?: string[];
   count?: number;
@@ -13,6 +13,7 @@ export const CreatedQuestion = ({
   answerIndex,
   type,
   title,
+
   answerList,
   count,
   onEdit,
@@ -22,10 +23,11 @@ export const CreatedQuestion = ({
   return (
     <div className="px-6 w-full">
       {/* 질문제목 */}
-      <div className="flex pb-6">
+      <div className="flex pb-2">
         <div className="sm-gray-9-text text-base pr-2">{`${answerIndex}.`}</div>
         <div className="sm-gray-9-text text-base">{title}</div>
       </div>
+      <div className="pb-6 sm-gray-9-text">{type}</div>
 
       {/* 질문답변 */}
       {answerList?.map((answer: string, index: number) => (

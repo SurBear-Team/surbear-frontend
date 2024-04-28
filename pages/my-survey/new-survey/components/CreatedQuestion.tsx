@@ -13,7 +13,6 @@ export const CreatedQuestion = ({
   answerIndex,
   type,
   title,
-
   answerList,
   count,
   onEdit,

@@ -11,6 +11,7 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { surveyIdAtom } from "../surveyState";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -203,6 +204,8 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     };
   };
 
+  const [, setEditSurveyTitle] = useRecoilState(editSurveyTitleAtom);
+
   const config = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("surbearToken")}`,
@@ -218,7 +221,8 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       axios
         .put(`${baseUrl}/survey/management/${surveyId}`, validData, config)
         .then(() => {
-          alert("수정했어요 원래는 이동해야해요");
+          router.push(`/edit-survey/${surveyId}`);
+          setEditSurveyTitle(surveyTitle);
         })
         .catch((error) => {
           console.error("설문 수정 오류 : ", error);

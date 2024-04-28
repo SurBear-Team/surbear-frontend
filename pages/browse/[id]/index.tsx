@@ -9,8 +9,13 @@ import ShortAnswer from "../components/ShortAnswer";
 import Slider from "../components/Slider";
 import { Dialog } from "@/pages/components/Dialog";
 
+export interface IOption {
+  id: number;
+  answer: string;
+}
+
 interface IData {
-  options: string[];
+  options: IOption[];
   surveyQuestion: IQuestion;
 }
 

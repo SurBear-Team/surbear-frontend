@@ -3,10 +3,25 @@ import { Overlay } from "@/pages/components/styles/Overlay";
 import { SettingCard } from "@/pages/profile/components/SettingCard";
 import { useState } from "react";
 import { InputDialog } from "../components/InputDialog";
+import api from "@/pages/api/config";
+import MemberInfoDialog from "../components/MemberInfoDialog";
+
+export interface IMemberInfo {
+  age: string;
+  deleted: boolean;
+  email: string;
+  gender: string;
+  id: number;
+  nickname: string;
+  password: string;
+  point: number;
+  userId: string;
+}
 
 export default function Member() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");
+  const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
   return (
     <>
       <TopBar hasBack noShadow title="회원 관리" />
@@ -39,7 +54,29 @@ export default function Member() {
               rightText="조회"
               leftText="취소"
               onLeftClick={() => setShowPopUp((prev) => !prev)}
-              onRightClick={() => console.log("조회")}
+              onRightClick={(data) => {
+                const nickname = data.nickname;
+                if (nickname !== undefined) {
+                  api
+                    .get(`/member/${nickname}`)
+                    .then((res) => {
+                      const data = res.data;
+                      setMemberInfo(data);
+                      setPopUpType("memberInfoResult");
+                    })
+                    .catch((err) => {
+                      if (err.response.status === 404) {
+                        alert("존재하지 않는 닉네임입니다.");
+                      }
+                    });
+                }
+              }}
+            />
+          )}
+          {popUpType === "memberInfoResult" && (
+            <MemberInfoDialog
+              info={memberInfo!}
+              onBtnClick={() => setShowPopUp((prev) => !prev)}
             />
           )}
         </>

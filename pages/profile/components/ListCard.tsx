@@ -1,7 +1,7 @@
 import { SettingIcon } from "@/pages/components/styles/Icons";
 
 interface ListCardProps {
-  getTime: any;
+  getTime: string;
   content: string;
   plusMinus?: any;
   point?: string;

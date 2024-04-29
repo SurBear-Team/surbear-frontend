@@ -8,22 +8,14 @@ type AgeSheetProps = {
 };
 
 export const AgeSheet = ({ onClose, showSheet, onSelected }: AgeSheetProps) => {
-  const ageRanges = [
-    "10대 이하",
-    "10대",
-    "20대",
-    "30대",
-    "40대",
-    "50대",
-    "60대 이상",
-  ];
+  const ageRanges = ["20대 미만", "20대", "30대", "40대", "50대", "60대 이상"];
 
   return (
     <motion.div
       initial="hidden"
       animate={showSheet ? "visible" : "hidden"}
       variants={SheetAnimation}
-      className="fixed bottom-0 z-20 bg-white border-1 border-black w-full h-4/5 rounded-2xl px-6 pb-6"
+      className="fixed left-0 bottom-0 z-50 bg-white border-1 border-black w-full h-4/5 rounded-2xl px-6 pb-6"
     >
       <div className="flex pt-4 gap-1 cursor-pointer" onClick={onClose}>
         <svg

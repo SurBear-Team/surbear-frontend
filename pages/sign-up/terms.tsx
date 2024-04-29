@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
-import { TopBar } from "../components/TopBar";
-import { ArrowBackIcon } from "../components/styles/Icons";
+
+import { TopBar } from "../components/TopBar/TopBar";
+import { Dialog } from "../components/Dialog";
 
 type CheckboxName =
   | "all"
@@ -14,8 +15,18 @@ type CheckboxName =
   | "terms4"
   | "terms5";
 
-export default function Clause() {
+interface DialogState {
+  open: boolean;
+  title: string;
+}
+
+export default function Terms() {
   const router = useRouter();
+
+  const [dialog, setDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+  });
 
   const [isChecked, setIsChecked] = useState<Record<CheckboxName, boolean>>({
     all: false,
@@ -78,25 +89,25 @@ export default function Clause() {
     setIsButtonActive(terms1 && terms2 && terms3 && terms4 && terms5 && all);
   }, [isChecked]);
 
+  // 모든 필수 약관을 체크해야 다음으로 보내줌
   const handleNextButtonClick = () => {
     if (isButtonActive) {
-      router.push("/sign-up/phoneNum");
+      router.push("/sign-up/authentication");
     } else {
-      alert("약관 확인 plz");
+      setDialog({
+        open: true,
+        title: "약관 동의를 진행해주세요",
+      });
     }
   };
 
   return (
     <>
       {/* 탑바 */}
-      <TopBar
-        onClick={() => router.back()}
-        leftSVG={<ArrowBackIcon />}
-        title="회원가입"
-      />
+      <TopBar hasBack noShadow title="회원가입" />
       {/* 본문 */}
-      <div className="screen ">
-        <div className="w-full px-10">
+      <div className="white-screen">
+        <div className="inner-screen px-10">
           <div className="flex">
             <Checkbox
               inputChecked={isChecked.all}
@@ -172,11 +183,22 @@ export default function Clause() {
           >
             다음
           </button>
+
+          {dialog.open && (
+            <Dialog
+              title={dialog.title}
+              rightText="확인"
+              onRightClick={() => {
+                setDialog((current) => ({ ...current, open: false }));
+              }}
+              onlyOneBtn
+            />
+          )}
         </div>
         {showSheet && (
           <>
             {/* 오버레이 배경 */}
-            <Overlay />
+            <Overlay onClick={toggleShowSheet} />
             {/* 시트 */}
             <Sheet
               showSheet={showSheet}

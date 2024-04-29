@@ -1,15 +1,26 @@
 import { useRouter } from "next/router";
 import CharSVG from "../components/styles/CharSVG";
+import { useRecoilState } from "recoil";
+import {
+  userEmailAtom,
+  userIdAtom,
+  userNicknameAtom,
+  userPasswordAtom,
+} from "./userState";
 
 export default function CompleteSignUp() {
   const router = useRouter();
+  const [nickname, setNickname] = useRecoilState(userNicknameAtom);
+  const [, setPassword] = useRecoilState(userPasswordAtom);
+  const [, setUserEmail] = useRecoilState(userEmailAtom);
+  const [, setUserId] = useRecoilState(userIdAtom);
   return (
-    <div className="screen flex-col px-12">
+    <div className="white-screen flex-col px-12">
       <div className="flex justify-center mb-8">
         <CharSVG />
       </div>
       <div className="text-center font-semibold text-xl text-gray-9">
-        임직찬 님 <br />
+        {`${nickname} 님`} <br />
         회원가입을 축하합니다!
       </div>
       <div className="gray-line mt-12" />
@@ -17,6 +28,11 @@ export default function CompleteSignUp() {
         className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
         onClick={() => {
           router.push("/sign-in");
+
+          setNickname("");
+          setPassword("");
+          setUserEmail("");
+          setUserId("");
         }}
       >
         로그인 페이지로

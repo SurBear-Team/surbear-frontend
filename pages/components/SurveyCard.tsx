@@ -1,40 +1,36 @@
+import { ISurvey, category } from "../browse/data";
+import { getTime } from "../utils";
 import { ReportIcon } from "./styles/Icons";
+import { motion } from "framer-motion";
 
 interface SurveyCardProps {
-  category: string;
-  title: string;
-  nickname?: string;
-  point?: number;
-  ismine?: boolean; // 이게 true면 삭제 수정 설문시작 버튼으로
+  layoutId: number;
+  token?: number | null;
+  data: ISurvey;
   isFinished?: boolean;
   onReportClick?: () => void;
   showDetail?: () => void;
-  onDeleteClick?: () => void;
-  onUpdateClick?: () => void;
-  onStartClick?: () => void;
-  showResult?: () => void;
 }
 
 export default function SurveyCard({
-  category,
-  title,
-  nickname,
-  point,
-  ismine,
+  layoutId,
+  token,
+  data,
   isFinished,
   onReportClick,
   showDetail,
-  onDeleteClick,
-  onUpdateClick,
-  onStartClick,
-  showResult,
 }: SurveyCardProps) {
+  const { year, month, date, hour, minute } = getTime(data.deadLine);
+  const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
   return (
     <>
-      <div className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}>
+      <motion.div
+        layoutId={layoutId + ""}
+        className={`card ${isFinished ? "bg-gray-1" : "bg-white"}`}
+      >
         <div className="flex justify-between items-center w-full pb-2">
-          <div className="text-gray-5 text-xs font-semibold">{category}</div>
-          {!ismine && (
+          <div className="sm-gray-text">{value}</div>
+          {token !== data.surveyAuthorId && (
             <div
               onClick={onReportClick}
               className="text-red-1 flex items-center gap-1 text-[10px] cursor-pointer"
@@ -44,48 +40,24 @@ export default function SurveyCard({
             </div>
           )}
         </div>
-        <div className="text-gray-9 font-semibold pb-2">{title}</div>
+        <div className="text-gray-9 font-semibold pb-2">{data.title}</div>
 
-        {!ismine ? (
-          <>
-            <div className="text-gray-5 text-xs font-semibold">
-              <div>작성자 : {nickname}</div>
-              <div>지급 포인트 : {point} pt</div>
+        <>
+          <div className="sm-gray-text">
+            <div>작성자 : {data.surveyAuthorId}</div>
+            <div>지급 포인트 : {data.point} pt</div>
+            <div>
+              설문 마감 : {year}년 {month}월 {date}일 {hour}시 {minute}분까지
             </div>
-            <div
-              onClick={showDetail}
-              className="long-button bg-primary-1 text-white mt-4 flex justify-center"
-            >
-              더보기
-            </div>
-          </>
-        ) : (
-          <div className="flex gap-4 w-full pt-4">
-            <div className="flex gap-2 w-full">
-              <button
-                onClick={onDeleteClick}
-                className="small-Btn bg-white border-red-1 text-red-1"
-              >
-                삭제
-              </button>
-              {!isFinished && (
-                <button
-                  onClick={onUpdateClick}
-                  className="small-Btn bg-white border-primary-1 text-primary-1"
-                >
-                  수정
-                </button>
-              )}
-            </div>
-            <button
-              onClick={isFinished ? showResult : onStartClick}
-              className="medium-Btn w-full text-white  border-primary-1 bg-primary-1"
-            >
-              {isFinished ? "결과 보기" : "설문 시작"}
-            </button>
           </div>
-        )}
-      </div>
+          <div
+            onClick={showDetail}
+            className="long-button primary-btn-style mt-4 flex justify-center"
+          >
+            더보기
+          </div>
+        </>
+      </motion.div>
     </>
   );
 }

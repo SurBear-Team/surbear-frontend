@@ -1,40 +1,84 @@
-import { useRouter } from "next/router";
-import { TopBar } from "../components/TopBar";
 import { useForm } from "react-hook-form";
-import { ArrowBackIcon } from "../components/styles/Icons";
+import { TopBar } from "../components/TopBar/TopBar";
+import { useRecoilState } from "recoil";
+import { userIdAtom, userPasswordAtom } from "./userState";
+import { useRouter } from "next/router";
+import api from "../api/config";
+import { AxiosError } from "axios";
 
 export default function IdPassword() {
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const [, setUserId] = useRecoilState(userIdAtom);
+  const [, setUserPassword] = useRecoilState(userPasswordAtom);
 
-  const validateUsername = (username: string) => {
-    // 유효성검사
-    const isValidContent = /^[A-Za-z0-9]+$/.test(username);
-
-    // 중복 검사 일단 true로
-    const isUnique = true;
-    return isValidContent && isUnique;
+  // 아이디 중복검사
+  const checkUserIdDuplication = async (username: string) => {
+    if (!username) return false;
+    try {
+      await api.post("/member/verification/duplicate", {
+        type: "userid",
+        value: username,
+      });
+      return true;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.error(axiosError);
+      if (axiosError.response && axiosError.response.status === 409) {
+        setError("username", {
+          type: "duplicate",
+          message: "이미 사용 중인 아이디입니다.",
+        });
+      } else {
+        setError("username", {
+          type: "server",
+          message: "서버 오류로 중복 검사를 완료할 수 없습니다.",
+        });
+      }
+      return false;
+    }
   };
 
+  // 아이디 유효성 검사
+  const validateUsername = (username: string) => {
+    const isValidContent = /^[A-Za-z0-9]+$/.test(username);
+    return isValidContent || "아이디는 영문과 숫자만 포함시켜주세요";
+  };
+
+  // 비밀번호 유효성 검사
+  const validatePassword = (password: string) => {
+    const isValidContent = /^[A-Za-z0-9]+$/.test(password);
+    return (
+      isValidContent || "비밀번호는 영문 소문자, 대문자, 숫자만 포함시켜주세요"
+    );
+  };
+
+  // 모든 유효성 검사 통과하고 다음 버튼 누르면 실행되는 함수
+  const onSubmit = async (data: any) => {
+    const isUnique = await checkUserIdDuplication(data.username);
+    if (isUnique) {
+      setUserId(data.username);
+      setUserPassword(data.password);
+      router.push("/sign-up/detail");
+    }
+  };
   return (
     <>
-      <TopBar
-        onClick={() => router.back()}
-        leftSVG={<ArrowBackIcon />}
-        title="회원가입"
-      />
-      <div className="screen px-12 flex-col w-full">
-        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+      <TopBar hasBack noShadow title="회원가입" />
+      <div className="white-screen px-12 flex-col w-full">
+        <form
+          className="inner-screen px-12 flex-col"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* 아이디 */}
           <div className="w-full relative mb-10">
             <span className="font-semibold">아이디</span>
@@ -46,6 +90,7 @@ export default function IdPassword() {
                   value: 6,
                   message: "아이디는 최소 6자 이상이어야 합니다.",
                 },
+                onBlur: (e) => checkUserIdDuplication(e.target.value),
               })}
               type="text"
               placeholder="아이디를 입력해주세요"
@@ -66,6 +111,7 @@ export default function IdPassword() {
             <input
               {...register("password", {
                 required: "비밀번호를 입력해주세요.",
+                validate: validatePassword,
                 minLength: {
                   value: 8,
                   message: "비밀번호는 최소 8자 이상이어야 합니다.",
@@ -113,7 +159,6 @@ export default function IdPassword() {
             <button
               type="submit"
               className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
-              onClick={() => {}}
             >
               다음
             </button>

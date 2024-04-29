@@ -2,7 +2,7 @@ import api from "@/pages/api/config";
 import { ISurvey } from "@/pages/browse/data";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { ListCard } from "@/pages/profile/components/ListCard";
-import { getTime } from "@/pages/utils";
+import { getTimeAsString } from "@/pages/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -30,9 +30,9 @@ export default function MemberSurvey() {
             <ListCard
               key={el.id}
               getTime={
-                getTime(el.startDate, true) === null
+                getTimeAsString(el.startDate) === null
                   ? "시작 전"
-                  : getTime(el.startDate, true)
+                  : getTimeAsString(el.startDate)
               }
               content={el.title}
               status={el.ongoingType}

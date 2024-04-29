@@ -1,8 +1,5 @@
 import api from "@/pages/api/config";
-import { ISurvey } from "@/pages/browse/data";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { ListCard } from "@/pages/profile/components/ListCard";
-import { getTime } from "@/pages/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

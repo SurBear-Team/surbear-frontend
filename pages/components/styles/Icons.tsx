@@ -210,11 +210,11 @@ export const ProfileIcon = ({ active }: PathProps) => {
 };
 
 // 톱니바퀴 아이콘
-export const SettingIcon = () => {
+export const SettingIcon = ({ isSmall }: IIcon) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width={isSmall ? "16" : "24"}
+      height={isSmall ? "16" : "24"}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

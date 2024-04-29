@@ -55,7 +55,7 @@ export const Dialog = ({
           {!onlyOneBtn && (
             <button
               onClick={onLeftClick}
-              className="large-Btn border-gray-5 bg-white text-gray-5"
+              className="long-button border-gray-5 bg-white text-gray-5"
             >
               {leftText}
             </button>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { IOption } from "../[id]";
 
 interface ISingleChoice {
   index: number;
   title: string;
-  options: string[];
+  options: IOption[];
   required: boolean;
   onSelect: (selected: string) => void;
-  initial: number[];
+  initial: string[];
 }
 
 export default function SingleChoice({
@@ -19,11 +20,12 @@ export default function SingleChoice({
 }: ISingleChoice) {
   const [selected, setSelected] = useState(-1);
   useEffect(() => {
-    setSelected(initial[0]);
+    const index = options.findIndex((el) => el.answer === initial[0]);
+    setSelected(index);
   }, [initial]);
   const onOptionClick = (index: number) => {
     setSelected(index);
-    onSelect(options[index]);
+    onSelect(options[index].answer);
   };
   return (
     <div className="w-full px-6 py-8 gap-6 flex flex-col">
@@ -43,7 +45,7 @@ export default function SingleChoice({
                 <div className="w-2 h-2 bg-primary-1 rounded-full" />
               )}
             </div>
-            <span className="flex-grow">{el}</span>
+            <span className="flex-grow">{el.answer}</span>
           </div>
         ))}
       </div>

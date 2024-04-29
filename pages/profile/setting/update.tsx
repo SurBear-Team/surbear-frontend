@@ -1,14 +1,37 @@
-import { ArrowBackIcon } from "@/pages/components/styles/Icons";
 import { useRouter } from "next/router";
 import { MemberUpdateCard } from "../components/MemberUpdateCard";
-import { useState } from "react";
-import { Dialog } from "@/pages/components/Dialog";
+import { useEffect, useState } from "react";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { AgeSheet } from "@/pages/sign-up/Components/AgeSheet";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
+import api from "@/pages/api/config";
+import { IMemberInfo } from "@/pages/manager/member";
+import { getAge } from "@/pages/utils";
+import { InputDialog } from "@/pages/manager/components/InputDialog";
 
 export default function MemberUpdate() {
-  const route = useRouter();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const checkToken = localStorage.getItem("surbearToken");
+      if (checkToken === null) {
+        router.push("/sign-in");
+      } else {
+        api
+          .get("/member", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => {
+            const info = res.data;
+            setMemberInfo(info);
+          })
+          .catch((err) => console.log(err));
+      }
+    }
+  }, []);
+
+  const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
 
   const [showNicknameDialog, setShowNicknameDialog] = useState(false);
 
@@ -26,7 +49,7 @@ export default function MemberUpdate() {
         <div className="inner-screen">
           <MemberUpdateCard
             title="닉네임"
-            content={`user nickname`}
+            content={memberInfo?.nickname!}
             onClick={() => {
               setShowNicknameDialog((prev) => !prev);
             }}
@@ -34,7 +57,7 @@ export default function MemberUpdate() {
 
           <MemberUpdateCard
             title="나이대"
-            content={`user age big`}
+            content={getAge(memberInfo?.age!)!}
             onClick={() => {
               setShowSheet(true);
             }}
@@ -44,16 +67,16 @@ export default function MemberUpdate() {
         {showNicknameDialog && (
           <>
             <div className="flex justify-center">
-              <Dialog
+              <Overlay onClick={() => setShowNicknameDialog((prev) => !prev)} />
+              <InputDialog
                 title="새 닉네임"
                 leftText="취소"
-                onLeftClick={() => {
-                  setShowNicknameDialog((prev) => !prev);
+                rightText="확인"
+                onLeftClick={() => setShowNicknameDialog((prev) => !prev)}
+                onRightClick={(data) => {
+                  console.log(data);
                 }}
-                rightText="수정"
-                onRightClick={() => {
-                  console.log("수정");
-                }}
+                placeholder="변경할 닉네임을 입력해주세요."
               />
             </div>
           </>

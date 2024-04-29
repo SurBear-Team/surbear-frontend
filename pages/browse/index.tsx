@@ -10,9 +10,22 @@ import Pagination from "./components/Pagination";
 import api from "../api/config";
 import { useRecoilState } from "recoil";
 import { categoryTypeAtom } from "../atoms";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 export default function Browse() {
   const [data, setData] = useState<ISurvey[]>();
+
+  // 유저 토큰
+  const [token, setToken] = useState<number | null>(null);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      const decoded = jwtDecode<JwtPayload>(storedToken);
+      if (decoded && decoded.sub) {
+        setToken(parseInt(decoded.sub));
+      }
+    }
+  }, []);
 
   // 페이지네이션
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,16 +43,6 @@ export default function Browse() {
     setCurrentPage(el - 1);
   };
 
-  useEffect(() => {
-    api
-      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}?type=ALL`)
-      .then((res) => {
-        setData(res.data.content);
-        setLastPage(res.data.totalPages);
-      })
-      .catch((err) => console.log(err));
-  }, [currentPage]);
-
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
   useEffect(() => {
     setCategoryType("ALL");
@@ -49,6 +52,20 @@ export default function Browse() {
   const handleOrderSelect = (selectedOrderType: string) => {
     setOrderType(selectedOrderType);
   };
+
+  useEffect(() => {
+    if (categoryType !== "") {
+      api
+        .get(
+          `/survey/management/${currentPage}/${CARD_PER_PAGE}?type=${categoryType}`
+        )
+        .then((res) => {
+          setData(res.data.content);
+          setLastPage(res.data.totalPages);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [currentPage, categoryType]);
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
@@ -62,8 +79,6 @@ export default function Browse() {
     setDetailData(tempData);
     setShowDetail(true);
   };
-
-  console.log(data);
 
   return (
     <>
@@ -83,6 +98,7 @@ export default function Browse() {
             {showDetail && (
               <Detail
                 key={detailId}
+                token={token}
                 layoutId={detailId}
                 data={detailData!}
                 onBackClick={() => setShowDetail(false)}
@@ -93,6 +109,7 @@ export default function Browse() {
                 <SurveyCard
                   layoutId={el.id}
                   key={el.id}
+                  token={token}
                   data={el}
                   onReportClick={() => {
                     setShowAlertDialog((prev) => !prev);

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 interface SurveyCardProps {
   layoutId: number;
+  token?: number | null;
   data: ISurvey;
   isFinished?: boolean;
   onReportClick?: () => void;
@@ -13,6 +14,7 @@ interface SurveyCardProps {
 
 export default function SurveyCard({
   layoutId,
+  token,
   data,
   isFinished,
   onReportClick,
@@ -28,13 +30,15 @@ export default function SurveyCard({
       >
         <div className="flex justify-between items-center w-full pb-2">
           <div className="sm-gray-text">{value}</div>
-          <div
-            onClick={onReportClick}
-            className="text-red-1 flex items-center gap-1 text-[10px] cursor-pointer"
-          >
-            <ReportIcon />
-            신고
-          </div>
+          {token !== data.surveyAuthorId && (
+            <div
+              onClick={onReportClick}
+              className="text-red-1 flex items-center gap-1 text-[10px] cursor-pointer"
+            >
+              <ReportIcon />
+              신고
+            </div>
+          )}
         </div>
         <div className="text-gray-9 font-semibold pb-2">{data.title}</div>
 

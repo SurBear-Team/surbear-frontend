@@ -4,7 +4,7 @@ import { ListCard } from "./components/ListCard";
 import { TopBar } from "../components/TopBar/TopBar";
 
 export default function PointHistory() {
-  const route = useRouter();
+  const router = useRouter();
 
   let PointList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
   return (
@@ -16,7 +16,7 @@ export default function PointHistory() {
             <ListCard
               key={index}
               getTime={"2024.03.15"}
-              getWay={`설문조사 참여`}
+              content={`설문조사 참여`}
               plusMinus={`+`}
               point={`10pt`}
             />

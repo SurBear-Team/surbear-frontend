@@ -6,17 +6,22 @@ import { editSurveyTitleAtom } from "../editSurveyState";
 import { useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
-import { EditSurvey } from "@/pages/my-survey/new-survey/components/EditSurvey";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
 import { SurveyTabBar } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
+import axios from "axios";
+import { EditInEditSurvey } from "../components/EditInEditSurvey";
 
 export interface SurveyQuestion {
+  options: any;
   id: number;
   content: string;
   page: number;
   questionType: string;
   maxText?: number;
+  surveyId: number;
+  questionOrder?: number;
+  required: boolean;
 }
 
 export interface SurveyData {
@@ -24,6 +29,7 @@ export interface SurveyData {
   options: Array<{ answer: string }>;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export default function EditSurveyPage() {
   const router = useRouter();
   const { id: surveyId } = router.query; // 현재 id 가져오기
@@ -35,6 +41,17 @@ export default function EditSurveyPage() {
   const [alertText, setAlertText] = useState("");
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
+
+  // 설문 삭제 다이얼로그 부분
+  const [deleteSurveyDialog, setDeleteSurveyDialog] = useState(false);
+  const [selectedSurveyQuestion, setSelectedSurveyQuestion] =
+    useState<SurveyQuestion | null>(null);
+
+  // 삭제 확인 다이얼로그를 표시하는 함수
+  const showDeleteConfirmation = (surveyQuestion: SurveyQuestion) => {
+    setSelectedSurveyQuestion(surveyQuestion); // 삭제할 질문
+    setDeleteSurveyDialog(true);
+  };
 
   // 영어 - 한글 매핑하기
   const typeMapping: { [key: string]: string } = {
@@ -50,18 +67,13 @@ export default function EditSurveyPage() {
     const { data } = await api.get(`/survey/management/option/${surveyId}`);
     return data;
   };
-  const { data } = useQuery<SurveyData[]>(
+  const { data, refetch } = useQuery<SurveyData[]>(
     ["editSurvey", surveyId],
     fetchSurvey,
     {
       enabled: !!surveyId,
     }
   );
-
-  // 콘솔 찍기
-  useEffect(() => {
-    console.log(data);
-  }, []);
 
   // 현재 페이지
   const [currentPage, setCurrentPage] = useState(1);
@@ -105,6 +117,47 @@ export default function EditSurveyPage() {
     setEditData(initialData);
   };
 
+  // (공통) 질문 삭제
+  const handleDeleteSurvey = async (surveyQuestion: SurveyQuestion) => {
+    try {
+      const options = surveyQuestion.options || [];
+      const formattedOptions = options.map(
+        (option: { id: number; answer: string }) => ({
+          beforeChangeSurveyQuestionOptionList: {
+            id: option.id,
+            answer: option.answer,
+          },
+          afterChangeSurveyQuestionOptionList: {
+            id: option.id,
+            answer: option.answer,
+            deleteFlag: true, // 옵션 삭제
+            creationFlag: false,
+          },
+        })
+      );
+
+      const response = await axios.post(`${baseUrl}/survey/question-options`, {
+        surveyQuestion: {
+          id: surveyQuestion.id,
+          surveyId: surveyQuestion.surveyId,
+          questionType: surveyQuestion.questionType,
+          content: surveyQuestion.content,
+          page: surveyQuestion.page,
+          questionOrder: surveyQuestion.questionOrder,
+          maxText: surveyQuestion.maxText,
+          required: surveyQuestion.required,
+          deleted: true, // 설문 질문 삭제 플래그 설정
+        },
+        options: formattedOptions,
+      });
+      if (response.status === 200) {
+        refetch();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // 설문조사 저장 버튼
   const saveSurvey = () => {
     setSaveDialog((prev) => !prev);
@@ -113,6 +166,11 @@ export default function EditSurveyPage() {
     localStorage.removeItem("surveyTitle");
     router.push("/my-survey");
   };
+
+  // 콘솔 찍기
+  useEffect(() => {
+    console.log(data);
+  }, []);
 
   return (
     <>
@@ -130,7 +188,7 @@ export default function EditSurveyPage() {
           </div>
           {currentPageData.map((item, index) =>
             editIndex === index ? (
-              <EditSurvey
+              <EditInEditSurvey
                 key={index}
                 initialData={editData!}
                 onSave={() => {}}
@@ -145,7 +203,7 @@ export default function EditSurveyPage() {
                 answerList={item.options.map((option) => option.answer)}
                 count={item.surveyQuestion.maxText}
                 onEdit={() => handleEdit(item, index)}
-                onDelete={() => {}}
+                onDelete={() => showDeleteConfirmation(item.surveyQuestion)}
                 onOrderChange={() => {}}
               />
             )
@@ -161,6 +219,22 @@ export default function EditSurveyPage() {
                 setAlertDialog((prev) => !prev);
               }}
               onRightClick={() => {}}
+              isDelete={true}
+            />
+          )}
+
+          {deleteSurveyDialog && (
+            <Dialog
+              title="해당 질문을 삭제하시겠어요?"
+              leftText="취소"
+              rightText="삭제"
+              onLeftClick={() => {
+                setDeleteSurveyDialog((prev) => !prev);
+              }}
+              onRightClick={() => {
+                handleDeleteSurvey(selectedSurveyQuestion!);
+                setDeleteSurveyDialog(false);
+              }}
               isDelete={true}
             />
           )}

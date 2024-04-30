@@ -5,15 +5,16 @@ import { useRecoilValue } from "recoil";
 import { editSurveyTitleAtom } from "../editSurveyState";
 import { useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
 import { SurveyTabBar } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
-import axios from "axios";
 import { EditInEditSurvey } from "../components/EditInEditSurvey";
 
 export interface SurveyQuestion {
-  options: any;
+  options: Array<{
+    id: number;
+    answer: string;
+  }>;
   id: number;
   content: string;
   page: number;
@@ -26,10 +27,12 @@ export interface SurveyQuestion {
 
 export interface SurveyData {
   surveyQuestion: SurveyQuestion;
-  options: Array<{ answer: string }>;
+  options: Array<{
+    id: number;
+    answer: string;
+  }>;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export default function EditSurveyPage() {
   const router = useRouter();
   const { id: surveyId } = router.query; // 현재 id 가져오기
@@ -47,7 +50,7 @@ export default function EditSurveyPage() {
   const [selectedSurveyQuestion, setSelectedSurveyQuestion] =
     useState<SurveyQuestion | null>(null);
 
-  // 삭제 확인 다이얼로그를 표시하는 함수
+  // 다이얼로그에 값 전달하기
   const showDeleteConfirmation = (surveyQuestion: SurveyQuestion) => {
     setSelectedSurveyQuestion(surveyQuestion); // 삭제할 질문
     setDeleteSurveyDialog(true);
@@ -102,19 +105,10 @@ export default function EditSurveyPage() {
 
   // (공통) 설문 수정하기
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  // (공통) 수정 전 초기 데이타
-  const [editData, setEditData] = useState<NewSurveyProps | null>(null);
 
   // CreatedQuestion에서 수정하기 버튼 누르면 받아오는거
-  const handleEdit = (item: SurveyData, index: number | null) => {
-    const initialData = {
-      title: item.surveyQuestion.content,
-      type: typeMapping[item.surveyQuestion.questionType],
-      choices: item.options.map((option) => option.answer),
-      count: item.surveyQuestion.maxText,
-    };
+  const handleEdit = (index: number | null) => {
     setEditIndex(index);
-    setEditData(initialData);
   };
 
   // (공통) 질문 삭제
@@ -136,7 +130,7 @@ export default function EditSurveyPage() {
         })
       );
 
-      const response = await axios.post(`${baseUrl}/survey/question-options`, {
+      const response = await api.post(`/survey/question-options`, {
         surveyQuestion: {
           id: surveyQuestion.id,
           surveyId: surveyQuestion.surveyId,
@@ -146,7 +140,7 @@ export default function EditSurveyPage() {
           questionOrder: surveyQuestion.questionOrder,
           maxText: surveyQuestion.maxText,
           required: surveyQuestion.required,
-          deleted: true, // 설문 질문 삭제 플래그 설정
+          deleted: true, // 설문 질문 삭제
         },
         options: formattedOptions,
       });
@@ -190,9 +184,25 @@ export default function EditSurveyPage() {
             editIndex === index ? (
               <EditInEditSurvey
                 key={index}
-                initialData={editData!}
+                initialData={{
+                  id: item.surveyQuestion.id,
+                  surveyId: item.surveyQuestion.surveyId,
+                  page: item.surveyQuestion.page,
+                  order: item.surveyQuestion.questionOrder ?? 0, // order가 없으면 0
+                  title: item.surveyQuestion.content,
+                  type: typeMapping[item.surveyQuestion.questionType],
+                  choices: item.options.map((option) => option.answer),
+                  count: item.surveyQuestion.maxText ?? 0, // count가 없으면 0
+                  required: item.surveyQuestion.required,
+                  options: item.options.map((option) => ({
+                    id: option.id,
+                    answer: option.answer,
+                  })),
+                }}
                 onSave={() => {}}
                 onCancel={() => setEditIndex(null)}
+                refetch={refetch}
+                setEditIndex={setEditIndex}
               />
             ) : (
               <CreatedQuestion
@@ -202,7 +212,7 @@ export default function EditSurveyPage() {
                 title={item.surveyQuestion.content}
                 answerList={item.options.map((option) => option.answer)}
                 count={item.surveyQuestion.maxText}
-                onEdit={() => handleEdit(item, index)}
+                onEdit={() => handleEdit(index)}
                 onDelete={() => showDeleteConfirmation(item.surveyQuestion)}
                 onOrderChange={() => {}}
               />

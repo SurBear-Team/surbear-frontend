@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { ISurvey, category } from "../browse/data";
 import { getTime } from "../utils";
 import { ReportIcon } from "./styles/Icons";
@@ -22,6 +23,9 @@ export default function SurveyCard({
 }: SurveyCardProps) {
   const { year, month, date, hour, minute } = getTime(data.deadLine);
   const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
+  const [nickname, setNickname] = useState("");
+  useEffect(() => {}, []);
+
   return (
     <>
       <motion.div
@@ -44,7 +48,7 @@ export default function SurveyCard({
 
         <>
           <div className="sm-gray-text">
-            <div>작성자 : {data.surveyAuthorId}</div>
+            <div>작성자 : {nickname}</div>
             <div>지급 포인트 : {data.point} pt</div>
             <div>
               설문 마감 : {year}년 {month}월 {date}일 {hour}시 {minute}분까지

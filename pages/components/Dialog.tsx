@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Overlay } from "./styles/Overlay";
 
 interface DialogProps {
@@ -9,7 +10,7 @@ interface DialogProps {
   leftText?: string;
   onLeftClick?: () => void;
   rightText: string;
-  onRightClick: () => void;
+  onRightClick: (text?: any) => void;
   isDelete?: boolean;
 }
 
@@ -25,6 +26,7 @@ export const Dialog = ({
   onRightClick,
   isDelete,
 }: DialogProps) => {
+  const [text, setText] = useState("");
   return (
     <>
       <Overlay onClick={onLeftClick!} />
@@ -46,7 +48,11 @@ export const Dialog = ({
             <div className="w-full sm-gray-9-text font-medium">
               {inputTitle}
             </div>
-            <textarea className="w-full p-2 items-start border-[1px] border-gray-4 sm-gray-9-text font-normal" />
+            <textarea
+              onChange={(event) => setText(event.target.value)}
+              value={text}
+              className="w-full p-2 items-start border-[1px] border-gray-4 sm-gray-9-text font-normal"
+            />
           </div>
         )}
 
@@ -61,7 +67,7 @@ export const Dialog = ({
             </button>
           )}
           <button
-            onClick={onRightClick}
+            onClick={() => onRightClick(text)}
             className={`long-button text-white ${
               isDelete
                 ? "border-red-1 bg-red-1"

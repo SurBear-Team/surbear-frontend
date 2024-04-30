@@ -80,6 +80,8 @@ export default function Browse() {
     setShowDetail(true);
   };
 
+  const [reportedId, setReportedId] = useState<number | null>(null);
+
   return (
     <>
       <TopBar
@@ -101,6 +103,10 @@ export default function Browse() {
                 token={token}
                 layoutId={detailId}
                 data={detailData!}
+                onReportClick={() => {
+                  setShowAlertDialog((prev) => !prev);
+                  setReportedId(detailId);
+                }}
                 onBackClick={() => setShowDetail(false)}
               />
             )}
@@ -113,6 +119,7 @@ export default function Browse() {
                   data={el}
                   onReportClick={() => {
                     setShowAlertDialog((prev) => !prev);
+                    setReportedId(el.id);
                   }}
                   showDetail={() => showDetailclick(el.id)}
                 />
@@ -130,8 +137,21 @@ export default function Browse() {
               setShowAlertDialog((prev) => !prev);
             }}
             rightText="신고"
-            onRightClick={() => {
-              console.log("신고");
+            onRightClick={(text) => {
+              // api 호출
+              if (reportedId !== null) {
+                api
+                  .post("/report", {
+                    reporterId: token,
+                    surveyId: reportedId,
+                    reason: text,
+                  })
+                  .then((res) => {
+                    alert("신고되었습니다.");
+                    setShowAlertDialog((prev) => !prev);
+                  })
+                  .catch((err) => console.log(err));
+              }
             }}
             isDelete={true}
           />

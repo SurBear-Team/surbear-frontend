@@ -82,21 +82,32 @@ export default function Survey() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const onConfirm = () => {
+    const token = localStorage.getItem("surbearToken");
     api
-      .post("/survey/answer", {
-        memberId: 4 /* 사용자 인증 연동 후 수정 필요 */,
-        surveyId: id,
-      })
+      .get("/member", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        const surveyAnswerId = res.data;
-        if (surveyAnswerId !== undefined) {
+        const memberId = res.data.id;
+        if (memberId !== undefined) {
           api
-            .post(`/survey/answer/${surveyAnswerId}`, answers)
-            .then((res) => router.push("/browse"))
-            .catch((err) => alert("설문조사 제출 실패! 다시 시도해주세요"));
+            .post("/survey/answer", {
+              memberId: memberId,
+              surveyId: id,
+            })
+            .then((res) => {
+              const surveyAnswerId = res.data;
+              if (surveyAnswerId !== undefined) {
+                api
+                  .post(`/survey/answer/${surveyAnswerId}`, answers)
+                  .then((res) => router.push("/browse"))
+                  .catch((err) =>
+                    alert("설문조사 제출 실패! 다시 시도해주세요")
+                  );
+              }
+            })
+            .catch((err) => alert("사용자 인식 실패! 다시 시도해주세요"));
         }
       })
-      .catch((err) => alert("사용자 인식 실패! 다시 시도해주세요"));
+      .catch((err) => {});
   };
   return (
     <>

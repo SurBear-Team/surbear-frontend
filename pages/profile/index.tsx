@@ -63,7 +63,7 @@ export default function Profile() {
           title="참여한 설문조사 개수"
           content={`0 개`}
           onClick={() => {
-            console.log("참설개");
+            router.push("/profile/survey-history");
           }}
         />
       </div>

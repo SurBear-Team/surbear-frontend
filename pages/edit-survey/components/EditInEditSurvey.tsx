@@ -210,6 +210,41 @@ export const EditInEditSurvey = ({
     setDeleteQuestionDialog(false);
   };
 
+  // (공통) 질문 제목 수정 후 저장
+  const handleSaveQuestion = async () => {
+    try {
+      const response = await api.post(`/survey/question-options`, {
+        surveyQuestion: {
+          id: initialData.id,
+          surveyId: initialData.surveyId,
+          questionType: typeMapping[typeType], // 질문 타입
+          content: questionTitle, // 질문 제목
+          page: initialData.page,
+          questionOrder: initialData.order,
+          maxText: count, // 최대 글자수
+          required: isChecked, // 필수 여부
+          deleted: false,
+        },
+        options: [
+          {
+            beforeChangeSurveyQuestionOptionList: {},
+            afterChangeSurveyQuestionOptionList: {
+              answer: "1",
+              deleteFlag: false,
+              creationFlag: false,
+            },
+          },
+        ],
+      });
+
+      if (response.status === 200) {
+        setEditIndex(null); // editIndex를 null로 설정
+        refetch(); // 데이터 다시 가져오기
+      }
+    } catch (error) {
+      console.error("Failed to delete answer: ", error);
+    }
+  };
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
       <div className="sm-gray-9-text text-base pb-4">질문 수정</div>
@@ -328,19 +363,13 @@ export const EditInEditSurvey = ({
         >
           취소
         </button>
-        <>
-          {!(
-            typeType === "객관식 - 단일 선택" ||
-            typeType === "객관식 - 다중 선택"
-          ) && (
-            <button
-              onClick={() => {}}
-              className="small-Btn w-auto white-bg-primary-btn"
-            >
-              저장
-            </button>
-          )}
-        </>
+
+        <button
+          onClick={handleSaveQuestion}
+          className="small-Btn w-auto white-bg-primary-btn"
+        >
+          저장
+        </button>
       </div>
 
       <div className="flex justify-center items-center">

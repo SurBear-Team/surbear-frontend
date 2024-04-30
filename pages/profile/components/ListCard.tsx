@@ -61,11 +61,11 @@ export const ListCard = ({
         {openType !== undefined && (
           <div className="flex items-center">
             {openType === true ? (
-              <button className="small-Btn primary-btn-style text-sm font-bold">
+              <button className="small-Btn primary-btn-style text-sm font-bold whitespace-nowrap">
                 결과 보기
               </button>
             ) : (
-              <span className="font-bold text-xs text-gray-5 px-4">
+              <span className="font-bold text-xs text-gray-5 px-4 whitespace-nowrap">
                 결과 비공개
               </span>
             )}

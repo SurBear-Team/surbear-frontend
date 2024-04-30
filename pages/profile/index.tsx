@@ -30,6 +30,8 @@ export default function Profile() {
 
   const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
 
+  console.log(memberInfo);
+
   return (
     <>
       <TopBar title={memberInfo?.nickname!} hasSetting />

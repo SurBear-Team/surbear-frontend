@@ -6,6 +6,7 @@ import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAn
 import { useState } from "react";
 import {
   MinusIcon,
+  PlusIcon,
   SaveIcon,
   UpdateIcon,
 } from "@/pages/components/styles/Icons";
@@ -108,6 +109,12 @@ export const EditInEditSurvey = ({
     setDeleteIndex(index); // 선택한 index 전달
   };
 
+  // (객관식) 새 답변 추가 함수
+  const addNewChoice = () => {
+    setChoices([...choices, ""]); // 현재 답변 배열에 빈 문자열을 추가
+    setDisabledInputs([...disabledInputs, false]); // 새 답변 입력 칸을 활성화 상태로 설정
+  };
+
   // (객관식) input을 enable로 하기
   const enableEdit = (index: number) => {
     setDisabledInputs(
@@ -129,7 +136,12 @@ export const EditInEditSurvey = ({
       )
     );
     const updatedAnswer = choices[optionIndex];
-    const initailOption = initialData.options[optionIndex];
+    const initialOption = initialData.options[optionIndex] || {
+      id: undefined,
+      answer: "",
+    };
+    const isOptionNew = !initialOption.id; // 새 답변 추가로 만든건지 체크
+
     try {
       const response = await api.post(`/survey/question-options`, {
         surveyQuestion: {
@@ -145,12 +157,11 @@ export const EditInEditSurvey = ({
         },
         options: [
           {
-            beforeChangeSurveyQuestionOptionList: {
-              id: initailOption.id,
-              answer: initailOption.answer,
-            },
+            beforeChangeSurveyQuestionOptionList: isOptionNew
+              ? {}
+              : { id: initialOption.id, answer: initialOption.answer },
             afterChangeSurveyQuestionOptionList: {
-              id: initailOption.id,
+              id: initialOption.id,
               answer: updatedAnswer,
               deleteFlag: false,
               creationFlag: false,
@@ -339,6 +350,13 @@ export const EditInEditSurvey = ({
               </div>
             </div>
           ))}
+          {/* 새 답변 추가 버튼 */}
+          <button
+            className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
+            onClick={addNewChoice}
+          >
+            <PlusIcon /> 새 답변 추가
+          </button>
         </>
       )}
 

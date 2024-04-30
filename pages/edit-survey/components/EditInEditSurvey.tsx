@@ -4,7 +4,11 @@ import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
 import { useState } from "react";
-import { MinusIcon } from "@/pages/components/styles/Icons";
+import {
+  MinusIcon,
+  SaveIcon,
+  UpdateIcon,
+} from "@/pages/components/styles/Icons";
 import api from "@/pages/api/config";
 
 interface EditSurveyProps {
@@ -58,7 +62,10 @@ export const EditInEditSurvey = ({
   const [typeType, setTypeType] = useState(initialData?.type);
 
   // (객관식) 답변들 배열, 처음엔 빈 답변 2개
-  const [choices, setChoices] = useState(initialData?.choices);
+  const [choices, setChoices] = useState(initialData?.choices || []);
+  const [disabledInputs, setDisabledInputs] = useState(
+    choices?.map(() => true) ?? []
+  ); // 모든 입력을 초기에 비활성화
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
@@ -69,7 +76,7 @@ export const EditInEditSurvey = ({
       selectedTypeType === "객관식 - 다중 선택"
     ) {
       if (!choices || choices.length < 2) {
-        setChoices(["", ""]); // 객관식 선택 시 최소 2개의 빈 답변으로 초기화
+        setChoices(choices.length < 2 ? ["", ""] : choices); // 객관식 선택 시 최소 2개의 빈 답변으로 초기화
       }
     } else {
       setChoices([]); // 객관식이 아닌 경우 선택지를 비움
@@ -100,9 +107,70 @@ export const EditInEditSurvey = ({
     setDeleteQuestionDialog(true); // 다이얼로그 열기
     setDeleteIndex(index); // 선택한 index 전달
   };
+
+  // (객관식) input을 enable로 하기
+  const enableEdit = (index: number) => {
+    setDisabledInputs(
+      disabledInputs.map((disabled, idx) => (idx === index ? false : disabled))
+    );
+  };
+
+  // (객관식) 각 input의 onChange
+  const handleInputChange = (index: number, value: string) => {
+    setChoices(choices.map((choice, idx) => (idx === index ? value : choice)));
+  };
+
+  // (객관식) 저장하기 버튼
+  const saveChanges = async (optionIndex: number) => {
+    setDisabledInputs(
+      // 선택한 input disable하기
+      disabledInputs.map((disabled, idx) =>
+        idx === optionIndex ? true : disabled
+      )
+    );
+    const updatedAnswer = choices[optionIndex];
+    const initailOption = initialData.options[optionIndex];
+    try {
+      const response = await api.post(`/survey/question-options`, {
+        surveyQuestion: {
+          id: initialData.id,
+          surveyId: initialData.surveyId,
+          questionType: typeMapping[initialData.type],
+          content: initialData.title,
+          page: initialData.page,
+          questionOrder: initialData.order,
+          maxText: initialData.count,
+          required: initialData.required,
+          deleted: false,
+        },
+        options: [
+          {
+            beforeChangeSurveyQuestionOptionList: {
+              id: initailOption.id,
+              answer: initailOption.answer,
+            },
+            afterChangeSurveyQuestionOptionList: {
+              id: initailOption.id,
+              answer: updatedAnswer,
+              deleteFlag: false,
+              creationFlag: false,
+            },
+          },
+        ],
+      });
+
+      if (response.status === 200) {
+        setEditIndex(null); // editIndex를 null로 설정
+        refetch(); // 데이터 다시 가져오기
+      }
+    } catch (error) {
+      console.error("Failed to delete answer: ", error);
+    }
+  };
+
   // (객관식) 답변 삭제
   const handleDeleteQuestion = async (optionIndex: number) => {
-    const optionToDelete = initialData.options[optionIndex];
+    const initailOption = initialData.options[optionIndex];
     try {
       const response = await api.post(`/survey/question-options`, {
         surveyQuestion: {
@@ -119,12 +187,12 @@ export const EditInEditSurvey = ({
         options: [
           {
             beforeChangeSurveyQuestionOptionList: {
-              id: optionToDelete.id,
-              answer: optionToDelete.answer,
+              id: initailOption.id,
+              answer: initailOption.answer,
             },
             afterChangeSurveyQuestionOptionList: {
-              id: optionToDelete.id,
-              answer: optionToDelete.answer,
+              id: initailOption.id,
+              answer: initailOption.answer,
               deleteFlag: true, // 이걸 true로 답변 삭제
               creationFlag: false,
             },
@@ -197,10 +265,33 @@ export const EditInEditSurvey = ({
               <input
                 className="main-input text-gray-9"
                 value={choice}
-                onChange={(e) => {}}
+                onChange={(e) => handleInputChange(index, e.target.value)}
                 placeholder="답변을 입력해주세요"
+                disabled={disabledInputs[index]}
               />
+
               <div className="flex gap-2 justify-end">
+                {!disabledInputs[index] ? (
+                  <div
+                    onClick={() => saveChanges(index)}
+                    className="flex items-center gap-1 cursor-pointer"
+                  >
+                    <SaveIcon />
+                    <div className="text-primary-1 font-semibold text-sm">
+                      답변 저장
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => enableEdit(index)}
+                    className="flex items-center gap-1 cursor-pointer"
+                  >
+                    <UpdateIcon />
+                    <div className="text-primary-1 font-semibold text-sm">
+                      답변 수정
+                    </div>
+                  </div>
+                )}
                 <div
                   onClick={() => showDeleteConfirmation(index)}
                   className="flex items-center gap-1 cursor-pointer"

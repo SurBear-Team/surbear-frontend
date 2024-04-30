@@ -5,6 +5,7 @@ import { useState } from "react";
 import { InputDialog } from "../components/InputDialog";
 import api from "@/pages/api/config";
 import MemberInfoDialog from "../components/MemberInfoDialog";
+import { useRouter } from "next/router";
 
 export interface IMemberInfo {
   age: string;
@@ -19,6 +20,8 @@ export interface IMemberInfo {
 }
 
 export default function Member() {
+  const router = useRouter();
+
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");
   const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
@@ -34,10 +37,19 @@ export default function Member() {
               setPopUpType("memberInfo");
             }}
           />
-          <SettingCard title="회원 설문조사 조회" onClick={() => {}} />
+          <SettingCard
+            title="회원 설문조사 조회"
+            onClick={() => {
+              setShowPopUp((prev) => !prev);
+              setPopUpType("memberSurvey");
+            }}
+          />
           <SettingCard
             title="회원 설문조사 참여 내역 조회"
-            onClick={() => {}}
+            onClick={() => {
+              setShowPopUp((prev) => !prev);
+              setPopUpType("memberSurveyHistory");
+            }}
           />
           <SettingCard title="회원 포인트 내역 조회" onClick={() => {}} />
           <SettingCard title="회원 상품 교환 내역 조회" onClick={() => {}} />
@@ -58,7 +70,7 @@ export default function Member() {
                 const nickname = data.nickname;
                 if (nickname !== undefined) {
                   api
-                    .get(`/member/${nickname}`)
+                    .get(`/role/${nickname}`)
                     .then((res) => {
                       const data = res.data;
                       setMemberInfo(data);
@@ -77,6 +89,46 @@ export default function Member() {
             <MemberInfoDialog
               info={memberInfo!}
               onBtnClick={() => setShowPopUp((prev) => !prev)}
+            />
+          )}
+          {popUpType === "memberSurvey" && (
+            <InputDialog
+              title="회원 설문조사 조회"
+              placeholder="조회할 닉네임을 입력해주세요"
+              leftText="취소"
+              rightText="조회"
+              onLeftClick={() => setShowPopUp((prev) => !prev)}
+              onRightClick={(data) => {
+                const nickname = data.nickname;
+                if (nickname !== undefined) {
+                  api
+                    .get(`/role/${nickname}`)
+                    .then((res) => {
+                      router.push(`/manager/member/survey/${nickname}`);
+                    })
+                    .catch((err) => alert("존재하지 않는 사용자입니다."));
+                }
+              }}
+            />
+          )}
+          {popUpType === "memberSurveyHistory" && (
+            <InputDialog
+              title="회원 설문조사 참여 내역 조회"
+              placeholder="조회할 닉네임을 입력해주세요"
+              leftText="취소"
+              rightText="조회"
+              onLeftClick={() => setShowPopUp((prev) => !prev)}
+              onRightClick={(data) => {
+                const nickname = data.nickname;
+                if (nickname !== undefined) {
+                  api
+                    .get(`/role/${nickname}`)
+                    .then((res) => {
+                      router.push(`/manager/member/survey-history/${nickname}`);
+                    })
+                    .catch((err) => alert("존재하지 않는 사용자입니다."));
+                }
+              }}
             />
           )}
         </>

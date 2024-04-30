@@ -10,6 +10,15 @@ export const getTime = (time: string) => {
   return { year, month, date, hour, minute };
 };
 
+export const getTimeAsString = (time: string) => {
+  if (time === null) {
+    return "";
+  } else {
+    const { year, month, date } = getTime(time);
+    return `${year}.${month}.${date}`;
+  }
+};
+
 export const getAge = (age: string) => {
   if (age === "UNDER_TWENTY") {
     return "10대";

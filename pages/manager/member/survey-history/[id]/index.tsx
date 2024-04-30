@@ -1,12 +1,22 @@
 import api from "@/pages/api/config";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
+import { ListCard } from "@/pages/profile/components/ListCard";
+import { getTimeAsString } from "@/pages/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+export interface IMemberHistory {
+  createdAt: string;
+  deleted: boolean;
+  id: number;
+  nickname: string;
+  title: string;
+}
 
 export default function MemberSurvey() {
   const router = useRouter();
 
-  const [data, setData] = useState();
+  const [data, setData] = useState<IMemberHistory[]>();
   const { id: nickname } = router.query;
   useEffect(() => {
     if (nickname !== undefined) {
@@ -19,26 +29,22 @@ export default function MemberSurvey() {
     }
   }, []);
 
-  // 토큰으로 설문참여내역 조회 테스트
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const token = localStorage.getItem("surbearToken");
-      if (token !== undefined) {
-        api
-          .get("/member/survey/history", {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
-      }
-    }
-  }, []);
+  console.log(data);
 
   return (
     <>
       <TopBar hasBack noShadow title="회원 설문조사 참여 내역" />
       <div className="white-screen flex-col pt-[50px] justify-start">
-        <div className="inner-screen"></div>
+        <div className="inner-screen">
+          {data?.map((el) => (
+            <ListCard
+              key={el.id}
+              getTime={getTimeAsString(el.createdAt)}
+              content={el.title}
+              surveyOwner={el.nickname}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

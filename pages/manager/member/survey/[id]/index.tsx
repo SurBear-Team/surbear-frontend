@@ -20,7 +20,6 @@ export default function MemberSurvey() {
     }
   }, []);
 
-  console.log(data);
   return (
     <>
       <TopBar hasBack noShadow title="회원 설문조사 내역" />

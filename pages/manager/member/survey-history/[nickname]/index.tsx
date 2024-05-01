@@ -17,7 +17,7 @@ export default function MemberSurvey() {
   const router = useRouter();
 
   const [data, setData] = useState<IMemberHistory[]>();
-  const { id: nickname } = router.query;
+  const { nickname } = router.query;
   useEffect(() => {
     if (nickname !== undefined) {
       api
@@ -28,8 +28,6 @@ export default function MemberSurvey() {
         });
     }
   }, []);
-
-  console.log(data);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { SettingIcon } from "@/pages/components/styles/Icons";
+import { BanIcon, SettingIcon } from "@/pages/components/styles/Icons";
 
 interface ListCardProps {
   getTime: string;
@@ -6,7 +6,8 @@ interface ListCardProps {
   plusMinus?: any;
   point?: string;
   status?: string;
-  hasEdit?: boolean;
+  hasBan?: boolean;
+  onBanClick?: () => void;
   openType?: boolean;
   surveyOwner?: string;
 }
@@ -17,7 +18,8 @@ export const ListCard = ({
   plusMinus,
   point,
   status,
-  hasEdit,
+  hasBan,
+  onBanClick,
   openType,
   surveyOwner,
 }: ListCardProps) => {
@@ -53,19 +55,19 @@ export const ListCard = ({
             {status === "FORCED_DELETION" && "강제 삭제됨"}
           </div>
         )}
-        {hasEdit && (
-          <div className="cursor-pointer" onClick={() => {}}>
-            <SettingIcon isSmall />
+        {hasBan && (
+          <div onClick={onBanClick} className="cursor-pointer">
+            <BanIcon />
           </div>
         )}
         {openType !== undefined && (
           <div className="flex items-center">
             {openType === true ? (
-              <button className="small-Btn primary-btn-style text-sm font-bold">
+              <button className="small-Btn primary-btn-style text-sm font-bold whitespace-nowrap">
                 결과 보기
               </button>
             ) : (
-              <span className="font-bold text-xs text-gray-5 px-4">
+              <span className="font-bold text-xs text-gray-5 px-4 whitespace-nowrap">
                 결과 비공개
               </span>
             )}

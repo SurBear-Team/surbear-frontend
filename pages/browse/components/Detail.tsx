@@ -9,6 +9,7 @@ interface IDetail {
   layoutId: number;
   token?: number | null;
   data: ISurvey;
+  onReportClick: () => void;
   onBackClick: () => void;
 }
 
@@ -16,6 +17,7 @@ export default function Detail({
   layoutId,
   token,
   data,
+  onReportClick,
   onBackClick,
 }: IDetail) {
   const router = useRouter();
@@ -31,7 +33,7 @@ export default function Detail({
       <Overlay onClick={onBackClick} />
       <motion.div
         onClick={onBackClick}
-        className="fixed top-0 left-auto right-auto w-full max-w-xl h-screen px-6 pt-[106px] pb-[105px] z-50"
+        className="fixed top-0 left-auto right-auto w-full max-w-xl h-screen px-6 pt-[106px] pb-[105px] z-40"
       >
         <motion.div
           onClick={(e) => e.stopPropagation()}
@@ -48,7 +50,10 @@ export default function Detail({
               <span className="sm-gray-9-text">뒤로가기</span>
             </div>
             {token !== data.surveyAuthorId && (
-              <div className="flex items-center gap-1 cursor-pointer">
+              <div
+                onClick={onReportClick}
+                className="flex items-center gap-1 cursor-pointer"
+              >
                 <ReportIcon />
                 <span className="font-semibold text-xs text-red-1">
                   신고하기

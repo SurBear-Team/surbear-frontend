@@ -9,6 +9,11 @@ import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/Created
 import { Dialog } from "@/pages/components/Dialog";
 import { SurveyTabBar } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
 import { EditInEditSurvey } from "../components/EditInEditSurvey";
+import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
+import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
+import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
+import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 
 export interface SurveyQuestion {
   options: Array<{
@@ -56,6 +61,14 @@ export default function EditSurveyPage() {
     setDeleteSurveyDialog(true);
   };
 
+  const typeList = [
+    "객관식 - 단일 선택",
+    "객관식 - 다중 선택",
+    "단답형",
+    "슬라이더",
+    "주관식",
+  ];
+
   // 영어 - 한글 매핑하기
   const typeMapping: { [key: string]: string } = {
     SINGLE_CHOICE: "객관식 - 단일 선택",
@@ -63,6 +76,24 @@ export default function EditSurveyPage() {
     SHORT_ANSWER: "단답형",
     SLIDER: "슬라이더",
     SUBJECTIVE: "주관식",
+  };
+
+  // 한글 - 영어 매핑하기
+  const KorToEngTypeMapping: { [key: string]: string } = {
+    "객관식 - 단일 선택": "SINGLE_CHOICE",
+    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
+    단답형: "SHORT_ANSWER",
+    슬라이더: "SLIDER",
+    주관식: "SUBJECTIVE",
+  };
+
+  // 객, 단, 슬 선택하는 함수
+  const handleTypeSelect = (selectedTypeType: string) => {
+    setTypeType(selectedTypeType);
+    setShowType(false);
+    const englishType =
+      KorToEngTypeMapping[selectedTypeType] || "SINGLE_CHOICE";
+    setNowType(englishType);
   };
 
   // 기존 설문 데이터 가져오기
@@ -95,14 +126,17 @@ export default function EditSurveyPage() {
 
   // 다음 페이지 이동
   const goToNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    if (currentPage < surveyPages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  // 이전 페이지 이동
+  // 이전 페이지로 이동
   const goToPrevPage = () => {
-    setCurrentPage(currentPage - 1);
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
-
   // (공통) 설문 수정하기
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
@@ -161,6 +195,137 @@ export default function EditSurveyPage() {
     router.push("/my-survey");
   };
 
+  // (공통) 새 질문 만들기
+  const [showType, setShowType] = useState(false);
+  const [typeType, setTypeType] = useState("객관식 - 단일 선택");
+  const [nowType, setNowType] = useState("SINGLE_CHOICE");
+
+  // 필수 답변 체크 박스
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setIsChecked((isChecked) => !isChecked);
+  };
+
+  // (공통) 질문 제목
+  const [questionTitle, setQuestionTitle] = useState("");
+
+  const handleTitleChange = (e: any) => {
+    setQuestionTitle(e.target.value);
+  };
+
+  // (객관식) 답변들 배열, 처음엔 빈 답변 2개
+  const [choices, setChoices] = useState(["", ""]);
+  const addChoice = () => {
+    setChoices([...choices, ""]);
+  };
+
+  // (객관식) 답변 삭제
+  const deleteChoice = (index: number) => {
+    // 2개 이상일 때만 삭제
+    if (choices.length > 2) {
+      const newChoices = choices.filter((_, i) => i !== index);
+      setChoices(newChoices);
+    } else {
+      setAlertDialog(true);
+      setAlertText("답변은 최소 2개");
+    }
+  };
+
+  // (객관식) 답변 onChange
+  const handleChoiceChange = (index: number, newText: string) => {
+    const updatedChoices = choices.map((choice, choiceIndex) => {
+      if (index === choiceIndex) {
+        return newText; // 선택된 답변의 텍스트 업데이트
+      }
+      return choice;
+    });
+    setChoices(updatedChoices); // 변경된 답변 배열로 업데이트
+  };
+
+  // (단답형) 최대 글자 수
+  const [count, setCount] = useState(7883);
+
+  // (공통)페이지
+  const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
+
+  // (공통) 설문 만들기
+  const addNewSurveyComponent = (newComponentData: any) => {
+    let newPages = [...surveyPages];
+
+    // 현재 페이지에 배열이 초기화되었는지 확인하고 필요하면 초기화
+    if (!newPages[currentPage]) {
+      newPages[currentPage] = [];
+    }
+    newPages[currentPage] = [...newPages[currentPage], newComponentData];
+    setSurveyPages(newPages);
+    setIsNewSurvey(false);
+  };
+
+  // ///
+  const onSaveNewQuestion = () => {
+    const isTitleEmpty = !questionTitle.trim();
+    if (isTitleEmpty) {
+      setAlertDialog(true);
+      setAlertText("제목을 입력해주세요.");
+      return; // 함수 중단
+    }
+    console.log(nowType);
+    // (객관식)
+    if (
+      typeType === "객관식 - 단일 선택" ||
+      typeType === "객관식 - 다중 선택"
+    ) {
+      const multipleChoiceSurveyData = {
+        type: typeType,
+        title: questionTitle,
+        choices: choices,
+      };
+
+      addNewSurveyComponent(multipleChoiceSurveyData);
+    }
+    // (단답형)
+    else if (typeType === "단답형" || typeType === "주관식") {
+      const shortAnswerSurveyData = {
+        type: typeType,
+        title: questionTitle,
+        count: count,
+        choices: [],
+      };
+      addNewSurveyComponent(shortAnswerSurveyData);
+    }
+    // (슬라이더)
+    else if (typeType === "슬라이더") {
+      const sliderSurveyData = {
+        type: typeType,
+        title: questionTitle,
+        choices: [],
+      };
+      addNewSurveyComponent(sliderSurveyData);
+    }
+
+    api
+      .post("/survey/question", {
+        answers:
+          typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택"
+            ? choices
+            : [],
+        surveyQuestion: {
+          surveyId: surveyId,
+          questionType: nowType,
+          content: questionTitle,
+          page: currentPage,
+          questionOrder: 0, // ㅇㅅㅇ?
+          maxText: count, // 임시
+          required: isChecked,
+        },
+      })
+      .then(() => {
+        // 저장 후 입력 필드 초기화
+        setQuestionTitle("");
+        setChoices(["", ""]);
+        refetch();
+      });
+  };
   // 콘솔 찍기
   useEffect(() => {
     console.log(data);
@@ -203,6 +368,7 @@ export default function EditSurveyPage() {
                 onCancel={() => setEditIndex(null)}
                 refetch={refetch}
                 setEditIndex={setEditIndex}
+                currentPage={currentPage}
               />
             ) : (
               <CreatedQuestion
@@ -217,6 +383,126 @@ export default function EditSurveyPage() {
                 onOrderChange={() => {}}
               />
             )
+          )}
+
+          {/* 새 질문 생성 */}
+          {isNewSurvey && (
+            <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
+              <div className="sm-gray-9-text text-base pb-4">
+                새 질문 만들기
+                {/* 형식 필수답변 */}
+                <div className="flex justify-center items-center gap-4">
+                  <div className="flex gap-4 w-full items-center">
+                    {/* 형식 고르기 */}
+                    <div className="sm-gray-9-text text-base whitespace-nowrap">
+                      형식
+                    </div>
+                    <TypeDropDown
+                      onShowTypeClick={() => {
+                        setShowType((prev) => !prev);
+                      }}
+                      showType={showType}
+                      typeType={typeType}
+                      typeList={typeList}
+                      onTypeSelect={handleTypeSelect}
+                    />
+                  </div>
+
+                  <div className="flex gap-1 items-center">
+                    <div className="sm-gray-9-text text-base whitespace-nowrap">
+                      필수 답변
+                    </div>
+                    <MyCheckBox
+                      isChecked={isChecked}
+                      onCheckClick={handleCheckboxChange}
+                    />
+                  </div>
+                </div>
+                {/* 질문 제목 */}
+                <div className="flex flex-col gap-1">
+                  <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
+                  <input
+                    className="main-input text-gray-9"
+                    value={questionTitle}
+                    onChange={handleTitleChange}
+                    placeholder="제목을 입력해주세요"
+                  />
+                </div>
+                {/* 답변들 */}
+                {(typeType === "객관식 - 단일 선택" ||
+                  typeType === "객관식 - 다중 선택") && (
+                  <>
+                    {/* 회색선 */}
+                    <div className="gray-line my-8" />
+                    <>
+                      {choices?.map((choice, index) => (
+                        <div key={index} className="flex flex-col gap-1">
+                          <div className="sm-gray-9-text text-base pt-2">
+                            답변 {index + 1}
+                          </div>
+                          <input
+                            className="main-input text-gray-9"
+                            onChange={(e) => {
+                              handleChoiceChange(index, e.target.value);
+                            }}
+                            placeholder="답변을 입력해주세요"
+                          />
+
+                          <div className="flex gap-2 justify-end">
+                            <div
+                              onClick={() => {
+                                deleteChoice(index);
+                              }}
+                              className="flex items-center gap-1 cursor-pointer"
+                            >
+                              <MinusIcon />
+                              <div className="text-red-1 font-semibold text-sm">
+                                답변 삭제
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {/* 새 답변 추가 버튼 */}
+                      <button
+                        className="medium-Btn white-bg-primary-btn  w-auto mx-auto mt-6 flex items-center gap-1"
+                        onClick={addChoice}
+                      >
+                        <PlusIcon /> 새 답변 추가
+                      </button>
+                    </>
+                  </>
+                )}
+                {typeType === "단답형" && (
+                  <>
+                    <ShortAnswerType setCount={setCount} />
+                    <div className="gray-line mt-8" />
+                  </>
+                )}
+                {typeType === "슬라이더" && (
+                  <>
+                    <div className="gray-line mt-8" />
+                  </>
+                )}
+                <div className="flex justify-end p-0 mt-6 gap-2">
+                  <button
+                    onClick={() => {
+                      setIsNewSurvey(false);
+                    }}
+                    className="small-Btn w-auto bg-white text-gray-5 border-gray-5"
+                  >
+                    취소
+                  </button>
+
+                  <button
+                    onClick={onSaveNewQuestion}
+                    className="small-Btn w-auto white-bg-primary-btn"
+                  >
+                    저장
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
 
           {alertDialog && (

@@ -32,6 +32,7 @@ interface EditSurveyProps {
   onCancel: () => void;
   refetch: () => void;
   setEditIndex: (index: number | null) => void;
+  currentPage: number;
 }
 
 export const EditInEditSurvey = ({
@@ -40,6 +41,7 @@ export const EditInEditSurvey = ({
   onCancel,
   refetch,
   setEditIndex,
+  currentPage,
 }: EditSurveyProps) => {
   const typeList = [
     "객관식 - 단일 선택",
@@ -149,7 +151,7 @@ export const EditInEditSurvey = ({
           surveyId: initialData.surveyId,
           questionType: typeMapping[initialData.type],
           content: initialData.title,
-          page: initialData.page,
+          page: currentPage,
           questionOrder: initialData.order,
           maxText: initialData.count,
           required: initialData.required,
@@ -189,7 +191,7 @@ export const EditInEditSurvey = ({
           surveyId: initialData.surveyId,
           questionType: typeMapping[initialData.type],
           content: initialData.title,
-          page: initialData.page,
+          page: currentPage,
           questionOrder: initialData.order,
           maxText: initialData.count,
           required: initialData.required,
@@ -230,7 +232,7 @@ export const EditInEditSurvey = ({
           surveyId: initialData.surveyId,
           questionType: typeMapping[typeType], // 질문 타입
           content: questionTitle, // 질문 제목
-          page: initialData.page,
+          page: currentPage,
           questionOrder: initialData.order,
           maxText: count, // 최대 글자수
           required: isChecked, // 필수 여부

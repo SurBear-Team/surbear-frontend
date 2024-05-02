@@ -7,12 +7,19 @@ import { useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
-import { SurveyTabBar } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
+import { TabButton } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
 import { EditInEditSurvey } from "../components/EditInEditSurvey";
 import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
-import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
+import {
+  AddQuestionIcon,
+  MinusIcon,
+  NextPageIcon,
+  PlusIcon,
+  PrevPageIcon,
+  SaveIcon,
+} from "@/pages/components/styles/Icons";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 
 export interface SurveyQuestion {
@@ -50,11 +57,10 @@ export default function EditSurveyPage() {
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
 
-  // 설문 삭제 다이얼로그 부분
+  // (공통) 설문 삭제 다이얼로그 부분
   const [deleteSurveyDialog, setDeleteSurveyDialog] = useState(false);
   const [selectedSurveyQuestion, setSelectedSurveyQuestion] =
     useState<SurveyQuestion | null>(null);
-
   // 다이얼로그에 값 전달하기
   const showDeleteConfirmation = (surveyQuestion: SurveyQuestion) => {
     setSelectedSurveyQuestion(surveyQuestion); // 삭제할 질문
@@ -111,12 +117,16 @@ export default function EditSurveyPage() {
 
   // 현재 페이지
   const [currentPage, setCurrentPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1); // 마지막 페이지
   // 현재 페이지의 질문 목록
   const [currentPageData, setCurrentPageData] = useState<SurveyData[]>([]);
 
   // 현재 페이지의 설문만 보이게
   useEffect(() => {
     if (data) {
+      const pages = data.map((item) => item.surveyQuestion.page);
+      const lastPage = Math.max(...pages); // 최대 페이지 계산
+      setMaxPage(lastPage);
       const filteredData = data.filter(
         (item) => item.surveyQuestion.page === currentPage
       );
@@ -124,19 +134,19 @@ export default function EditSurveyPage() {
     }
   }, [data, currentPage]);
 
-  // 다음 페이지 이동
   const goToNextPage = () => {
-    if (currentPage < surveyPages.length - 1) {
-      setCurrentPage(currentPage + 1);
+    if (currentPage < maxPage) {
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
-  // 이전 페이지로 이동
   const goToPrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
+    if (currentPage > 1) {
+      // 첫 페이지보다 클 때만 이전 페이지로 이동 가능
+      setCurrentPage((prev) => prev - 1);
     }
   };
+
   // (공통) 설문 수정하기
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
@@ -568,15 +578,33 @@ export default function EditSurveyPage() {
           )}
 
           {editIndex === null && !isNewSurvey && (
-            <SurveyTabBar
-              setIsNewSurvey={setIsNewSurvey}
-              addNewPage={() => {}}
-              goToPrevPage={goToPrevPage}
-              goToNextPage={goToNextPage}
-              saveSurvey={saveSurvey}
-              canAddPage={false}
-              setSelectedQuestion={() => {}}
-            />
+            <div className="w-full flex justify-center gap-4 left-0 right-0 mx-auto px-1 bg-white fixed bottom-0">
+              <div className="flex w-full max-w-xl justify-between">
+                <TabButton
+                  onClick={() => {
+                    setIsNewSurvey((prev) => !prev);
+                  }}
+                  icon={<AddQuestionIcon />}
+                  label="새 질문"
+                />
+                <TabButton
+                  onClick={goToPrevPage}
+                  icon={<PrevPageIcon />}
+                  label="이전 페이지"
+                />
+                <TabButton
+                  onClick={goToNextPage}
+                  icon={<NextPageIcon />}
+                  label="다음 페이지"
+                />
+                <TabButton
+                  onClick={saveSurvey}
+                  icon={<SaveIcon />}
+                  label="설문조사 저장"
+                  labelStyle="text-primary-1"
+                />
+              </div>
+            </div>
           )}
         </div>
       </div>

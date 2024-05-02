@@ -1,13 +1,12 @@
 import { Dialog } from "@/pages/components/Dialog";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
-import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
-import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
 import { useState } from "react";
 import {
   MinusIcon,
   PlusIcon,
   SaveIcon,
+  TriangleDownIcon,
   UpdateIcon,
 } from "@/pages/components/styles/Icons";
 import api from "@/pages/api/config";
@@ -28,7 +27,6 @@ interface EditSurveyProps {
     }>;
     choices?: string[];
   };
-  onSave: (updatedData: NewSurveyProps) => void;
   onCancel: () => void;
   refetch: () => void;
   setEditIndex: (index: number | null) => void;
@@ -37,20 +35,11 @@ interface EditSurveyProps {
 
 export const EditInEditSurvey = ({
   initialData,
-  onSave,
   onCancel,
   refetch,
   setEditIndex,
   currentPage,
 }: EditSurveyProps) => {
-  const typeList = [
-    "객관식 - 단일 선택",
-    "객관식 - 다중 선택",
-    "단답형",
-    "슬라이더",
-    "주관식",
-  ];
-
   // 한글 - 영어 매핑하기
   const typeMapping: { [key: string]: string } = {
     "객관식 - 단일 선택": "SINGLE_CHOICE",
@@ -60,31 +49,14 @@ export const EditInEditSurvey = ({
     주관식: "SUBJECTIVE",
   };
 
-  // 카테고리 보이기
-  const [showType, setShowType] = useState(false);
-  const [typeType, setTypeType] = useState(initialData?.type);
+  // 카테고리
+  const typeType = initialData?.type;
 
   // (객관식) 답변들 배열, 처음엔 빈 답변 2개
   const [choices, setChoices] = useState(initialData?.choices || []);
   const [disabledInputs, setDisabledInputs] = useState(
     choices?.map(() => true) ?? []
   ); // 모든 입력을 초기에 비활성화
-
-  // 객, 단, 슬 선택하는 함수
-  const handleTypeSelect = (selectedTypeType: string) => {
-    setTypeType(selectedTypeType);
-    setShowType(false);
-    if (
-      selectedTypeType === "객관식 - 단일 선택" ||
-      selectedTypeType === "객관식 - 다중 선택"
-    ) {
-      if (!choices || choices.length < 2) {
-        setChoices(choices.length < 2 ? ["", ""] : choices); // 객관식 선택 시 최소 2개의 빈 답변으로 초기화
-      }
-    } else {
-      setChoices([]); // 객관식이 아닌 경우 선택지를 비움
-    }
-  };
 
   // (공통) 필수 답변 체크 박스
   const [isChecked, setIsChecked] = useState(false);
@@ -254,17 +226,12 @@ export const EditInEditSurvey = ({
       {/* 형식 필수답변 */}
       <div className="flex justify-center items-center gap-4">
         <div className="flex gap-4 w-full items-center">
-          {/* 형식 고르기 */}
+          {/* 형식 표시 */}
           <div className="sm-gray-9-text text-base whitespace-nowrap">형식</div>
-          <TypeDropDown
-            onShowTypeClick={() => {
-              setShowType((prev) => !prev);
-            }}
-            showType={showType}
-            typeType={typeType}
-            typeList={typeList}
-            onTypeSelect={handleTypeSelect}
-          />
+          <div className="drop-down-bar relative flex">
+            <div className="sm-gray-9-text text-center w-full">{typeType}</div>
+            <TriangleDownIcon />
+          </div>
         </div>
 
         <div className="flex gap-1 items-center">

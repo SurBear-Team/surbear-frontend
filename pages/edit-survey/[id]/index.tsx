@@ -374,7 +374,6 @@ export default function EditSurveyPage() {
                     answer: option.answer,
                   })),
                 }}
-                onSave={() => {}}
                 onCancel={() => setEditIndex(null)}
                 refetch={refetch}
                 setEditIndex={setEditIndex}

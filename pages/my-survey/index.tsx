@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TabBar } from "../components/TabBar";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";

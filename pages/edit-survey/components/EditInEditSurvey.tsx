@@ -238,16 +238,6 @@ export const EditInEditSurvey = ({
           required: isChecked, // 필수 여부
           deleted: false,
         },
-        options: [
-          {
-            beforeChangeSurveyQuestionOptionList: {},
-            afterChangeSurveyQuestionOptionList: {
-              answer: "1",
-              deleteFlag: false,
-              creationFlag: false,
-            },
-          },
-        ],
       });
 
       if (response.status === 200) {

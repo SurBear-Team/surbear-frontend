@@ -106,7 +106,7 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/survey/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 사용자입니다."));
+                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
                 }
               }}
             />
@@ -126,7 +126,7 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/survey-history/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 사용자입니다."));
+                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
                 }
               }}
             />

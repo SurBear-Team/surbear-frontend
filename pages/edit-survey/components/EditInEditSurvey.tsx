@@ -115,6 +115,16 @@ export const EditInEditSurvey = ({
       answer: "",
     };
     const isOptionNew = !initialOption.id; // 새 답변 추가로 만든건지 체크
+    const isDuplicate = choices.some(
+      (choice, idx) => choice.trim() === updatedAnswer && idx !== optionIndex
+    );
+
+    if (isDuplicate) {
+      // 중복 답변이 있는 경우
+      setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
+      setAlertDialog(true);
+      return; // 함수 종료
+    }
 
     try {
       const response = await api.post(`/survey/question-options`, {

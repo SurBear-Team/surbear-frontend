@@ -271,7 +271,7 @@ export default function EditSurveyPage() {
     setIsNewSurvey(false);
   };
 
-  // ///
+  // 새 설문 저장하기
   const onSaveNewQuestion = () => {
     const isTitleEmpty = !questionTitle.trim();
     if (isTitleEmpty) {
@@ -279,7 +279,15 @@ export default function EditSurveyPage() {
       setAlertText("제목을 입력해주세요.");
       return; // 함수 중단
     }
-    console.log(nowType);
+
+    // 중복 답변 확인
+    const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
+    if (choiceSet.size !== choices.length) {
+      setAlertDialog(true);
+      setAlertText("중복된 답변이 있습니다. 다시 확인해 주세요.");
+      return; // 함수 중단
+    }
+
     // (객관식)
     if (
       typeType === "객관식 - 단일 선택" ||

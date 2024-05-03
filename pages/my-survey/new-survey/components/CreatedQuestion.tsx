@@ -6,7 +6,6 @@ interface CreatedQuestionProps {
   count?: number;
   onEdit: () => void;
   onDelete: () => void;
-  onOrderChange?: () => void;
 }
 
 export const CreatedQuestion = ({
@@ -17,7 +16,6 @@ export const CreatedQuestion = ({
   count,
   onEdit,
   onDelete,
-  onOrderChange,
 }: CreatedQuestionProps) => {
   return (
     <div className="px-6 w-full">
@@ -43,12 +41,6 @@ export const CreatedQuestion = ({
       )}
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">
-        <button
-          onClick={onOrderChange}
-          className="small-Btn white-bg-primary-btn"
-        >
-          순서 변경
-        </button>
         <button onClick={onEdit} className="small-Btn white-bg-primary-btn">
           수정
         </button>

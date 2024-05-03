@@ -370,7 +370,6 @@ export default function EditSurveyPage() {
                 count={item.surveyQuestion.maxText}
                 onEdit={() => handleEdit(index)}
                 onDelete={() => showDeleteConfirmation(item.surveyQuestion)}
-                onOrderChange={() => {}}
               />
             )
           )}
@@ -380,117 +379,117 @@ export default function EditSurveyPage() {
             <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
               <div className="sm-gray-9-text text-base pb-4">
                 새 질문 만들기
-                {/* 형식 필수답변 */}
-                <div className="flex justify-center items-center gap-4">
-                  <div className="flex gap-4 w-full items-center">
-                    {/* 형식 고르기 */}
-                    <div className="sm-gray-9-text text-base whitespace-nowrap">
-                      형식
-                    </div>
-                    <TypeDropDown
-                      onShowTypeClick={() => {
-                        setShowType((prev) => !prev);
-                      }}
-                      showType={showType}
-                      typeType={typeType}
-                      typeList={typeList}
-                      onTypeSelect={handleTypeSelect}
-                    />
+              </div>
+              {/* 형식 필수답변 */}
+              <div className="flex justify-center items-center gap-4">
+                <div className="flex gap-4 w-full items-center">
+                  {/* 형식 고르기 */}
+                  <div className="sm-gray-9-text text-base whitespace-nowrap">
+                    형식
                   </div>
-
-                  <div className="flex gap-1 items-center">
-                    <div className="sm-gray-9-text text-base whitespace-nowrap">
-                      필수 답변
-                    </div>
-                    <MyCheckBox
-                      isChecked={isChecked}
-                      onCheckClick={handleCheckboxChange}
-                    />
-                  </div>
-                </div>
-                {/* 질문 제목 */}
-                <div className="flex flex-col gap-1">
-                  <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
-                  <input
-                    className="main-input text-gray-9"
-                    value={questionTitle}
-                    onChange={handleTitleChange}
-                    placeholder="제목을 입력해주세요"
+                  <TypeDropDown
+                    onShowTypeClick={() => {
+                      setShowType((prev) => !prev);
+                    }}
+                    showType={showType}
+                    typeType={typeType}
+                    typeList={typeList}
+                    onTypeSelect={handleTypeSelect}
                   />
                 </div>
-                {/* 답변들 */}
-                {(typeType === "객관식 - 단일 선택" ||
-                  typeType === "객관식 - 다중 선택") && (
-                  <>
-                    {/* 회색선 */}
-                    <div className="gray-line my-8" />
-                    <>
-                      {choices?.map((choice, index) => (
-                        <div key={index} className="flex flex-col gap-1">
-                          <div className="sm-gray-9-text text-base pt-2">
-                            답변 {index + 1}
-                          </div>
-                          <input
-                            className="main-input text-gray-9"
-                            onChange={(e) => {
-                              handleChoiceChange(index, e.target.value);
-                            }}
-                            placeholder="답변을 입력해주세요"
-                          />
 
-                          <div className="flex gap-2 justify-end">
-                            <div
-                              onClick={() => {
-                                deleteChoice(index);
-                              }}
-                              className="flex items-center gap-1 cursor-pointer"
-                            >
-                              <MinusIcon />
-                              <div className="text-red-1 font-semibold text-sm">
-                                답변 삭제
-                              </div>
+                <div className="flex gap-1 items-center">
+                  <div className="sm-gray-9-text text-base whitespace-nowrap">
+                    필수 답변
+                  </div>
+                  <MyCheckBox
+                    isChecked={isChecked}
+                    onCheckClick={handleCheckboxChange}
+                  />
+                </div>
+              </div>
+              {/* 질문 제목 */}
+              <div className="flex flex-col gap-1">
+                <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
+                <input
+                  className="main-input text-gray-9"
+                  value={questionTitle}
+                  onChange={handleTitleChange}
+                  placeholder="제목을 입력해주세요"
+                />
+              </div>
+              {/* 답변들 */}
+              {(typeType === "객관식 - 단일 선택" ||
+                typeType === "객관식 - 다중 선택") && (
+                <>
+                  {/* 회색선 */}
+                  <div className="gray-line my-8" />
+                  <>
+                    {choices?.map((choice, index) => (
+                      <div key={index} className="flex flex-col gap-1">
+                        <div className="sm-gray-9-text text-base pt-2">
+                          답변 {index + 1}
+                        </div>
+                        <input
+                          className="main-input text-gray-9"
+                          onChange={(e) => {
+                            handleChoiceChange(index, e.target.value);
+                          }}
+                          placeholder="답변을 입력해주세요"
+                        />
+
+                        <div className="flex gap-2 justify-end">
+                          <div
+                            onClick={() => {
+                              deleteChoice(index);
+                            }}
+                            className="flex items-center gap-1 cursor-pointer"
+                          >
+                            <MinusIcon />
+                            <div className="text-red-1 font-semibold text-sm">
+                              답변 삭제
                             </div>
                           </div>
                         </div>
-                      ))}
-                      {/* 새 답변 추가 버튼 */}
-                      <button
-                        className="medium-Btn white-bg-primary-btn  w-auto mx-auto mt-6 flex items-center gap-1"
-                        onClick={addChoice}
-                      >
-                        <PlusIcon /> 새 답변 추가
-                      </button>
-                    </>
+                      </div>
+                    ))}
+                    {/* 새 답변 추가 버튼 */}
+                    <button
+                      className="medium-Btn white-bg-primary-btn  w-auto mx-auto mt-6 flex items-center gap-1"
+                      onClick={addChoice}
+                    >
+                      <PlusIcon /> 새 답변 추가
+                    </button>
                   </>
-                )}
-                {typeType === "단답형" && (
-                  <>
-                    <ShortAnswerType setCount={setCount} />
-                    <div className="gray-line mt-8" />
-                  </>
-                )}
-                {typeType === "슬라이더" && (
-                  <>
-                    <div className="gray-line mt-8" />
-                  </>
-                )}
-                <div className="flex justify-end p-0 mt-6 gap-2">
-                  <button
-                    onClick={() => {
-                      setIsNewSurvey(false);
-                    }}
-                    className="small-Btn w-auto bg-white text-gray-5 border-gray-5"
-                  >
-                    취소
-                  </button>
+                </>
+              )}
+              {typeType === "단답형" && (
+                <>
+                  <ShortAnswerType setCount={setCount} />
+                  <div className="gray-line mt-8" />
+                </>
+              )}
+              {typeType === "슬라이더" && (
+                <>
+                  <div className="gray-line mt-8" />
+                </>
+              )}
+              <div className="flex justify-end p-0 mt-6 gap-2">
+                <button
+                  onClick={() => {
+                    setIsNewSurvey(false);
+                  }}
+                  className="small-Btn w-auto bg-white text-gray-5 border-gray-5"
+                >
+                  취소
+                </button>
 
-                  <button
-                    onClick={onSaveNewQuestion}
-                    className="small-Btn w-auto white-bg-primary-btn"
-                  >
-                    저장
-                  </button>
-                </div>
+                <button
+                  onClick={onSaveNewQuestion}
+                  className="small-Btn w-auto white-bg-primary-btn"
+                >
+                  저장
+                </button>
               </div>
             </div>
           )}

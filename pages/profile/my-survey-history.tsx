@@ -15,7 +15,7 @@ export default function SurveyHistory() {
       const token = localStorage.getItem("surbearToken");
       if (token !== undefined) {
         api
-          .get(`/survey/management/list`, {
+          .get(`/member/profile/list`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
@@ -25,7 +25,6 @@ export default function SurveyHistory() {
       }
     }
   }, []);
-  console.log(data);
 
   return (
     <>

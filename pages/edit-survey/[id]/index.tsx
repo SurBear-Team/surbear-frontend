@@ -14,7 +14,7 @@ import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAn
 import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 import { EditTabBar } from "../components/EditTabBar";
-import { SurveyData, SurveyQuestion } from "../editInterface";
+import { DialogState, SurveyData, SurveyQuestion } from "../editInterface";
 import {
   korToEngTypeMapping,
   engToKorTypeMapping,
@@ -24,11 +24,16 @@ export default function EditSurveyPage() {
   const router = useRouter();
   const { id: surveyId } = router.query; // 현재 id 가져오기
   const surveyTitle = useRecoilValue(editSurveyTitleAtom); // recoil로 가져온 제목
+  // 새 설문 만들기 창
+  const [isNewSurvey, setIsNewSurvey] = useState(false);
 
-  const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
+  // 원버튼 다이얼로그
+  const [oneBtnDialog, setOneBtnDialog] = useState<DialogState>({
+    open: false,
+    title: "",
+    text: "",
+  });
 
-  const [alertDialog, setAlertDialog] = useState(false); // 다이얼로그
-  const [alertText, setAlertText] = useState("");
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
 
@@ -91,12 +96,14 @@ export default function EditSurveyPage() {
     }
   }, [data, currentPage]);
 
+  // 다음 페이지
   const goToNextPage = () => {
     if (currentPage < maxPage) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
+  // 이전 페이지
   const goToPrevPage = () => {
     if (currentPage > 1) {
       // 첫 페이지보다 클 때만 이전 페이지로 이동 가능
@@ -193,8 +200,11 @@ export default function EditSurveyPage() {
       const newChoices = choices.filter((_, i) => i !== index);
       setChoices(newChoices);
     } else {
-      setAlertDialog(true);
-      setAlertText("답변은 최소 2개");
+      setOneBtnDialog({
+        open: true,
+        title: "답변은 최소 2개입니다",
+        text: "확인",
+      });
     }
   };
 
@@ -232,16 +242,11 @@ export default function EditSurveyPage() {
   const onSaveNewQuestion = () => {
     const isTitleEmpty = !questionTitle.trim();
     if (isTitleEmpty) {
-      setAlertDialog(true);
-      setAlertText("제목을 입력해주세요.");
-      return; // 함수 중단
-    }
-
-    // 중복 답변 확인
-    const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
-    if (choiceSet.size !== choices.length) {
-      setAlertDialog(true);
-      setAlertText("중복된 답변이 있습니다. 다시 확인해 주세요.");
+      setOneBtnDialog({
+        open: true,
+        title: "제목을 입력해주세요",
+        text: "확인",
+      });
       return; // 함수 중단
     }
 
@@ -250,6 +255,17 @@ export default function EditSurveyPage() {
       typeType === "객관식 - 단일 선택" ||
       typeType === "객관식 - 다중 선택"
     ) {
+      // 중복 답변 확인
+      const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
+      if (choiceSet.size !== choices.length) {
+        setOneBtnDialog({
+          open: true,
+          title: "중복된 답변이 있습니다. 다시 확인해 주세요",
+          text: "확인",
+        });
+        return; // 함수 중단
+      }
+
       const multipleChoiceSurveyData = {
         type: typeType,
         title: questionTitle,
@@ -479,20 +495,6 @@ export default function EditSurveyPage() {
             </div>
           )}
 
-          {alertDialog && (
-            <Dialog
-              title={alertText}
-              leftText="취소"
-              rightText="삭제"
-              onlyOneBtn={false}
-              onLeftClick={() => {
-                setAlertDialog((prev) => !prev);
-              }}
-              onRightClick={() => {}}
-              isDelete={true}
-            />
-          )}
-
           {deleteSurveyDialog && (
             <Dialog
               title="해당 질문을 삭제하시겠어요?"
@@ -532,6 +534,19 @@ export default function EditSurveyPage() {
             </>
           )}
 
+          {/* 원버튼 다이얼로그 */}
+          {oneBtnDialog.open && (
+            <Dialog
+              title={oneBtnDialog.title}
+              rightText={oneBtnDialog.text}
+              onlyOneBtn
+              onRightClick={() => {
+                setOneBtnDialog((current) => ({ ...current, open: false }));
+              }}
+            />
+          )}
+
+          {/* 저장하기 누르면 나오는 다이얼로그 */}
           {saveDialog && (
             <Dialog
               title={"설문이 저장되었어요"}

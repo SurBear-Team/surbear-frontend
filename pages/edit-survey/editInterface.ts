@@ -42,3 +42,9 @@ export interface EditSurveyProps {
   setEditIndex: (index: number | null) => void;
   currentPage: number;
 }
+
+export interface DialogState {
+  open: boolean;
+  title: string;
+  text: string;
+}

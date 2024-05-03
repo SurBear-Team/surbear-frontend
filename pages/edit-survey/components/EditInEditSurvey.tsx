@@ -10,28 +10,8 @@ import {
   UpdateIcon,
 } from "@/pages/components/styles/Icons";
 import api from "@/pages/api/config";
-
-interface EditSurveyProps {
-  initialData: {
-    id: number;
-    surveyId: number;
-    type: string;
-    title: string;
-    page: number;
-    order: number;
-    count: number;
-    required: boolean;
-    options: Array<{
-      id: number;
-      answer: string;
-    }>;
-    choices?: string[];
-  };
-  onCancel: () => void;
-  refetch: () => void;
-  setEditIndex: (index: number | null) => void;
-  currentPage: number;
-}
+import { EditSurveyProps } from "../editInterface";
+import { korToEngTypeMapping } from "@/pages/my-survey/components/typeMapping";
 
 export const EditInEditSurvey = ({
   initialData,
@@ -40,15 +20,6 @@ export const EditInEditSurvey = ({
   setEditIndex,
   currentPage,
 }: EditSurveyProps) => {
-  // 한글 - 영어 매핑하기
-  const typeMapping: { [key: string]: string } = {
-    "객관식 - 단일 선택": "SINGLE_CHOICE",
-    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
-    단답형: "SHORT_ANSWER",
-    슬라이더: "SLIDER",
-    주관식: "SUBJECTIVE",
-  };
-
   // 카테고리
   const typeType = initialData?.type;
 
@@ -131,7 +102,7 @@ export const EditInEditSurvey = ({
         surveyQuestion: {
           id: initialData.id,
           surveyId: initialData.surveyId,
-          questionType: typeMapping[initialData.type],
+          questionType: korToEngTypeMapping[initialData.type],
           content: initialData.title,
           page: currentPage,
           questionOrder: initialData.order,
@@ -171,7 +142,7 @@ export const EditInEditSurvey = ({
         surveyQuestion: {
           id: initialData.id,
           surveyId: initialData.surveyId,
-          questionType: typeMapping[initialData.type],
+          questionType: korToEngTypeMapping[initialData.type],
           content: initialData.title,
           page: currentPage,
           questionOrder: initialData.order,
@@ -212,7 +183,7 @@ export const EditInEditSurvey = ({
         surveyQuestion: {
           id: initialData.id,
           surveyId: initialData.surveyId,
-          questionType: typeMapping[typeType], // 질문 타입
+          questionType: korToEngTypeMapping[typeType], // 질문 타입
           content: questionTitle, // 질문 제목
           page: currentPage,
           questionOrder: initialData.order,

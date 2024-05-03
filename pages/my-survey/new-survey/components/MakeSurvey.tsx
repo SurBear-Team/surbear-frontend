@@ -8,6 +8,7 @@ import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import api from "@/pages/api/config";
 import { useRecoilValue } from "recoil";
 import { surveyIdAtom } from "../../surveyState";
+import { korToEngTypeMapping } from "../../components/typeMapping";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -39,14 +40,6 @@ export const MakeSurvey = ({
 
   const surveyId = useRecoilValue(surveyIdAtom);
 
-  const typeMapping: { [key: string]: string } = {
-    "객관식 - 단일 선택": "SINGLE_CHOICE",
-    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
-    단답형: "SHORT_ANSWER",
-    슬라이더: "SLIDER",
-    주관식: "SUBJECTIVE",
-  };
-
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState("객관식 - 단일 선택");
   const [nowType, setNowType] = useState("SINGLE_CHOICE");
@@ -63,7 +56,8 @@ export const MakeSurvey = ({
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
-    const englishType = typeMapping[selectedTypeType] || "SINGLE_CHOICE";
+    const englishType =
+      korToEngTypeMapping[selectedTypeType] || "SINGLE_CHOICE";
     setTypeType(selectedTypeType);
     setShowType(false);
     setNowType(englishType);

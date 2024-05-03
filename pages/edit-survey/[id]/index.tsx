@@ -7,43 +7,18 @@ import { useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
-import { TabButton } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
 import { EditInEditSurvey } from "../components/EditInEditSurvey";
 import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
-import {
-  AddQuestionIcon,
-  MinusIcon,
-  NextPageIcon,
-  PlusIcon,
-  PrevPageIcon,
-  SaveIcon,
-} from "@/pages/components/styles/Icons";
+import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
-
-export interface SurveyQuestion {
-  options: Array<{
-    id: number;
-    answer: string;
-  }>;
-  id: number;
-  content: string;
-  page: number;
-  questionType: string;
-  maxText?: number;
-  surveyId: number;
-  questionOrder?: number;
-  required: boolean;
-}
-
-export interface SurveyData {
-  surveyQuestion: SurveyQuestion;
-  options: Array<{
-    id: number;
-    answer: string;
-  }>;
-}
+import { EditTabBar } from "../components/EditTabBar";
+import { SurveyData, SurveyQuestion } from "../editInterface";
+import {
+  korToEngTypeMapping,
+  engToKorTypeMapping,
+} from "@/pages/my-survey/components/typeMapping";
 
 export default function EditSurveyPage() {
   const router = useRouter();
@@ -75,30 +50,12 @@ export default function EditSurveyPage() {
     "주관식",
   ];
 
-  // 영어 - 한글 매핑하기
-  const typeMapping: { [key: string]: string } = {
-    SINGLE_CHOICE: "객관식 - 단일 선택",
-    MULTIPLE_CHOICE: "객관식 - 다중 선택",
-    SHORT_ANSWER: "단답형",
-    SLIDER: "슬라이더",
-    SUBJECTIVE: "주관식",
-  };
-
-  // 한글 - 영어 매핑하기
-  const KorToEngTypeMapping: { [key: string]: string } = {
-    "객관식 - 단일 선택": "SINGLE_CHOICE",
-    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
-    단답형: "SHORT_ANSWER",
-    슬라이더: "SLIDER",
-    주관식: "SUBJECTIVE",
-  };
-
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
     setTypeType(selectedTypeType);
     setShowType(false);
     const englishType =
-      KorToEngTypeMapping[selectedTypeType] || "SINGLE_CHOICE";
+      korToEngTypeMapping[selectedTypeType] || "SINGLE_CHOICE";
     setNowType(englishType);
   };
 
@@ -373,7 +330,7 @@ export default function EditSurveyPage() {
                   page: item.surveyQuestion.page,
                   order: item.surveyQuestion.questionOrder ?? 0, // order가 없으면 0
                   title: item.surveyQuestion.content,
-                  type: typeMapping[item.surveyQuestion.questionType],
+                  type: engToKorTypeMapping[item.surveyQuestion.questionType],
                   choices: item.options.map((option) => option.answer),
                   count: item.surveyQuestion.maxText ?? 0, // count가 없으면 0
                   required: item.surveyQuestion.required,
@@ -391,7 +348,7 @@ export default function EditSurveyPage() {
               <CreatedQuestion
                 key={index}
                 answerIndex={index + 1}
-                type={typeMapping[item.surveyQuestion.questionType]}
+                type={engToKorTypeMapping[item.surveyQuestion.questionType]}
                 title={item.surveyQuestion.content}
                 answerList={item.options.map((option) => option.answer)}
                 count={item.surveyQuestion.maxText}
@@ -585,33 +542,12 @@ export default function EditSurveyPage() {
           )}
 
           {editIndex === null && !isNewSurvey && (
-            <div className="w-full flex justify-center gap-4 left-0 right-0 mx-auto px-1 bg-white fixed bottom-0">
-              <div className="flex w-full max-w-xl justify-between">
-                <TabButton
-                  onClick={() => {
-                    setIsNewSurvey((prev) => !prev);
-                  }}
-                  icon={<AddQuestionIcon />}
-                  label="새 질문"
-                />
-                <TabButton
-                  onClick={goToPrevPage}
-                  icon={<PrevPageIcon />}
-                  label="이전 페이지"
-                />
-                <TabButton
-                  onClick={goToNextPage}
-                  icon={<NextPageIcon />}
-                  label="다음 페이지"
-                />
-                <TabButton
-                  onClick={saveSurvey}
-                  icon={<SaveIcon />}
-                  label="설문조사 저장"
-                  labelStyle="text-primary-1"
-                />
-              </div>
-            </div>
+            <EditTabBar
+              setIsNewSurvey={setIsNewSurvey}
+              goToPrevPage={goToPrevPage}
+              goToNextPage={goToNextPage}
+              saveSurvey={saveSurvey}
+            />
           )}
         </div>
       </div>

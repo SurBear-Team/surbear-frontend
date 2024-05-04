@@ -27,7 +27,7 @@ export const Dialog = ({
     <>
       <Overlay onClick={onLeftClick!} />
       <div className="card justify-center fixed px-6 py-8 gap-8 bg-white z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="text-gray-9 text-center font-semibold w-full">
+        <div className="text-gray-9 text-center font-semibold w-full whitespace-nowrap">
           {title}
         </div>
         {/* 텍스트에리어 */}

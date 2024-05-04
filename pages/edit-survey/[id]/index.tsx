@@ -36,6 +36,7 @@ export default function EditSurveyPage() {
 
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
+  const [count, setCount] = useState(788183); // (단답형) 최대 글자 수
 
   // (공통) 설문 삭제 다이얼로그 부분
   const [deleteSurveyDialog, setDeleteSurveyDialog] = useState(false);
@@ -85,9 +86,12 @@ export default function EditSurveyPage() {
 
   // 현재 페이지의 설문만 보이게
   useEffect(() => {
+    // data가 null이나 undi가 아닐 때 실행
     if (data) {
+      // 각 항목에서 페이지 번호 추출해서 pages배열에 저장
       const pages = data.map((item) => item.surveyQuestion.page);
-      const lastPage = Math.max(...pages); // 최대 페이지 계산
+      // ...으로 배열의 모든 값을 함수의 인자로 전달하고 최대값 저장
+      const lastPage = Math.max(...pages);
       setMaxPage(lastPage);
       const filteredData = data.filter(
         (item) => item.surveyQuestion.page === currentPage
@@ -114,7 +118,7 @@ export default function EditSurveyPage() {
   // (공통) 설문 수정하기
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
-  // CreatedQuestion에서 수정하기 버튼 누르면 받아오는거
+  // CreatedQuestion에서 수정 버튼 누르면 받아오는거
   const handleEdit = (index: number | null) => {
     setEditIndex(index);
   };
@@ -122,6 +126,7 @@ export default function EditSurveyPage() {
   // (공통) 질문 삭제
   const handleDeleteSurvey = async (surveyQuestion: SurveyQuestion) => {
     try {
+      // 해당 질문에 연결된 options를 가져옴, 객관식이 아니면 []로
       const options = surveyQuestion.options || [];
       const formattedOptions = options.map(
         (option: { id: number; answer: string }) => ({
@@ -156,7 +161,11 @@ export default function EditSurveyPage() {
         refetch();
       }
     } catch (error) {
-      console.error(error);
+      setOneBtnDialog({
+        open: true,
+        text: "닫기",
+        title: "네트워크 에러. 나중에 다시 시도해주세요",
+      });
     }
   };
 
@@ -197,6 +206,7 @@ export default function EditSurveyPage() {
   const deleteChoice = (index: number) => {
     // 2개 이상일 때만 삭제
     if (choices.length > 2) {
+      // 삭제하려는 인덱스를 제외한 나머지 답변들을 새로운 배열로, 요소의 값을 안받고 index만 받으므로 _ 사용
       const newChoices = choices.filter((_, i) => i !== index);
       setChoices(newChoices);
     } else {
@@ -219,9 +229,6 @@ export default function EditSurveyPage() {
     setChoices(updatedChoices); // 변경된 답변 배열로 업데이트
   };
 
-  // (단답형) 최대 글자 수
-  const [count, setCount] = useState(788183);
-
   // (공통)페이지
   const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
 
@@ -229,73 +236,68 @@ export default function EditSurveyPage() {
   const addNewSurveyComponent = (newComponentData: any) => {
     let newPages = [...surveyPages];
 
-    // 현재 페이지에 배열이 초기화되었는지 확인하고 필요하면 초기화
+    // 현재 페이지에 배열(currentPage)이 초기화되었는지 확인하고
+    // 필요하면 초기화 (unde일 경우 빈 배열을 할당하여 초기화)
     if (!newPages[currentPage]) {
       newPages[currentPage] = [];
     }
+    // 기존 페이지 배열을 복사하고, 끝에 새 데이터 추가
     newPages[currentPage] = [...newPages[currentPage], newComponentData];
     setSurveyPages(newPages);
     setIsNewSurvey(false);
   };
 
-  // 새 설문 저장하기
-  const onSaveNewQuestion = () => {
-    const isTitleEmpty = !questionTitle.trim();
-    if (isTitleEmpty) {
-      setOneBtnDialog({
-        open: true,
-        title: "제목을 입력해주세요",
-        text: "확인",
-      });
-      return; // 함수 중단
-    }
-
-    // (객관식)
-    if (
-      typeType === "객관식 - 단일 선택" ||
-      typeType === "객관식 - 다중 선택"
-    ) {
-      // 중복 답변 확인
-      const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
-      if (choiceSet.size !== choices.length) {
+  // (공통) 새 설문 저장하기
+  const onSaveNewQuestion = async () => {
+    try {
+      const isTitleEmpty = !questionTitle.trim();
+      if (isTitleEmpty) {
         setOneBtnDialog({
           open: true,
-          title: "중복된 답변이 있습니다. 다시 확인해 주세요",
+          title: "제목을 입력해주세요",
           text: "확인",
         });
         return; // 함수 중단
       }
 
-      const multipleChoiceSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        choices: choices,
-      };
+      let surveyData;
+      // 카테고리 분류
+      if (
+        typeType === "객관식 - 단일 선택" ||
+        typeType === "객관식 - 다중 선택"
+      ) {
+        // 중복 답변 확인
+        const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
+        if (choiceSet.size !== choices.length) {
+          setOneBtnDialog({
+            open: true,
+            title: "중복된 답변이 있습니다. 다시 확인해 주세요",
+            text: "확인",
+          });
+          return; // 함수 중단
+        }
+        surveyData = {
+          type: typeType,
+          title: questionTitle,
+          choices: choices,
+        };
+      } else if (typeType === "단답형" || typeType === "주관식") {
+        surveyData = {
+          type: typeType,
+          title: questionTitle,
+          count: count,
+          choices: [],
+        };
+      } else if (typeType === "슬라이더") {
+        surveyData = {
+          type: typeType,
+          title: questionTitle,
+          choices: [],
+        };
+      }
+      addNewSurveyComponent(surveyData);
 
-      addNewSurveyComponent(multipleChoiceSurveyData);
-    }
-    // (단답형)
-    else if (typeType === "단답형" || typeType === "주관식") {
-      const shortAnswerSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        count: count,
-        choices: [],
-      };
-      addNewSurveyComponent(shortAnswerSurveyData);
-    }
-    // (슬라이더)
-    else if (typeType === "슬라이더") {
-      const sliderSurveyData = {
-        type: typeType,
-        title: questionTitle,
-        choices: [],
-      };
-      addNewSurveyComponent(sliderSurveyData);
-    }
-
-    api
-      .post("/survey/question", {
+      const response = await api.post("/survey/question", {
         answers:
           typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택"
             ? choices
@@ -305,23 +307,26 @@ export default function EditSurveyPage() {
           questionType: nowType,
           content: questionTitle,
           page: currentPage,
-          questionOrder: 0, // ㅇㅅㅇ?
-          maxText: count, // 임시
+          questionOrder: 0,
+          maxText: count,
           required: isChecked,
         },
-      })
-      .then(() => {
+      });
+      if (response.status === 200) {
         // 저장 후 입력 필드 초기화
         setCount(788183);
         setQuestionTitle("");
         setChoices(["", ""]);
         refetch();
+      }
+    } catch (error) {
+      setOneBtnDialog({
+        open: true,
+        title: "네트워크 에러. 나중에 다시 시도해주세요",
+        text: "닫기",
       });
+    }
   };
-  // 콘솔 찍기
-  useEffect(() => {
-    console.log(data);
-  }, []);
 
   return (
     <>
@@ -484,7 +489,6 @@ export default function EditSurveyPage() {
                 >
                   취소
                 </button>
-
                 <button
                   onClick={onSaveNewQuestion}
                   className="small-Btn w-auto white-bg-primary-btn"
@@ -512,26 +516,24 @@ export default function EditSurveyPage() {
           )}
 
           {showCloseDialog && (
-            <>
-              <Dialog
-                title={
-                  <>
-                    {"설문 수정을 그만 두시겠습니까?"}
-                    <br />
-                    {"진행과정은 저장돼요"}
-                  </>
-                }
-                leftText="취소"
-                onLeftClick={() => {
-                  setShowCloseDialog((prev) => !prev);
-                }}
-                rightText="예"
-                onRightClick={() => {
-                  router.back();
-                }}
-                isDelete={true}
-              />
-            </>
+            <Dialog
+              title={
+                <>
+                  {"설문 수정을 그만 두시겠습니까?"}
+                  <br />
+                  {"진행과정은 저장됩니다"}
+                </>
+              }
+              leftText="취소"
+              onLeftClick={() => {
+                setShowCloseDialog((prev) => !prev);
+              }}
+              rightText="예"
+              onRightClick={() => {
+                router.back();
+              }}
+              isDelete={true}
+            />
           )}
 
           {/* 원버튼 다이얼로그 */}

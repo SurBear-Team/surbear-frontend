@@ -6,7 +6,6 @@ import {
   MinusIcon,
   PlusIcon,
   SaveIcon,
-  TriangleDownIcon,
   UpdateIcon,
 } from "@/pages/components/styles/Icons";
 import api from "@/pages/api/config";
@@ -14,7 +13,7 @@ import { EditSurveyProps } from "../editInterface";
 import { korToEngTypeMapping } from "@/pages/my-survey/components/typeMapping";
 
 export const EditInEditSurvey = ({
-  initialData,
+  initialData, // index에서 받은 기존 질문 데이터 객체
   onCancel,
   refetch,
   setEditIndex,
@@ -27,7 +26,7 @@ export const EditInEditSurvey = ({
   const [choices, setChoices] = useState(initialData?.choices || []);
   const [disabledInputs, setDisabledInputs] = useState(
     choices?.map(() => true) ?? []
-  ); // 모든 입력을 초기에 비활성화
+  ); // 모든 입력을 초기에 비활성화(true)
 
   // (공통) 필수 답변 체크 박스
   const [isChecked, setIsChecked] = useState(false);
@@ -57,7 +56,7 @@ export const EditInEditSurvey = ({
   // (객관식) 새 답변 추가 함수
   const addNewChoice = () => {
     setChoices([...choices, ""]); // 현재 답변 배열에 빈 문자열을 추가
-    setDisabledInputs([...disabledInputs, false]); // 새 답변 입력 칸을 활성화 상태로 설정
+    setDisabledInputs([...disabledInputs, false]); // 새 답변 입력 칸을 활성화 상태(false)로 설정
   };
 
   // (객관식) input을 enable로 하기
@@ -72,24 +71,29 @@ export const EditInEditSurvey = ({
     setChoices(choices.map((choice, idx) => (idx === index ? value : choice)));
   };
 
-  // (객관식) 저장하기 버튼
-  const saveChanges = async (optionIndex: number) => {
+  // (객관식) 답변 저장 버튼
+  const handleSaveChanges = async (optionIndex: number) => {
+    // 선택한 input disable하기
     setDisabledInputs(
-      // 선택한 input disable하기
+      // input중 idx가 optionIndex가 같은건 disable true
       disabledInputs.map((disabled, idx) =>
         idx === optionIndex ? true : disabled
       )
     );
+    // 수정하고자 하는 답변의 index를 통해 값 가져오고 수정한 내용 저장
     const updatedAnswer = choices[optionIndex];
+    // 해당 index에 데이터가 없을 경우, 기본값 제공. 새 답변인지 구분
     const initialOption = initialData.options[optionIndex] || {
       id: undefined,
       answer: "",
     };
-    const isOptionNew = !initialOption.id; // 새 답변 추가로 만든건지 체크
+    const isOptionNew = !initialOption.id; // 새 답변 추가로 만든 새로운건지(id가 unde인) 체크
+
+    // choices배열을 순회하며 수정된 답변이 다른 항목과 중복되는지 검사. 중복이면 true
     const isDuplicate = choices.some(
+      // 자기 자신을 제외한 index와 비교
       (choice, idx) => choice.trim() === updatedAnswer && idx !== optionIndex
     );
-
     if (isDuplicate) {
       // 중복 답변이 있는 경우
       setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
@@ -130,7 +134,8 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      console.error("Failed to delete answer: ", error);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
+      setAlertDialog(true);
     }
   };
 
@@ -171,7 +176,8 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      console.error("Failed to delete answer: ", error);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
+      setAlertDialog(true);
     }
     setDeleteQuestionDialog(false);
   };
@@ -198,7 +204,8 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      console.error("Failed to delete answer: ", error);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
+      setAlertDialog(true);
     }
   };
   return (
@@ -209,9 +216,8 @@ export const EditInEditSurvey = ({
         <div className="flex gap-4 w-full items-center">
           {/* 형식 표시 */}
           <div className="sm-gray-9-text text-base whitespace-nowrap">형식</div>
-          <div className="drop-down-bar relative flex">
+          <div className="drop-down-bar">
             <div className="sm-gray-9-text text-center w-full">{typeType}</div>
-            <TriangleDownIcon />
           </div>
         </div>
 
@@ -259,7 +265,7 @@ export const EditInEditSurvey = ({
               <div className="flex gap-2 justify-end">
                 {!disabledInputs[index] ? (
                   <div
-                    onClick={() => saveChanges(index)}
+                    onClick={() => handleSaveChanges(index)}
                     className="flex items-center gap-1 cursor-pointer"
                   >
                     <SaveIcon isSmall={true} />

@@ -7,9 +7,16 @@ import api from "@/pages/api/config";
 import Subjective from "../components/Subjective";
 import ShortAnswer from "../components/ShortAnswer";
 import Slider from "../components/Slider";
+import { Dialog } from "@/pages/components/Dialog";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+
+export interface IOption {
+  id: number;
+  answer: string;
+}
 
 interface IData {
-  options: string[];
+  options: IOption[];
   surveyQuestion: IQuestion;
 }
 
@@ -33,6 +40,7 @@ interface IAnswers {
 export default function Survey() {
   const [data, setData] = useState<IData[]>();
   const [answers, setAnswers] = useState<IAnswers[]>([]);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -51,7 +59,6 @@ export default function Survey() {
       api
         .get(`/survey/management/option/${id}`)
         .then((res) => {
-          console.log(res);
           const data: IData[] = res.data.sort(
             (a: IData, b: IData) =>
               a.surveyQuestion.page - b.surveyQuestion.page
@@ -75,6 +82,39 @@ export default function Survey() {
   const [lastPage, setLastPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const onConfirm = () => {
+    if (typeof window !== undefined) {
+      const token = localStorage.getItem("surbearToken");
+      if (token) {
+        const decoded = jwtDecode<JwtPayload>(token);
+        if (decoded && decoded.sub) {
+          const memberId = parseInt(decoded.sub);
+          api
+            .post("/survey/answer", {
+              memberId: memberId,
+              surveyId: id,
+            })
+            .then((res) => {
+              const surveyAnswerId = res.data;
+              if (surveyAnswerId !== undefined) {
+                api
+                  .post(`/survey/answer/${surveyAnswerId}`, answers)
+                  .then((res) => {
+                    alert("설문조사가 제출되었습니다.");
+                    router.push("/browse");
+                  })
+                  .catch((err) =>
+                    alert("설문조사 제출 실패! 다시 시도해주세요")
+                  );
+              }
+            })
+            .catch((err) =>
+              alert("사용자 인식 실패! 로그인 후 다시 시도해주세요")
+            );
+        }
+      }
+    }
+  };
   return (
     <>
       <TopBar
@@ -82,6 +122,7 @@ export default function Survey() {
         hasBack
         progress={progress}
         subTitle={title}
+        page={[currentPage, lastPage]}
       />
 
       {/* 설문 유형별 컴포넌트 렌더링 */}
@@ -105,6 +146,7 @@ export default function Survey() {
                             questionId: id,
                             answers: [selected],
                           };
+                          console.log(newAnswer);
                           const otherAnswers = answers.filter(
                             (el) => el.questionId !== id
                           );
@@ -116,7 +158,7 @@ export default function Survey() {
                               (answer) =>
                                 answer.questionId === el.surveyQuestion.id
                             )
-                            ?.answers.map(Number) || []
+                            ?.answers.map((el) => el) || []
                         }
                       />
                     );
@@ -259,23 +301,9 @@ export default function Survey() {
                   answers.findIndex((el) => el.questionId === target)
                 );
                 if (checkRequired?.findIndex((el) => el === -1) !== -1) {
-                  console.log("필수 질문을 답해주세요.");
+                  alert("필수 질문을 답해주세요.");
                 } else {
-                  api
-                    .post("/survey/answer", {
-                      memberId: 4 /* 사용자 인증 연동 후 수정 필요 */,
-                      surveyId: id,
-                    })
-                    .then((res) => {
-                      const surveyAnswerId = res.data;
-                      if (surveyAnswerId !== undefined) {
-                        api
-                          .post(`/survey/answer/${surveyAnswerId}`, answers)
-                          .then((res) => router.push("/browse"))
-                          .catch((err) => console.log(err));
-                      }
-                    })
-                    .catch((err) => console.log(err));
+                  setShowPopUp((prev) => !prev);
                 }
               }}
               className="long-button primary-btn-style"
@@ -294,6 +322,18 @@ export default function Survey() {
           )}
         </div>
       </div>
+      {showPopUp && (
+        <>
+          <Dialog
+            title="답변을 제출할까요?"
+            content="제출 후에는 수정할 수 없어요!"
+            rightText="제출하기"
+            leftText="취소"
+            onLeftClick={() => setShowPopUp((prev) => !prev)}
+            onRightClick={() => onConfirm()}
+          />
+        </>
+      )}
     </>
   );
 }

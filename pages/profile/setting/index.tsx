@@ -1,12 +1,35 @@
 import { useRouter } from "next/router";
 import { SettingCard } from "../components/SettingCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
+import api from "@/pages/api/config";
+import { IMemberInfo } from "@/pages/manager/member";
 
 export default function ProfileSetting() {
   const router = useRouter();
 
+  // 로그인 여부 감지
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const checkToken = localStorage.getItem("surbearToken");
+      if (checkToken === null) {
+        router.push("/sign-in");
+      } else {
+        api
+          .get("/member", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => {
+            const info = res.data;
+            setMemberInfo(info);
+          })
+          .catch((err) => console.log(err));
+      }
+    }
+  }, []);
+
+  const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
   return (
@@ -44,6 +67,7 @@ export default function ProfileSetting() {
                 }}
                 rightText="확인"
                 onRightClick={() => {
+                  alert("로그아웃이 완료되었습니다.");
                   localStorage.removeItem("surbearToken");
                   router.push("/sign-in");
                 }}
@@ -64,7 +88,16 @@ export default function ProfileSetting() {
                 }}
                 rightText="확인"
                 onRightClick={() => {
-                  console.log("로그아웃");
+                  api
+                    .delete(`/member/${memberInfo?.id}`)
+                    .then((res) => {
+                      alert("회원 탈퇴가 완료되었습니다.");
+                      localStorage.removeItem("surbearToken");
+                      router.push("/sign-in");
+                    })
+                    .catch((res) =>
+                      alert("오류가 발생하였습니다. 다시 시도해주세요.")
+                    );
                 }}
                 isDelete={true}
               />

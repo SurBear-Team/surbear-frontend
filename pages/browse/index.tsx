@@ -43,16 +43,6 @@ export default function Browse() {
     setCurrentPage(el - 1);
   };
 
-  useEffect(() => {
-    api
-      .get(`/survey/management/${currentPage}/${CARD_PER_PAGE}?type=ALL`)
-      .then((res) => {
-        setData(res.data.content);
-        setLastPage(res.data.totalPages);
-      })
-      .catch((err) => console.log(err));
-  }, [currentPage]);
-
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
   useEffect(() => {
     setCategoryType("ALL");
@@ -62,6 +52,20 @@ export default function Browse() {
   const handleOrderSelect = (selectedOrderType: string) => {
     setOrderType(selectedOrderType);
   };
+
+  useEffect(() => {
+    if (categoryType !== "") {
+      api
+        .get(
+          `/survey/management/${currentPage}/${CARD_PER_PAGE}?type=${categoryType}`
+        )
+        .then((res) => {
+          setData(res.data.content);
+          setLastPage(res.data.totalPages);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [currentPage, categoryType]);
 
   const [showAlertDialog, setShowAlertDialog] = useState(false);
 
@@ -76,7 +80,7 @@ export default function Browse() {
     setShowDetail(true);
   };
 
-  console.log(data);
+  const [reportedId, setReportedId] = useState<number | null>(null);
 
   return (
     <>
@@ -99,6 +103,10 @@ export default function Browse() {
                 token={token}
                 layoutId={detailId}
                 data={detailData!}
+                onReportClick={() => {
+                  setShowAlertDialog((prev) => !prev);
+                  setReportedId(detailId);
+                }}
                 onBackClick={() => setShowDetail(false)}
               />
             )}
@@ -111,6 +119,7 @@ export default function Browse() {
                   data={el}
                   onReportClick={() => {
                     setShowAlertDialog((prev) => !prev);
+                    setReportedId(el.id);
                   }}
                   showDetail={() => showDetailclick(el.id)}
                 />
@@ -128,8 +137,21 @@ export default function Browse() {
               setShowAlertDialog((prev) => !prev);
             }}
             rightText="신고"
-            onRightClick={() => {
-              console.log("신고");
+            onRightClick={(text) => {
+              // api 호출
+              if (reportedId !== null) {
+                api
+                  .post("/report", {
+                    reporterId: token,
+                    surveyId: reportedId,
+                    reason: text,
+                  })
+                  .then((res) => {
+                    alert("신고되었습니다.");
+                    setShowAlertDialog((prev) => !prev);
+                  })
+                  .catch((err) => console.log(err));
+              }
             }}
             isDelete={true}
           />

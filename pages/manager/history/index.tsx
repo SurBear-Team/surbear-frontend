@@ -1,27 +1,22 @@
 // 관리자 내역 조회
 
-import { TopBar } from "@/pages/components/TopBar";
-import { ArrowBackIcon } from "@/pages/components/styles/Icons";
+import { TopBar } from "@/pages/components/TopBar/TopBar";
+import { Overlay } from "@/pages/components/styles/Overlay";
 import { SettingCard } from "@/pages/profile/components/SettingCard";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { InputDialog } from "../components/InputDialog";
 
-export default function ManageHistory() {
+export default function ManagerHistory() {
   const router = useRouter();
+  const [showPopUp, setShowPopUp] = useState(false);
   return (
     <>
-      <TopBar
-        leftSVG={<ArrowBackIcon />}
-        onLeftClick={() => {
-          router.back();
-        }}
-        title="관리자 내역 조회"
-      />
-      <div className="screen flex-col justify-start pt-[66px]">
+      <TopBar title="관리자 내역 조회" hasBack noShadow />
+      <div className="white-screen flex-col justify-start pt-12">
         <SettingCard
           title="설문조사 강제 삭제 내역"
-          onClick={() => {
-            router.push("/manager/history/survey-delete");
-          }}
+          onClick={() => setShowPopUp((prev) => !prev)}
         />
         <SettingCard
           title="포인트 지급 내역"
@@ -30,6 +25,21 @@ export default function ManageHistory() {
           }}
         />
       </div>
+      {showPopUp && (
+        <>
+          <Overlay onClick={() => setShowPopUp((prev) => !prev)} />
+          <InputDialog
+            leftText="취소"
+            onLeftClick={() => setShowPopUp((prev) => !prev)}
+            rightText="조회"
+            onRightClick={(data) =>
+              router.push(`/manager/history/survey-delete/${data.nickname}`)
+            }
+            placeholder="조회할 닉네임을 입력해주세요."
+            title="설문조사 강제 삭제 내역 조회"
+          />
+        </>
+      )}
     </>
   );
 }

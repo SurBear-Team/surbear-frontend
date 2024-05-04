@@ -1,10 +1,11 @@
 import { SmallCheckIcon } from "@/pages/components/styles/Icons";
 import { useEffect, useState } from "react";
+import { IOption } from "../[id]";
 
 interface IMultipleChoice {
   index: number;
   title: string;
-  options: string[];
+  options: IOption[];
   required: boolean;
   onSelect: (selected: string[]) => void;
   initial: string[];
@@ -45,21 +46,20 @@ export default function MultipleChoice({
       <div className="flex flex-col gap-4">
         {options.map((el, index) => (
           <div
-            onClick={() => onOptionClick(el)}
+            onClick={() => onOptionClick(el.answer)}
             key={index}
             className="flex gap-3 p-2 items-center border border-gray-4 rounded-lg cursor-pointer"
           >
             <div
               className={`w-4 h-4 border border-gray-7 rounded-[4px] flex justify-center items-center shrink-0 ${
-                selected.find((target) => target === el) !== undefined &&
+                selected.find((target) => target === el.answer) !== undefined &&
                 "border-none bg-primary-1"
               }`}
             >
-              {selected.find((target) => target === el) !== undefined && (
-                <SmallCheckIcon />
-              )}
+              {selected.find((target) => target === el.answer) !==
+                undefined && <SmallCheckIcon />}
             </div>
-            <span className="flex-grow">{el}</span>
+            <span className="flex-grow">{el.answer}</span>
           </div>
         ))}
       </div>

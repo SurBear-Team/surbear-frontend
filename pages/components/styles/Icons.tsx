@@ -260,15 +260,15 @@ export const AddSurveyIcon = () => {
 export const UpdateIcon = () => {
   return (
     <svg
-      width="24"
-      height="24"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M14.3 4.80003L17.2 7.70003M7 7.00003H4C3.73478 7.00003 3.48043 7.10539 3.29289 7.29293C3.10536 7.48046 3 7.73482 3 8.00003V18C3 18.6 3.4 19 4 19H15C15.6 19 16 18.6 16 18V13.5M18.4 3.50003C18.6128 3.68772 18.7833 3.91854 18.9 4.17716C19.0167 4.43578 19.0771 4.71628 19.0771 5.00003C19.0771 5.28379 19.0167 5.56429 18.9 5.82291C18.7833 6.08153 18.6128 6.31235 18.4 6.50003L11.6 13.3L8 14L8.7 10.4L15.6 3.60003C15.9739 3.23358 16.4765 3.02832 17 3.02832C17.5235 3.02832 18.0261 3.23358 18.4 3.60003V3.50003Z"
-        stroke="#101010"
+        stroke="#6E7CF2"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -550,12 +550,12 @@ export const NextPageIcon = () => {
 };
 
 // 저장 아이콘
-export const SaveIcon = () => {
+export const SaveIcon = ({ isSmall }: IIcon) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="33"
-      height="32"
+      width={isSmall ? "16" : "33"}
+      height={isSmall ? "16" : "32"}
       viewBox="0 0 33 32"
       fill="none"
     >

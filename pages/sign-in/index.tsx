@@ -52,7 +52,7 @@ export default function SignIn() {
       } else {
         setDialog({
           open: true,
-          title: "네트워크 에러. 다시 시도해주세요",
+          title: "네트워크 에러. 나중에 다시 시도해주세요",
         });
       }
     }

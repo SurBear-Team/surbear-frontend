@@ -262,7 +262,7 @@ export const EditInEditSurvey = ({
                     onClick={() => saveChanges(index)}
                     className="flex items-center gap-1 cursor-pointer"
                   >
-                    <SaveIcon />
+                    <SaveIcon isSmall={true} />
                     <div className="text-primary-1 font-semibold text-sm">
                       답변 저장
                     </div>

@@ -550,12 +550,12 @@ export const NextPageIcon = () => {
 };
 
 // 저장 아이콘
-export const SaveIcon = () => {
+export const SaveIcon = ({ isSmall }: IIcon) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="33"
-      height="32"
+      width={isSmall ? "16" : "33"}
+      height={isSmall ? "16" : "32"}
       viewBox="0 0 33 32"
       fill="none"
     >

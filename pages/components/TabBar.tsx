@@ -32,11 +32,11 @@ export const TabBar = () => {
 
         <TabBox
           onClick={() => {
-            router.push("/point");
+            router.push("/store");
           }}
-          Icon={<PointIcon active={isActive("/point")} />}
+          Icon={<PointIcon active={isActive("/store")} />}
           text="포인트 교환"
-          isActive={isActive("/point")}
+          isActive={isActive("/store")}
         />
 
         <TabBox

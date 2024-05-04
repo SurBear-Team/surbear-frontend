@@ -38,7 +38,7 @@ export default function ProfileSetting() {
       <div className="white-screen flex-col justify-start pt-[50px]">
         <div className="inner-screen">
           <SettingCard
-            title="회원 정보 수정"
+            title="회원 정보 조회"
             onClick={() => {
               router.push("/profile/setting/update");
             }}

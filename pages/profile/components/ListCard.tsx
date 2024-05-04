@@ -44,8 +44,8 @@ export const ListCard = ({
               status === "PROGRESS" && "text-primary-1"
             } ${
               status === "CLOSE" ||
-              status === "DELETION" ||
-              (status === "FORCED_DELETION" && "text-red-1")
+              ((status === "DELETION" || status === "FORCED_DELETION") &&
+                "text-red-1")
             }`}
           >
             {status === "PAUSE" && "시작 전"}

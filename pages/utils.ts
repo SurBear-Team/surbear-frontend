@@ -21,7 +21,7 @@ export const getTimeAsString = (time: string) => {
 
 export const getAge = (age: string) => {
   if (age === "UNDER_TWENTY") {
-    return "10대";
+    return "20대 미만";
   } else if (age === "TWENTIES") {
     return "20대";
   } else if (age === "THIRTIES") {
@@ -31,6 +31,22 @@ export const getAge = (age: string) => {
   } else if (age === "FIFTIES") {
     return "50대";
   } else if (age === "OVER_SIXTIES") {
-    return "60대";
+    return "60대 이상";
+  }
+};
+
+export const getConstAge = (age: string) => {
+  if (age === "20대 미만") {
+    return "UNDER_TWENTY";
+  } else if (age === "20대") {
+    return "TWENTIES";
+  } else if (age === "30대") {
+    return "THIRTIES";
+  } else if (age === "40대") {
+    return "FOURTIES";
+  } else if (age === "50대") {
+    return "FIFTIES";
+  } else if (age === "60대 이상") {
+    return "OVER_SIXTIES";
   }
 };

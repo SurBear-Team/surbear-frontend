@@ -163,8 +163,8 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   // false를 반환할 수 있음
   const validateFormData = (): SurveyData | false => {
     const now = new Date();
-    // 최대 인원 빈값이면 7883 전송
-    const maxPersonInput = maxPeople.trim() === "" ? "7883" : maxPeople;
+    // 최대 인원 빈값이면 788183 전송
+    const maxPersonInput = maxPeople.trim() === "" ? "788183" : maxPeople;
     const parsedMaxPerson = parseInt(maxPersonInput, 10);
     const titleTrimmed = surveyTitle.trim();
     const descriptionTrimmed = description.trim(); // 앞뒤 공백 제거
@@ -310,7 +310,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           <div className="flex justify-between w-full items-center gap-2">
             <div className="sm-gray-9-text text-base">최대 인원</div>
             <input
-              value={maxPeople === "7883" ? "" : maxPeople}
+              value={maxPeople === "788183" ? "" : maxPeople}
               onChange={handleMaxPersonChange}
               type="number"
               className="w-16 p-2 rounded-lg border-[1px] border-gray-4"

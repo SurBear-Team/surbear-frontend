@@ -116,8 +116,7 @@ export const MakeSurvey = ({
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(7883); // 255는 임시
-
+  const [count, setCount] = useState(788183);
   // (공통) 저장 버튼
   const onSaveClick = () => {
     const isTitleEmpty = !questionTitle.trim();

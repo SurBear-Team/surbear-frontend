@@ -302,7 +302,11 @@ export const EditInEditSurvey = ({
 
       {(typeType === "단답형" || typeType === "주관식") && (
         <>
-          <ShortAnswerType setCount={setCount} />
+          <ShortAnswerType
+            setCount={setCount}
+            hasLimit={initialData?.count !== 788183}
+            value={initialData?.count}
+          />
           <div className="gray-line mt-8" />
         </>
       )}

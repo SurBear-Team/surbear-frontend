@@ -220,7 +220,7 @@ export default function EditSurveyPage() {
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(7883);
+  const [count, setCount] = useState(788183);
 
   // (공통)페이지
   const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
@@ -312,6 +312,7 @@ export default function EditSurveyPage() {
       })
       .then(() => {
         // 저장 후 입력 필드 초기화
+        setCount(788183);
         setQuestionTitle("");
         setChoices(["", ""]);
         refetch();

@@ -36,8 +36,8 @@ export const CreatedQuestion = ({
           <div className="sm-gray-9-text font-normal">{answer}</div>
         </div>
       ))}
-      {(type === "단답형" || type === "주관식") && count && (
-        <div>최대 글자수: {count === 7883 ? "제한 없음" : count}</div>
+      {type === "단답형" && count && (
+        <div>최대 글자수: {count === 788183 ? "제한 없음" : count}</div>
       )}
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">

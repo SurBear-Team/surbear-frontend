@@ -44,11 +44,7 @@ export default function MemberSurvey() {
           {data?.map((el) => (
             <ListCard
               key={el.id}
-              getTime={
-                getTimeAsString(el.startDate) === null
-                  ? "시작 전"
-                  : getTimeAsString(el.startDate)
-              }
+              getTime={getTimeAsString(el.startDate)}
               content={el.title}
               status={el.ongoingType}
               hasBan

@@ -5,6 +5,21 @@ import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import Chart from "react-apexcharts";
+
+interface SurveyResponseDetail {
+  questionId: number;
+  questionType: string; // 객, 단, 슬
+  request: {
+    answers: string[];
+  };
+}
+
+interface SurveyResult {
+  age: string; // "TWENTIES", "THIRTIES" .... 등등
+  gender: string;
+  response: SurveyResponseDetail[];
+}
 
 export default function Result() {
   const { id } = router.query;
@@ -27,7 +42,9 @@ export default function Result() {
   console.log(data);
 
   // 설문 결과 담기
-  const [surveyResult, setSurveyResult] = useState({});
+  const [surveyResult, setSurveyResult] = useState<{
+    [key: string]: SurveyResult;
+  }>({});
 
   const postSurveyResult = async () => {
     try {
@@ -37,7 +54,7 @@ export default function Result() {
       };
       const response = await api.post("/survey/result", requestBody);
       setSurveyResult(response.data);
-      console.log(surveyResult);
+      console.log("설문 결과", surveyResult);
     } catch (error) {
       console.error("에러떴숴잉 ㅇㅅㅇ", error);
     }
@@ -59,6 +76,16 @@ export default function Result() {
     setFilterType(selectedFilterType);
     setShowFilter(false);
   };
+
+  // surveyResult 객체를 배열로 변환하고 콘솔에 출력
+  useEffect(() => {
+    if (surveyResult) {
+      const resultArray = Object.entries(surveyResult);
+      resultArray.map(([key, value]) => {
+        console.log(`Key: ${key}, Value:`, JSON.stringify(value, null, 2));
+      });
+    }
+  }, [surveyResult]);
 
   return (
     <>
@@ -85,7 +112,61 @@ export default function Result() {
                     onTypeSelect={handleFilterSelect}
                   />
                 </div>
-
+                <div className="flex justify-center pt-4">
+                  {(item.surveyQuestion.questionType === "SINGLE_CHOICE" ||
+                    item.surveyQuestion.questionType === "MULTIPLE_CHOICE") && (
+                    <Chart
+                      options={{
+                        labels: item.options.map((option) => option.answer),
+                        legend: {
+                          show: true, // 범례를 표시
+                          position: "bottom",
+                        },
+                        // 반응형 설정
+                        responsive: [
+                          {
+                            breakpoint: 200, // 이 크기 이하의 화면에선 options에 정의된 스타일 적용
+                            options: {
+                              chart: {
+                                width: 180,
+                              },
+                              legend: {
+                                show: false, // 범례
+                              },
+                            },
+                          },
+                        ],
+                      }}
+                      series={item.options.map((option) => {
+                        // reduce로 response를 순회하며 surveyResult에서 해당 답변의 출현 횟수를 계산
+                        const answerCount = Object.values(surveyResult).reduce(
+                          (count, response) => {
+                            response.response.forEach((res) => {
+                              // res는 개별 응답의 상세정보
+                              if (
+                                res.questionId === item.surveyQuestion.id &&
+                                res.questionType ===
+                                  item.surveyQuestion.questionType
+                              ) {
+                                // 각 답변이 현재 옵션의 답변과 일치하는지 검사
+                                res.request.answers.forEach((ans) => {
+                                  if (ans === option.answer) {
+                                    count++; // 조건에 맞는 응답이면 count +1
+                                  }
+                                });
+                              }
+                            });
+                            return count;
+                          },
+                          0 // 초기값
+                        );
+                        return answerCount;
+                      })} // 각 옵션의 응답 수
+                      type="donut" // 차트 형식
+                      width="345" // 두께
+                    />
+                  )}
+                </div>
                 <div className="gray-line my-8" />
               </>
             ))}

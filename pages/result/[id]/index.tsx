@@ -87,6 +87,32 @@ export default function Result() {
     }
   }, [surveyResult]);
 
+  const ageCategories = [
+    "UNDER_TWENTY",
+    "TWENTIES",
+    "THIRTIES",
+    "FOURTIES",
+    "FIFTIES",
+    "OVER_SIXTIES",
+  ];
+
+  const genderCategories = ["MALE", "FEMALE", "UNKNOWN"];
+
+  const engToKorAge: { [key: string]: string } = {
+    UNDER_TWENTY: "20대 미만",
+    TWENTIES: "20대",
+    THIRTIES: "30대",
+    FOURTIES: "40대",
+    FIFTIES: "50대",
+    OVER_SIXTIES: "60대 이상",
+  };
+
+  const engToKorGender: { [key: string]: string } = {
+    MALE: "남성",
+    FEMALE: "여성",
+    UNKNOWN: "미정",
+  };
+
   return (
     <>
       <TopBar title="설문 결과" hasBack subTitle="임시 타이틀" />
@@ -112,7 +138,7 @@ export default function Result() {
                     onTypeSelect={handleFilterSelect}
                   />
                 </div>
-                <div className="flex justify-center pt-4">
+                <div className="flex flex-col justify-center pt-4">
                   {(item.surveyQuestion.questionType === "SINGLE_CHOICE" ||
                     item.surveyQuestion.questionType === "MULTIPLE_CHOICE") && (
                     <Chart
@@ -164,6 +190,135 @@ export default function Result() {
                       })} // 각 옵션의 응답 수
                       type="donut" // 차트 형식
                       width="345" // 두께
+                    />
+                  )}
+
+                  {(item.surveyQuestion.questionType === "SINGLE_CHOICE" ||
+                    item.surveyQuestion.questionType === "MULTIPLE_CHOICE") && (
+                    <Chart
+                      options={{
+                        chart: {
+                          type: "bar",
+                          stacked: true, // 누적 바 차트 옵션 활성화
+                          toolbar: {
+                            show: true,
+                          },
+                        },
+                        plotOptions: {
+                          bar: {
+                            horizontal: false, // false면 세로 바 차트
+                          },
+                        },
+                        xaxis: {
+                          categories: ageCategories.map(
+                            (age) => engToKorAge[age]
+                          ), // x축 카테고리 설정
+                        },
+                        yaxis: {
+                          labels: {},
+                        },
+                        legend: {
+                          position: "bottom",
+                        },
+                      }}
+                      series={item.options.map((option) => {
+                        const dataForOption = ageCategories.map((age) => {
+                          const countForAge = Object.values(
+                            surveyResult
+                          ).reduce((count, res) => {
+                            if (res.age === age) {
+                              res.response.forEach((response) => {
+                                if (
+                                  response.questionId ===
+                                    item.surveyQuestion.id &&
+                                  response.questionType ===
+                                    item.surveyQuestion.questionType &&
+                                  response.request.answers.includes(
+                                    option.answer
+                                  )
+                                ) {
+                                  count++;
+                                }
+                              });
+                            }
+                            return count;
+                          }, 0);
+                          return countForAge;
+                        });
+                        return {
+                          name: option.answer,
+                          data: dataForOption,
+                        };
+                      })}
+                      type="bar"
+                      width="500"
+                    />
+                  )}
+
+                  {(item.surveyQuestion.questionType === "SINGLE_CHOICE" ||
+                    item.surveyQuestion.questionType === "MULTIPLE_CHOICE") && (
+                    <Chart
+                      options={{
+                        chart: {
+                          type: "bar",
+                          stacked: true, // 누적 바 차트 옵션 활성화
+                          toolbar: {
+                            show: true,
+                          },
+                        },
+                        plotOptions: {
+                          bar: {
+                            horizontal: false, // false면 세로 바 차트
+                          },
+                        },
+                        xaxis: {
+                          categories: genderCategories.map(
+                            (gender) => engToKorGender[gender]
+                          ),
+                        }, // x축 카테고리 설정
+
+                        yaxis: {
+                          labels: {
+                            formatter: function (val) {
+                              return val.toFixed(0); // 소수점 없이 정수로 표시
+                            },
+                          },
+                        },
+                        legend: {
+                          position: "bottom",
+                        },
+                      }}
+                      series={item.options.map((option) => {
+                        const dataForOption = genderCategories.map((gender) => {
+                          const countForAge = Object.values(
+                            surveyResult
+                          ).reduce((count, res) => {
+                            if (res.gender === gender) {
+                              res.response.forEach((response) => {
+                                if (
+                                  response.questionId ===
+                                    item.surveyQuestion.id &&
+                                  response.questionType ===
+                                    item.surveyQuestion.questionType &&
+                                  response.request.answers.includes(
+                                    option.answer
+                                  )
+                                ) {
+                                  count++;
+                                }
+                              });
+                            }
+                            return count;
+                          }, 0);
+                          return countForAge;
+                        });
+                        return {
+                          name: option.answer,
+                          data: dataForOption,
+                        };
+                      })}
+                      type="bar"
+                      width="500"
                     />
                   )}
                 </div>

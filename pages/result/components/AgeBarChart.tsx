@@ -11,7 +11,7 @@ interface ResponseProps {
   request: { answers: string | string[] }; // 응답 내용
 }
 
-const ageCategories = [
+export const ageCategories = [
   "UNDER_TWENTY",
   "TWENTIES",
   "THIRTIES",
@@ -20,7 +20,7 @@ const ageCategories = [
   "OVER_SIXTIES",
 ];
 
-const engToKorAge: { [key: string]: string } = {
+export const engToKorAge: { [key: string]: string } = {
   UNDER_TWENTY: "20대 미만",
   TWENTIES: "20대",
   THIRTIES: "30대",

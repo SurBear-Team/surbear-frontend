@@ -11,9 +11,9 @@ interface ResponseProps {
   request: { answers: string | string[] }; // 응답 내용
 }
 
-const genderCategories = ["MALE", "FEMALE", "UNKNOWN"];
+export const genderCategories = ["MALE", "FEMALE", "UNKNOWN"];
 
-const engToKorGender: { [key: string]: string } = {
+export const engToKorGender: { [key: string]: string } = {
   MALE: "남성",
   FEMALE: "여성",
   UNKNOWN: "미정",

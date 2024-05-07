@@ -6,7 +6,7 @@ import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyResult } from "../[id]";
 
 interface SurveyQuestion {
-  id: number; // 또는 id가 string이면 그에 맞게 조정
+  id: number;
 }
 
 interface SurveyData {
@@ -31,29 +31,31 @@ export function SurveyFilter({
   const ageOptions = ["20대 미만", "20대", "30대", "40대", "50대", "60대 이상"];
   const genderOptions = ["남자", "여자"];
 
+  // 실제 필터 옵션을 저장하는 상태
   const [filterOptions, setFilterOptions] = useState<{
     [questionId: number]: { age: string[]; gender: string[] };
   }>({});
 
-  // 임시 필터 옵션 상태 추가
-  const [tempFilterOptions, setTempFilterOptions] = useState<{
+  // 임시 필터 옵션을 저장하는 상태(적용 누르기 전)
+  const [prevFilterOptions, setPrevFilterOptions] = useState<{
     [questionId: number]: { age: string[]; gender: string[] };
   }>({});
 
   // 필터 옵션 토글 (임시 상태에 저장)
   const toggleFilterOption = (
     questionId: number,
-    optionType: "age" | "gender",
-    option: string,
-    all: boolean = false
+    optionType: "age" | "gender", //  필터 유형
+    option: string, // 선택할지말지 옵션
+    all: boolean = false //  '전체' 옵션 선택 여부
   ) => {
-    setTempFilterOptions((prev) => {
-      const currentOptions = prev[questionId]
+    // 이전 필터 상태를 기반으로 새로운 필터 상태 결정
+    setPrevFilterOptions((prev) => {
+      const currentOptions = prev[questionId] // 이전 질문에 대한 필터 옵션을 가져옴
         ? prev[questionId][optionType] || []
-        : [];
+        : []; // 없다면 빈 배열로 시작
 
+      // "전체" 옵션이 선택된 경우
       if (all) {
-        // "전체" 옵션이 선택된 경우
         if (
           currentOptions.length ===
           (optionType === "age" ? ageOptions.length : genderOptions.length)
@@ -94,10 +96,11 @@ export function SurveyFilter({
 
   // 필터 적용 버튼 핸들링 (임시 상태를 최종 상태로 적용)
   const applyFilters = (questionId: number) => {
-    console.log("필터 적용", tempFilterOptions[questionId]);
+    // 필터 상태 업데이트
     setFilterOptions((prev) => ({
+      // 선택한 질문 id에 대한 필터 옵션을 임시에서 최종으로 옮김
       ...prev,
-      [questionId]: tempFilterOptions[questionId],
+      [questionId]: prevFilterOptions[questionId],
     }));
     setShowFilter((prev) => ({
       ...prev,
@@ -105,12 +108,12 @@ export function SurveyFilter({
     }));
   };
 
-  // 필터 창 토글 및 초기화
+  // 필터 창 토글
   const handleFilterClick = (questionId: number) => {
     setShowFilter((prev) => ({ ...prev, [questionId]: !prev[questionId] }));
     // 필터를 열 때 임시 상태를 현재 필터 상태로 초기화
     if (!showFilter[questionId]) {
-      setTempFilterOptions((prev) => ({
+      setPrevFilterOptions((prev) => ({
         ...prev,
         [questionId]: filterOptions[questionId] || { age: [], gender: [] },
       }));
@@ -127,8 +130,11 @@ export function SurveyFilter({
 
   useEffect(() => {
     if (data) {
+      // 데이터가 존재할 경우, 각 항목에서 설문 질문의 ID를 추출합니다.
       const ids = data.map((item) => item.surveyQuestion.id);
+      // 추출한 ID 배열을 상태에 저장
       setSurveyIds(ids);
+      // 모든 질문 id에 대해 필터 창의 표시 상태를 'false'로 초기화합니다. 필터 창이 닫혀있음을 의미
       setShowFilter(ids.reduce((acc, id) => ({ ...acc, [id]: false }), {}));
       // 각 질문 ID에 대해 빈 필터 옵션 초기화
       setFilterOptions(
@@ -143,26 +149,30 @@ export function SurveyFilter({
     }
   }, [data]);
 
+  // 버튼 스타일 결정
   const getButtonStyle = (
     questionId: number,
     optionType: "age" | "gender",
     option: string
   ) => {
     const isSelected =
-      tempFilterOptions[questionId] &&
-      tempFilterOptions[questionId][optionType].includes(option);
+      prevFilterOptions[questionId] &&
+      prevFilterOptions[questionId][optionType].includes(option);
     return isSelected ? "primary-btn-style" : "white-bg-primary-btn";
   };
 
   // "전체" 버튼에 대한 스타일 결정
   const isAllSelected = (questionId: number, optionType: "age" | "gender") => {
     const options = optionType === "age" ? ageOptions : genderOptions;
-    const selectedOptions = tempFilterOptions[questionId]
-      ? tempFilterOptions[questionId][optionType] || []
+    // 선택된 옵션 목록을 가져옴
+    const selectedOptions = prevFilterOptions[questionId]
+      ? prevFilterOptions[questionId][optionType] || []
       : [];
+    // 모든 옵션이 선택된 상태인지 확인
     return options.every((option) => selectedOptions.includes(option));
   };
 
+  // 필터링된 응답을 반환하는 함수
   const filteredResponses = (questionId: number, responses: SurveyResult[]) => {
     const ageFilter = filterOptions[questionId]?.age || [];
     const genderFilter = filterOptions[questionId]?.gender || [];
@@ -171,6 +181,7 @@ export function SurveyFilter({
       return responses; // 필터가 없으면 모든 응답 반환
     }
 
+    // 필터 조건에 맞는 응답만 필터링하여 반환
     return responses.filter((response) => {
       const ageMatches =
         ageFilter.length === 0 || ageFilter.includes(response.age);

@@ -9,6 +9,7 @@ import { DonutChart } from "../components/DonutChart";
 import { AgeBarChart } from "../components/AgeBarChart";
 import { GenderBarChart } from "../components/GenderBarChart";
 import { SurveyFilter } from "../components/SurveyFilter";
+import { LineChart } from "../components/LineChart";
 
 export interface SurveyResponseDetail {
   questionId: number;
@@ -168,6 +169,60 @@ export default function Result() {
                         item={item}
                         surveyResult={surveyResult}
                       />
+                    </>
+                  )}
+
+                  {/* 슬라이더 */}
+                  {item.surveyQuestion.questionType === "SLIDER" && (
+                    <>
+                      <div className="flex whitespace-nowrap gap-4 pr-2 w-full pb-4">
+                        구분
+                        <TypeDropDown
+                          onShowTypeClick={() =>
+                            setShowSort((prev) => ({
+                              ...prev,
+                              [item.surveyQuestion.id]:
+                                !prev[item.surveyQuestion.id],
+                            }))
+                          }
+                          showType={showSort[item.surveyQuestion.id] || false}
+                          typeType={sortTypes[item.surveyQuestion.id] || "전체"}
+                          typeList={sortedList}
+                          onTypeSelect={(type) =>
+                            handleSortSelect(item.surveyQuestion.id, type)
+                          }
+                        />
+                      </div>
+                      <>
+                        {sortTypes[item.surveyQuestion.id] === "전체" && (
+                          <>
+                            <LineChart
+                              item={item}
+                              surveyResult={surveyResult}
+                              type="전체"
+                            />
+                            {/* <DonutChart item={item} surveyResult={surveyResult} /> */}
+                          </>
+                        )}
+                        {sortTypes[item.surveyQuestion.id] === "나이" && (
+                          <>
+                            <LineChart
+                              item={item}
+                              surveyResult={surveyResult}
+                              type="age"
+                            />
+                          </>
+                        )}
+                        {sortTypes[item.surveyQuestion.id] === "성별" && (
+                          <>
+                            <LineChart
+                              item={item}
+                              surveyResult={surveyResult}
+                              type="gender"
+                            />
+                          </>
+                        )}
+                      </>
                     </>
                   )}
                 </div>

@@ -38,10 +38,10 @@ export const DonutChart = ({ item, surveyResult }: DonutChartProps) => {
     // 반응형 설정
     responsive: [
       {
-        breakpoint: 200, // 이 크기 이하의 화면에선 options에 정의된 스타일 적용
+        breakpoint: 250, // 이 크기 이하의 화면에선 options에 정의된 스타일 적용
         options: {
           chart: {
-            width: 180,
+            width: 200,
           },
           legend: {
             show: false, // 범례

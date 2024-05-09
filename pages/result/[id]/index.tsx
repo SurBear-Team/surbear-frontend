@@ -30,6 +30,15 @@ export interface SurveyResult {
 
 export default function Result() {
   const { id } = router.query;
+  const [resultTitle, setResultTitle] = useState("");
+
+  useEffect(() => {
+    const title = localStorage.getItem("resultTitle");
+    if (title) {
+      setResultTitle(title);
+    }
+  }, []);
+
   // 설문 데이터 비동기로 가져오기
   const fetchSurvey = async () => {
     const { data } = await api.get(`/survey/management/option/${id}`);
@@ -118,7 +127,15 @@ export default function Result() {
 
   return (
     <>
-      <TopBar title="설문 결과" hasBack subTitle="임시 타이틀" />
+      <TopBar
+        title="설문 결과"
+        hasBack
+        onLeftClick={() => {
+          localStorage.removeItem("resultTitle");
+          router.push("/my-survey");
+        }}
+        subTitle={resultTitle}
+      />
       <div className="white-screen flex-col pt-20 justify-start">
         <div className="inner-screen px-6 py-8 relative">
           {/* 질문 리스트 */}

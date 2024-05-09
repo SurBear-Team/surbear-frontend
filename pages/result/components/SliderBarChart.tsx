@@ -76,6 +76,20 @@ export const SliderAgeBarChart = ({ item, surveyResult }: LineChartProps) => {
     legend: {
       position: "bottom" as const,
     },
+    responsive: [
+      {
+        breakpoint: 435, // 이 크기 이하의 화면에선 options에 정의된 스타일 적용
+        options: {
+          chart: {
+            width: 350,
+            height: 500,
+          },
+          legend: {
+            show: false, // 범례
+          },
+        },
+      },
+    ],
   };
 
   return <Chart options={options} series={series} type="bar" width="500" />;
@@ -133,6 +147,20 @@ export const SliderGenderBarChart = ({
     legend: {
       position: "bottom" as const,
     },
+    responsive: [
+      {
+        breakpoint: 435, // 이 크기 이하의 화면에선 options에 정의된 스타일 적용
+        options: {
+          chart: {
+            width: 350,
+            height: 500,
+          },
+          legend: {
+            show: false, // 범례
+          },
+        },
+      },
+    ],
   };
 
   return <Chart options={options} series={series} type="bar" width="500" />;

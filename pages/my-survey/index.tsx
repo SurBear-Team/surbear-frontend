@@ -44,7 +44,6 @@ export default function MySurvey() {
     const { data } = await axios.get(`${baseUrl}/survey/management/list`, {
       headers,
     });
-    console.log(data);
     return data;
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
@@ -90,7 +89,6 @@ export default function MySurvey() {
     axios
       .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
-        console.log(`${id} 설문 시작`);
         queryClient.invalidateQueries("surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
@@ -119,7 +117,6 @@ export default function MySurvey() {
     axios
       .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
-        console.log(`${id} 설문 종료`);
         queryClient.invalidateQueries("surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
@@ -140,7 +137,8 @@ export default function MySurvey() {
   };
 
   // 설문 결과 보러가기
-  const handleShowResult = (id: string) => {
+  const handleShowResult = (id: string, title: string) => {
+    localStorage.setItem("resultTitle", title);
     router.push(`/result/${id}`);
   };
   return (
@@ -171,7 +169,9 @@ export default function MySurvey() {
                     onUpdateClick={() => handleEditSurvey(data.id.toString())}
                     onStartClick={() => handleStartSurvey(data.id)}
                     onFinishClick={() => handleFinishSurvey(data.id)}
-                    onResultClick={() => handleShowResult(data.id.toString())}
+                    onResultClick={() =>
+                      handleShowResult(data.id.toString(), data.title)
+                    }
                   />
                 )
             )}

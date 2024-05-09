@@ -4,3 +4,8 @@ export const categoryTypeAtom = atom({
   key: "categoryType",
   default: "",
 });
+
+export const goodsSearchAtom = atom({
+  key: "goodsSearch",
+  default: "",
+});

@@ -1,64 +1,36 @@
 import { ArrowBackIcon, ReportIcon } from "@/pages/components/styles/Icons";
 import { motion } from "framer-motion";
 import { Overlay } from "@/pages/components/styles/Overlay";
+import { useEffect, useState } from "react";
+import api from "@/pages/api/config";
 
 interface IDetail {
-  layoutId: string;
   goodsCode: string;
   onBackClick: () => void;
 }
 
-// goodsCode를 통해 api 호출 예정
-const data = {
-  code: "0000",
-  message: null,
-  result: {
-    goodsDetail: {
-      rmIdBuyCntFlagCd: "N",
-      discountRate: 6,
-      goldPrice: 750,
-      mdCode: "M000100615",
-      vipDiscountRate: 9,
-      discountPrice: 750,
-      mmsGoodsImg:
-        "https://biz.giftishow.com/Resource/goods/G00000280811/G00000280811_250.jpg",
-      limitDay: 30,
-      content: "해당 쿠폰은 일부 점포에서는 취급하지 않는 상품일 수 있습니다.",
-      goodsDescImgWeb: "",
-      goodsImgB:
-        "https://biz.giftishow.com/Resource/goods/G00000280811/G00000280811.jpg",
-      goodsTypeNm: "일반상품(물품교환형)",
-      categoryName1: "편의점/마트",
-      vipPrice: 730,
-      goodsName: "광동)비타500 100ml 병",
-      mmsReserveFlag: "Y",
-      goodsStateCd: "SALE",
-      brandCode: "BR00046",
-      goldDiscountRate: 6,
-      goodsNo: 21445,
-      platinumPrice: 710,
-      brandName: "세븐일레븐",
-      salePrice: 800,
-      brandIconImg:
-        "https://biz.giftishow.com/Resource/brand/BR_20140528_171011_3.jpg",
-      rmCntFlag: "N",
-      goodsTypeCd: "GNR",
-      platinumDiscountRate: 11,
-      saleDateFlagCd: "PERIOD_SALE",
-      contentAddDesc: "",
-      categorySeq1: 4,
-      goodsCode: "G00000280811",
-      goodsTypeDtlNm: "편의점",
-      goodsImgS:
-        "https://biz.giftishow.com/Resource/goods/G00000280811/G00000280811_250.jpg",
-      affiliate: "세븐일레븐/바이더웨이",
-      saleDateFlag: "N",
-      realPrice: 800,
-    },
-  },
-};
+interface IGoodsDetail {
+  brandName: string;
+  categoryName1: string;
+  content: string;
+  goodsCode: string;
+  goodsImgB: string;
+  goodsName: string;
+  goodsTypeNm: string;
+  limitDay: string;
+  salePrice: string;
+}
 
-export default function ItemDetail({ layoutId, onBackClick }: IDetail) {
+export default function ItemDetail({ goodsCode, onBackClick }: IDetail) {
+  const [data, setData] = useState<IGoodsDetail>();
+  useEffect(() => {
+    api
+      .get(`/external`, { params: { goodsCode } })
+      .then((res) => {
+        setData(res.data.result.goodsDetail);
+      })
+      .catch((err) => console.log(err));
+  }, [goodsCode]);
   return (
     <>
       <Overlay onClick={onBackClick} />
@@ -68,7 +40,7 @@ export default function ItemDetail({ layoutId, onBackClick }: IDetail) {
       >
         <motion.div
           onClick={(e) => e.stopPropagation()}
-          layoutId={layoutId}
+          layoutId={goodsCode}
           className="flex flex-col w-full h-full rounded-lg bg-white shadow-md pt-2 pb-4 px-4"
         >
           {/* 상단 메뉴 */}
@@ -90,18 +62,18 @@ export default function ItemDetail({ layoutId, onBackClick }: IDetail) {
                   <div className="w-full px-6">
                     <img
                       className="w-full border rounded-lg border-gray-4"
-                      src={data.result.goodsDetail.goodsImgB}
+                      src={data?.goodsImgB}
                     />
                   </div>
-                  <div>
+                  <div className="flex flex-col gap-2">
                     <div className="font-semibold text-base text-gray-9">
-                      {data.result.goodsDetail.goodsName}
+                      {data?.goodsName}
                     </div>
-                    <div className="flex flex-col sm-gray-text">
-                      {data.result.goodsDetail.brandName}
+                    <div className="flex flex-col sm-gray-text whitespace-pre-wrap">
+                      {`브랜드 : ${data?.brandName}\n카테고리 : ${data?.categoryName1}\n상품 종류 : ${data?.goodsTypeNm}`}
                     </div>
                   </div>
-                  <div className="text-gray-9 text-base font-bold">{`${data.result.goodsDetail.discountPrice.toLocaleString()} pt`}</div>
+                  <div className="text-gray-9 text-base font-bold">{`${data?.salePrice} pt`}</div>
                 </div>
               </div>
               {/* 본문 */}
@@ -110,27 +82,12 @@ export default function ItemDetail({ layoutId, onBackClick }: IDetail) {
                 <div className="w-full px-2 py-4 flex flex-col gap-4">
                   <div>
                     <div className="font-bold">[상품 안내]</div>
-                    <span className="font-normal">
-                      {`- ${data.result.goodsDetail.content}`}
-                    </span>
+                    <span className="font-normal whitespace-pre-wrap">{`${data?.content}`}</span>
                   </div>
                   <div>
                     <div className="font-bold">[이용 안내]</div>
                     <div className="font-normal">
-                      {`- 교환 유효기간은 발행일로부터 ${data.result.goodsDetail.limitDay}일입니다.`}
-                    </div>
-                    <div className="font-normal">
-                      - 본 상품은 예시 이미지로써 실제 상품과 다를 수 있습니다.
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">[사용 안내]</div>
-                    <div className="font-normal">
-                      - 일부 상품은 매장의 사정에 따라 교환이 어려울 시 타
-                      매장에서 교환 가능합니다.
-                    </div>
-                    <div className="font-normal">
-                      {`- 본 쿠폰은 전국 ${data.result.goodsDetail.affiliate} 매장 중 일부 특수 점포를 제외하고 사용이 가능합니다.`}
+                      {`- 교환 유효기간은 발행일로부터 ${data?.limitDay}일입니다.`}
                     </div>
                   </div>
                 </div>

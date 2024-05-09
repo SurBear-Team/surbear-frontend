@@ -20,6 +20,17 @@ interface SurveyFilterProps {
   surveyResult: { [key: string]: any }; // surveyResult의 타입 명시, 더 구체적인 타입으로 대체 가능
 }
 
+const engAgeOptions = [
+  "UNDER_TWENTY",
+  "TWENTIES",
+  "THIRTIES",
+  "FOURTIES",
+  "FIFTIES",
+  "OVER_SIXTIES",
+];
+
+const engGenderOptions = ["MALE", "FEMALE"];
+
 export function SurveyFilter({
   data,
   setSurveyIds,
@@ -56,6 +67,7 @@ export function SurveyFilter({
 
       // "전체" 옵션이 선택된 경우
       if (all) {
+        // 현재 선택된 옵션이 모든 옵션을 포함하고 있다면, 모든 옵션을 제거
         if (
           currentOptions.length ===
           (optionType === "age" ? ageOptions.length : genderOptions.length)
@@ -65,7 +77,7 @@ export function SurveyFilter({
             ...prev,
             [questionId]: {
               ...prev[questionId],
-              [optionType]: [],
+              [optionType]: [], // 해당 필터 유형의 옵션을 빈 배열로
             },
           };
         } else {
@@ -75,7 +87,9 @@ export function SurveyFilter({
             [questionId]: {
               ...prev[questionId],
               [optionType]:
-                optionType === "age" ? [...ageOptions] : [...genderOptions],
+                optionType === "age"
+                  ? [...engAgeOptions]
+                  : [...engGenderOptions],
             },
           };
         }
@@ -86,8 +100,8 @@ export function SurveyFilter({
           [questionId]: {
             ...prev[questionId],
             [optionType]: currentOptions.includes(option)
-              ? currentOptions.filter((o) => o !== option)
-              : [...currentOptions, option],
+              ? currentOptions.filter((o) => o !== option) // 옵션 제거
+              : [...currentOptions, option], // 옵션 추가
           },
         };
       }
@@ -163,7 +177,7 @@ export function SurveyFilter({
 
   // "전체" 버튼에 대한 스타일 결정
   const isAllSelected = (questionId: number, optionType: "age" | "gender") => {
-    const options = optionType === "age" ? ageOptions : genderOptions;
+    const options = optionType === "age" ? engAgeOptions : engGenderOptions;
     // 선택된 옵션 목록을 가져옴
     const selectedOptions = prevFilterOptions[questionId]
       ? prevFilterOptions[questionId][optionType] || []
@@ -196,7 +210,7 @@ export function SurveyFilter({
       <div className="flex items-center justify-start w-full pb-4 gap-4">
         <div
           onClick={() => handleFilterClick(item.surveyQuestion.id)}
-          className="flex items-center gap-1 cursor-pointer"
+          className="flex items-center gap-1 cursor-pointer whitespace-nowrap"
         >
           <FilterIcon /> 필터
         </div>

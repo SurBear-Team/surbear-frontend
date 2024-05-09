@@ -9,7 +9,10 @@ import { DonutChart } from "../components/DonutChart";
 import { AgeBarChart } from "../components/AgeBarChart";
 import { GenderBarChart } from "../components/GenderBarChart";
 import { SurveyFilter } from "../components/SurveyFilter";
-import { GenderLineChart, LineChart } from "../components/LineChart";
+import {
+  SliderAgeBarChart,
+  SliderGenderBarChart,
+} from "../components/SliderBarChart";
 
 export interface SurveyResponseDetail {
   questionId: number;
@@ -27,12 +30,13 @@ export interface SurveyResult {
 
 export default function Result() {
   const { id } = router.query;
-  // 설문 데이터 가져오기
+  // 설문 데이터 비동기로 가져오기
   const fetchSurvey = async () => {
     const { data } = await api.get(`/survey/management/option/${id}`);
     return data;
-  };
+  }; // react Query로 데이터 비동기로 가져오고 data에 저장
   const { data } = useQuery<SurveyData[]>(["result", id], fetchSurvey);
+
   const [surveyIds, setSurveyIds] = useState<number[]>([]); // 질문 번호들 담은 배열
   // 질문 번호들 배열에 담기
   useEffect(() => {
@@ -40,15 +44,14 @@ export default function Result() {
       const ids = data.map((item) => item.surveyQuestion.id);
       setSurveyIds(ids);
     }
-  }, [data]);
-
-  console.log(data);
+  }, [data]); // data가 로드되면
 
   // 설문 결과 담기
   const [surveyResult, setSurveyResult] = useState<{
     [key: string]: SurveyResult;
   }>({});
 
+  // 설문 결과를 서버에 요청하고 받아오기
   const postSurveyResult = async () => {
     try {
       const requestBody = {
@@ -57,9 +60,9 @@ export default function Result() {
       };
       const response = await api.post("/survey/result", requestBody);
       setSurveyResult(response.data);
-      console.log("설문 결과", surveyResult);
     } catch (error) {
-      console.error("에러떴숴잉 ㅇㅅㅇ", error);
+      alert("네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요");
+      console.error(error);
     }
   };
 
@@ -70,38 +73,48 @@ export default function Result() {
     }
   }, [surveyIds]);
 
+  // ========================================================================
+
   const sortedList = ["전체", "성별", "나이"];
   const [showSort, setShowSort] = useState<{ [key: number]: boolean }>({});
+  // 각 질문별로 선택한 정렬 유형을 저장하는 상태
   const [sortTypes, setSortTypes] = useState<{
     [questionId: number]: string;
   }>({});
 
+  // 선택된 정렬 유형을 상태에 저장
   const handleSortSelect = (questionId: number, selectedSortType: string) => {
     setSortTypes((prev) => ({ ...prev, [questionId]: selectedSortType }));
-    setShowSort((prev) => ({ ...prev, [questionId]: false }));
+    setShowSort((prev) => ({ ...prev, [questionId]: false })); // 선택한 id의 정렬 보여줌을 false로
   };
 
   useEffect(() => {
     if (data) {
+      // 각 질문의 초기 정렬 유형 설정
       const initialSortTypes = data.reduce(
         (acc, item) => ({
-          ...acc,
-          [item.surveyQuestion.id]: "전체",
+          ...acc, // 이전 상태
+          [item.surveyQuestion.id]:
+            item.surveyQuestion.questionType === "SLIDER" ? "성별" : "전체",
         }),
         {}
       );
+      // 초기 정렬 유형을 저장. 기본적으로 "전체", 슬라이더면 "성별"
       setSortTypes(initialSortTypes);
+      // 처음엔 모든 드롭다운 false로
       setShowSort(
         data.reduce(
           (acc, item) => ({
             ...acc,
-            [item.surveyQuestion.id]: false,
+            [item.surveyQuestion.id]: false, // 질문 id별로 false 할당
           }),
           {}
         )
       );
     }
   }, [data]);
+
+  const slideSortedList = ["성별", "나이"];
 
   return (
     <>
@@ -175,11 +188,36 @@ export default function Result() {
                   {/* 슬라이더 */}
                   {item.surveyQuestion.questionType === "SLIDER" && (
                     <>
-                      <LineChart item={item} surveyResult={surveyResult} />
-                      <GenderLineChart
-                        item={item}
-                        surveyResult={surveyResult}
-                      />
+                      <div className="flex whitespace-nowrap gap-4 pr-2 w-full pb-4">
+                        구분
+                        <TypeDropDown
+                          onShowTypeClick={() =>
+                            setShowSort((prev) => ({
+                              ...prev,
+                              [item.surveyQuestion.id]:
+                                !prev[item.surveyQuestion.id],
+                            }))
+                          }
+                          showType={showSort[item.surveyQuestion.id] || false}
+                          typeType={sortTypes[item.surveyQuestion.id] || "성별"}
+                          typeList={slideSortedList}
+                          onTypeSelect={(type) =>
+                            handleSortSelect(item.surveyQuestion.id, type)
+                          }
+                        />
+                      </div>
+                      {sortTypes[item.surveyQuestion.id] === "나이" && (
+                        <SliderAgeBarChart
+                          item={item}
+                          surveyResult={surveyResult}
+                        />
+                      )}
+                      {sortTypes[item.surveyQuestion.id] === "성별" && (
+                        <SliderGenderBarChart
+                          item={item}
+                          surveyResult={surveyResult}
+                        />
+                      )}
                     </>
                   )}
                 </div>

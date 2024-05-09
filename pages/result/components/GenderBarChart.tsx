@@ -1,9 +1,10 @@
 import { SurveyData } from "@/pages/edit-survey/editInterface";
 import Chart from "react-apexcharts";
+import { SurveyResult } from "../[id]";
 
 interface BarChartProps {
   item: SurveyData; // 설문 데이터
-  surveyResult: { [key: string]: any }; // 설문 결과 데이터
+  surveyResult: { [key: string]: SurveyResult }; // 설문 결과 데이터
 }
 
 interface ResponseProps {
@@ -48,6 +49,9 @@ export const GenderBarChart = ({ item, surveyResult }: BarChartProps) => {
     chart: {
       type: "bar" as const,
       stacked: true, // 누적 바 차트 옵션 활성화
+      toolbar: {
+        show: false,
+      },
     },
     plotOptions: {
       bar: {

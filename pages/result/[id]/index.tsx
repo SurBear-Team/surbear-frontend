@@ -8,25 +8,12 @@ import { useQuery } from "react-query";
 import { DonutChart } from "../components/DonutChart";
 import { AgeBarChart } from "../components/AgeBarChart";
 import { GenderBarChart } from "../components/GenderBarChart";
-import { SurveyFilter } from "../components/SurveyFilter";
 import {
   SliderAgeBarChart,
   SliderGenderBarChart,
 } from "../components/SliderBarChart";
-
-export interface SurveyResponseDetail {
-  questionId: number;
-  questionType: string; // 객, 단, 슬
-  request: {
-    answers: string[];
-  };
-}
-
-export interface SurveyResult {
-  age: string; // "TWENTIES", "THIRTIES" .... 등등
-  gender: string;
-  response: SurveyResponseDetail[];
-}
+import { ShortAnswerSubjective } from "../components/ShortAnswerSubjective";
+import { SurveyResult } from "../components/resultInterface";
 
 export default function Result() {
   const { id } = router.query;
@@ -193,7 +180,7 @@ export default function Result() {
                   {(item.surveyQuestion.questionType === "SHORT_ANSWER" ||
                     item.surveyQuestion.questionType === "SUBJECTIVE") && (
                     <>
-                      <SurveyFilter
+                      <ShortAnswerSubjective
                         data={data}
                         setSurveyIds={setSurveyIds}
                         item={item}

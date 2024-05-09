@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TabBar } from "../components/TabBar";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
@@ -23,8 +23,14 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export default function MySurvey() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [token, setToken] = useState("");
 
-  const storedToken = localStorage.getItem("surbearToken");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   // 기본 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
@@ -36,7 +42,7 @@ export default function MySurvey() {
   });
 
   const headers = {
-    Authorization: `Bearer ${storedToken}`,
+    Authorization: `Bearer ${token}`,
   };
 
   // 내 설문 목록 가져오기
@@ -47,7 +53,7 @@ export default function MySurvey() {
     return data;
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
-    enabled: !!storedToken,
+    enabled: !!token,
   });
 
   // 설문 삭제 다이얼로그 띄우기

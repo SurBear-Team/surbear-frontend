@@ -1,18 +1,11 @@
-import { SurveyData } from "@/pages/edit-survey/editInterface";
 import Chart from "react-apexcharts";
-import { SurveyResult } from "../[id]";
-
-interface BarChartProps {
-  item: SurveyData; // 설문 데이터
-  surveyResult: { [key: string]: SurveyResult }; // 설문 결과 데이터
-}
+import { ChartProps } from "./resultInterface";
+import { engGenderCategories } from "./categories";
 
 interface ResponseProps {
   questionId: number; // 질문 ID
   request: { answers: string | string[] }; // 응답 내용
 }
-
-export const genderCategories = ["MALE", "FEMALE", "UNKNOWN"];
 
 export const engToKorGender: { [key: string]: string } = {
   MALE: "남성",
@@ -20,12 +13,12 @@ export const engToKorGender: { [key: string]: string } = {
   UNKNOWN: "미정",
 };
 
-export const GenderBarChart = ({ item, surveyResult }: BarChartProps) => {
+export const GenderBarChart = ({ item, surveyResult }: ChartProps) => {
   // 각 설문 옵션에 대한 응답 수를 계산하여 series 데이터 생성
   const series = item.options.map((option) => ({
     name: option.answer, // 각 옵션의 답변 내용
     // 성별별로 응답 수를 계산
-    data: genderCategories.map((gender) => {
+    data: engGenderCategories.map((gender) => {
       // result 객체는 각 응답자의 응답을 담고 있음
       return Object.values(surveyResult).reduce((total, result) => {
         // 응답자의 성별이 현재 카테고리와 일치할 경우
@@ -60,7 +53,7 @@ export const GenderBarChart = ({ item, surveyResult }: BarChartProps) => {
     },
     xaxis: {
       // x축 카테고리 설정
-      categories: genderCategories.map((gender) => engToKorGender[gender]),
+      categories: engGenderCategories.map((gender) => engToKorGender[gender]),
     },
     legend: {
       position: "bottom" as const, // 범례

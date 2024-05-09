@@ -1,12 +1,7 @@
-import { SurveyData } from "@/pages/edit-survey/editInterface";
 import Chart from "react-apexcharts";
+import { ChartProps } from "./resultInterface";
 
-interface DonutChartProps {
-  item: SurveyData;
-  surveyResult: { [key: string]: any };
-}
-
-export const DonutChart = ({ item, surveyResult }: DonutChartProps) => {
+export const DonutChart = ({ item, surveyResult }: ChartProps) => {
   const series = item.options.map((option) => {
     // reduce로 response를 순회하며 surveyResult에서 해당 답변의 출현 횟수를 계산
     return Object.values(surveyResult).reduce((count, res) => {

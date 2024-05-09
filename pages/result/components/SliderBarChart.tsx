@@ -1,14 +1,9 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { SurveyData } from "@/pages/edit-survey/editInterface";
-import { ageCategories, engToKorAge } from "./AgeBarChart";
-import { engToKorGender, genderCategories } from "./GenderBarChart";
-import { SurveyResponseDetail, SurveyResult } from "../[id]";
-
-interface LineChartProps {
-  item: SurveyData; // 설문 데이터
-  surveyResult: { [key: string]: SurveyResult };
-}
+import { engToKorAge } from "./AgeBarChart";
+import { engToKorGender } from "./GenderBarChart";
+import { ChartProps, SurveyResponseDetail } from "./resultInterface";
+import { engAgeCategories, engGenderCategories } from "./categories";
 
 const colors = [
   "#FF5733",
@@ -24,14 +19,14 @@ const colors = [
   "#303030",
 ];
 
-export const SliderAgeBarChart = ({ item, surveyResult }: LineChartProps) => {
+export const SliderAgeBarChart = ({ item, surveyResult }: ChartProps) => {
   // 응답 수치별로 시리즈 데이터를 생성하기 위해 11개의 요소를 가진 배열을 생성 초기화
   const series = Array(11)
     .fill(null)
     .map((_, index) => ({
       name: `${index * 10}%`, // 각 응답 수치
       // 각 나이 카테고리별로 데이터를 계산
-      data: ageCategories.map((age) => {
+      data: engAgeCategories.map((age) => {
         // surveyResult 객체에서 모든 결과를 순회하며 해당 나이 카테고리와 일치하는 데이터의 총합을 계산
         return Object.values(surveyResult).reduce((total, result) => {
           if (result.age === age && result.response) {
@@ -65,7 +60,7 @@ export const SliderAgeBarChart = ({ item, surveyResult }: LineChartProps) => {
       },
     },
     xaxis: {
-      categories: ageCategories.map((age) => engToKorAge[age]),
+      categories: engAgeCategories.map((age) => engToKorAge[age]),
     },
     yaxis: {
       labels: {
@@ -95,15 +90,12 @@ export const SliderAgeBarChart = ({ item, surveyResult }: LineChartProps) => {
   return <Chart options={options} series={series} type="bar" width="500" />;
 };
 
-export const SliderGenderBarChart = ({
-  item,
-  surveyResult,
-}: LineChartProps) => {
+export const SliderGenderBarChart = ({ item, surveyResult }: ChartProps) => {
   const series = Array(11)
     .fill(null)
     .map((_, index) => ({
       name: `${index * 10}%`,
-      data: genderCategories.map((gender) => {
+      data: engGenderCategories.map((gender) => {
         return Object.values(surveyResult).reduce((total, result) => {
           if (result.gender === gender && result.gender) {
             result.response.forEach((response: SurveyResponseDetail) => {
@@ -136,7 +128,7 @@ export const SliderGenderBarChart = ({
       },
     },
     xaxis: {
-      categories: genderCategories.map((gender) => engToKorGender[gender]),
+      categories: engGenderCategories.map((gender) => engToKorGender[gender]),
     },
     yaxis: {
       labels: {

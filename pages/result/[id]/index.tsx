@@ -14,10 +14,16 @@ import {
 } from "../components/SliderBarChart";
 import { ShortAnswerSubjective } from "../components/ShortAnswerSubjective";
 import { SurveyResult } from "../components/resultInterface";
+import { Dialog } from "@/pages/components/Dialog";
 
 export default function Result() {
   const { id } = router.query;
   const [resultTitle, setResultTitle] = useState("");
+
+  const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
+    open: false,
+    text: "",
+  });
 
   useEffect(() => {
     const title = localStorage.getItem("resultTitle");
@@ -57,7 +63,11 @@ export default function Result() {
       const response = await api.post("/survey/result", requestBody);
       setSurveyResult(response.data);
     } catch (error) {
-      alert("네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요");
+      setDialog({
+        open: true,
+        text: "네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요",
+      });
+
       console.error(error);
     }
   };
@@ -227,6 +237,16 @@ export default function Result() {
                 </div>
               </>
             ))}
+
+          {dialog.open && (
+            <Dialog
+              title={dialog.text}
+              rightText="확인"
+              onRightClick={(current) => {
+                setDialog({ ...current, open: false });
+              }}
+            />
+          )}
         </div>
       </div>
     </>

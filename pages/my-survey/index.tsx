@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TabBar } from "../components/TabBar";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
 import { NewSurveyCard } from "./components/NewSurveyCard";
 import { TopBar } from "../components/TopBar/TopBar";
-import api from "../api/config";
 import { ISurvey } from "../browse/data";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
-import { jwtDecode, JwtPayload } from "jwt-decode";
 
 interface DialogState {
   open: boolean;
@@ -24,17 +22,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export default function MySurvey() {
   const queryClient = useQueryClient();
 
-  // 유저 토큰
-  const [token, setToken] = useState<number | null>(null);
-  useEffect(() => {
-    const storedToken = localStorage.getItem("surbearToken");
-    if (storedToken) {
-      const decoded = jwtDecode<JwtPayload>(storedToken);
-      if (decoded && decoded.sub) {
-        setToken(parseInt(decoded.sub));
-      }
-    }
-  }, []);
+  const storedToken = localStorage.getItem("surbearToken");
 
   // 기본 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
@@ -45,13 +33,20 @@ export default function MySurvey() {
     surveyId: 0, // 이거
   });
 
+  const headers = {
+    Authorization: `Bearer ${storedToken}`,
+  };
+
   // 내 설문 목록 가져오기
   const fetchSurveys = async () => {
-    const { data } = await api.get(`/survey/management/list/${token}`);
+    const { data } = await axios.get(`${baseUrl}/survey/management/list`, {
+      headers,
+    });
+    console.log(data);
     return data;
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
-    enabled: !!token,
+    enabled: !!storedToken,
   });
 
   // 설문 삭제 다이얼로그 띄우기

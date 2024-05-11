@@ -184,7 +184,6 @@ export const EditSurvey = ({
             addChoice={addChoice}
             deleteChoice={deleteChoice}
             handleChoiceChange={handleChoiceChange}
-            isEdit={true}
           />
         </>
       )}

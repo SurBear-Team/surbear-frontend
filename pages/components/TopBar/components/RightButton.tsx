@@ -5,15 +5,29 @@ import {
   SettingIcon,
   UpdateIcon,
 } from "../../styles/Icons";
+import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
+import { goodsSearchAtom } from "@/pages/atoms";
 
 function SearchBox() {
+  const router = useRouter();
+  const { register, handleSubmit } = useForm();
+  const setGoodsSearch = useSetRecoilState(goodsSearchAtom);
+  const onSubmit = (data: any) => {
+    if (router.pathname === "/store") {
+      setGoodsSearch(data.search);
+    }
+  };
   return (
-    <form className="relative">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative">
       <input
+        {...register("search")}
         className="w-40 border border-gray-4 px-2 py-1"
         type="text"
       ></input>
-      <SearchIcon />
+      <button type="submit">
+        <SearchIcon />
+      </button>
     </form>
   );
 }

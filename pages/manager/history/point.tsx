@@ -20,7 +20,7 @@ export default function PointHistory() {
   const router = useRouter();
   const [data, setData] = useState<IPointHistory[]>();
   useEffect(() => {
-    api.get("/point").then((res) => setData(res.data));
+    api.get("/point").then((res) => setData(res.data.reverse()));
   }, [updateList]);
 
   const [token, setToken] = useState("");

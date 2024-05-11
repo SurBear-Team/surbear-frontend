@@ -35,7 +35,7 @@ export default function PointHistory() {
           params: { nickname: nickname },
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then((res) => setData(res.data))
+        .then((res) => setData(res.data.reverse()))
         .catch((err) => console.log(err));
     }
   }, []);

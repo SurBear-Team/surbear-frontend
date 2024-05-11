@@ -218,8 +218,8 @@ export default function Member() {
               rightText="조회"
               onLeftClick={() => setShowPopUp((prev) => !prev)}
               onRightClick={(data) => {
-                const nickname = data.nickname;
-                if (nickname !== undefined) {
+                if (data.nickname !== undefined) {
+                  const nickname = data.nickname;
                   api
                     .get(`/role/${nickname}`)
                     .then((res) => {

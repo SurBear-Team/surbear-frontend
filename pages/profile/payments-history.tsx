@@ -6,12 +6,10 @@ import api from "../api/config";
 
 interface IPointHistory {
   deleted: boolean;
-  description: string;
   id: number;
-  paidPoint: number;
-  payerId: number;
-  paymentType: string;
-  recipientId: number;
+  memberId: number;
+  paymentItem: string;
+  usedPoint: number;
 }
 
 export default function PointHistory() {
@@ -23,7 +21,7 @@ export default function PointHistory() {
       const token = localStorage.getItem("surbearToken");
       if (token !== undefined) {
         api
-          .get("/point/history", {
+          .get("/product/history", {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
@@ -42,9 +40,9 @@ export default function PointHistory() {
           {data?.map((el) => (
             <ListCard
               getTime=""
-              content={el.description}
-              plusMinus={el.paymentType === "CANCEL" ? "-" : "+"}
-              point={el.paidPoint + ""}
+              content={el.paymentItem}
+              plusMinus={"-"}
+              point={el.usedPoint + ""}
             />
           ))}
         </div>

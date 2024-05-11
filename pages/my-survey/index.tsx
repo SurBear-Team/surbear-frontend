@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TabBar } from "../components/TabBar";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { Dialog } from "../components/Dialog";
@@ -7,6 +7,7 @@ import { TopBar } from "../components/TopBar/TopBar";
 import { ISurvey } from "../browse/data";
 import axios from "axios";
 import { useQuery, useQueryClient } from "react-query";
+import { useRouter } from "next/router";
 
 interface DialogState {
   open: boolean;
@@ -20,9 +21,16 @@ interface DialogState {
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function MySurvey() {
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const [token, setToken] = useState("");
 
-  const storedToken = localStorage.getItem("surbearToken");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   // 기본 다이얼로그
   const [dialog, setDialog] = useState<DialogState>({
@@ -34,7 +42,7 @@ export default function MySurvey() {
   });
 
   const headers = {
-    Authorization: `Bearer ${storedToken}`,
+    Authorization: `Bearer ${token}`,
   };
 
   // 내 설문 목록 가져오기
@@ -42,11 +50,10 @@ export default function MySurvey() {
     const { data } = await axios.get(`${baseUrl}/survey/management/list`, {
       headers,
     });
-    console.log(data);
     return data;
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
-    enabled: !!storedToken,
+    enabled: !!token,
   });
 
   // 설문 삭제 다이얼로그 띄우기
@@ -88,7 +95,34 @@ export default function MySurvey() {
     axios
       .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
-        console.log(`${id} 설문 시작`);
+        queryClient.invalidateQueries("surveys");
+        setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // 설문 종료 다이얼로그 띄우기
+  const handleFinishSurvey = (id: number) => {
+    setDialog({
+      open: true,
+      text: "설문을 종료하시겠습니까?",
+      rightText: "종료",
+      isDelete: false,
+      surveyId: id,
+      onConfirm: () => finishSurveyClick(id), // '시작' 버튼 클릭 시 실행될 함수
+    });
+  };
+
+  // 다이얼로그에서 설문 종료 클릭
+  const finishSurveyClick = (id: number) => {
+    const requestBody = {
+      id: id,
+      type: "CLOSE",
+    };
+
+    axios
+      .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
+      .then(() => {
         queryClient.invalidateQueries("surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
@@ -106,6 +140,12 @@ export default function MySurvey() {
   const handleEditSurvey = (id: string) => {
     setSelectedSurveyId(id); // 선택한 설문의 ID 설정
     setShowNewSurveyCard(true); // 수정 카드를 보이게 설정
+  };
+
+  // 설문 결과 보러가기
+  const handleShowResult = (id: string, title: string) => {
+    localStorage.setItem("resultTitle", title);
+    router.push(`/result/${id}`);
   };
   return (
     <>
@@ -134,8 +174,10 @@ export default function MySurvey() {
                     showResult={data.ongoingType === "CLOSE"} // true면 결과 보기 나옴
                     onUpdateClick={() => handleEditSurvey(data.id.toString())}
                     onStartClick={() => handleStartSurvey(data.id)}
-                    onFinishClick={() => {}}
-                    onResultClick={() => {}}
+                    onFinishClick={() => handleFinishSurvey(data.id)}
+                    onResultClick={() =>
+                      handleShowResult(data.id.toString(), data.title)
+                    }
                   />
                 )
             )}

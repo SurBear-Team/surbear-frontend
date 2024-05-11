@@ -65,7 +65,7 @@ export default function Result() {
     } catch (error) {
       setDialog({
         open: true,
-        text: "네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요",
+        text: "네트워크 에러가 발생했습니다. \n 나중에 다시 시도해주세요",
       });
 
       console.error(error);
@@ -240,6 +240,7 @@ export default function Result() {
 
           {dialog.open && (
             <Dialog
+              onlyOneBtn
               title={dialog.text}
               rightText="확인"
               onRightClick={(current) => {

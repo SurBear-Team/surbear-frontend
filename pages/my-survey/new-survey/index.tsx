@@ -296,7 +296,7 @@ export default function NewSurvey() {
           {showRecommendation && (
             <>
               <Overlay onClick={() => {}} />
-              <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
+              <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
                 {/* 타이틀 */}
                 <span className="whitespace-nowrap sm-gray-9-text text-base">
                   ChatGPT가 질문을 추천해드려요! <br />
@@ -361,9 +361,6 @@ export default function NewSurvey() {
                     ))}
                   </div>
                 )}
-
-                {/* 회색선 */}
-                <div className="gray-line py-6" />
 
                 {/* 버튼들 */}
                 <div className="w-full flex gap-4">

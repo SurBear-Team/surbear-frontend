@@ -8,6 +8,7 @@ import api from "../api/config";
 import Pagination from "../browse/components/Pagination";
 import { useRecoilState } from "recoil";
 import { goodsSearchAtom } from "../atoms";
+import { useRouter } from "next/router";
 
 interface IGoods {
   createdAt: string;
@@ -21,6 +22,7 @@ interface IGoods {
 }
 
 export default function Store() {
+  const router = useRouter();
   const [showDetail, setShowDetail] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
 
@@ -91,6 +93,7 @@ export default function Store() {
               <ItemDetail
                 goodsCode={detailId!}
                 onBackClick={() => setShowDetail((prev) => !prev)}
+                onBuyClick={() => router.push(`/store/${detailId}`)}
               />
             )}
           </AnimatePresence>

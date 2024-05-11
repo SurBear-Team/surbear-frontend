@@ -14,7 +14,7 @@ export default function MemberInfoDialog({
     <div className="card w-3/4 p-8 fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col gap-6">
       <div className="flex flex-col gap-4">
         <span className="text-base font-semibold">회원 정보 조회</span>
-        <div className="text-gray-9 gap-1">
+        <div className="text-gray-9 gap-1 flex-col flex">
           <div>
             <span className="text-base font-medium">아이디 : </span>
             <span className="text-base font-bold">{info.userId}</span>

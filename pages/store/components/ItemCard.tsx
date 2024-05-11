@@ -39,7 +39,7 @@ export default function ItemCard({
                 {type}
               </span>
             </div>
-            <span className="text-xs font-semibold text-gray-5">{`${company}`}</span>
+            <span className="text-xs font-semibold text-gray-5 whitespace-nowrap">{`${company}`}</span>
           </div>
           <div className="text-gray-9 text-base font-bold">{`${price.toLocaleString()} pt`}</div>
         </div>

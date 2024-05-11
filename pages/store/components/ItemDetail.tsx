@@ -7,9 +7,10 @@ import api from "@/pages/api/config";
 interface IDetail {
   goodsCode: string;
   onBackClick: () => void;
+  onBuyClick: () => void;
 }
 
-interface IGoodsDetail {
+export interface IGoodsDetail {
   brandName: string;
   categoryName1: string;
   content: string;
@@ -21,7 +22,11 @@ interface IGoodsDetail {
   salePrice: string;
 }
 
-export default function ItemDetail({ goodsCode, onBackClick }: IDetail) {
+export default function ItemDetail({
+  goodsCode,
+  onBackClick,
+  onBuyClick,
+}: IDetail) {
   const [data, setData] = useState<IGoodsDetail>();
   useEffect(() => {
     api
@@ -81,13 +86,13 @@ export default function ItemDetail({ goodsCode, onBackClick }: IDetail) {
               <div className="flex font-semibold text-gray-9 text-base overflow-y-scroll hide-scrollbar">
                 <div className="w-full px-2 py-4 flex flex-col gap-4">
                   <div>
-                    <div className="font-bold">[상품 안내]</div>
-                    <span className="font-normal whitespace-pre-wrap">{`${data?.content}`}</span>
+                    <div className="font-bold mb-1">[상품 안내]</div>
+                    <span className="font-normal whitespace-pre-wrap text-sm">{`${data?.content}`}</span>
                   </div>
                   <div>
-                    <div className="font-bold">[이용 안내]</div>
-                    <div className="font-normal">
-                      {`- 교환 유효기간은 발행일로부터 ${data?.limitDay}일입니다.`}
+                    <div className="font-bold mb-1">[이용 안내]</div>
+                    <div className="font-normal text-sm whitespace-pre-wrap">
+                      {`교환 유효기간은 발행일로부터 ${data?.limitDay}일입니다.`}
                     </div>
                   </div>
                 </div>
@@ -97,7 +102,12 @@ export default function ItemDetail({ goodsCode, onBackClick }: IDetail) {
           {/* 하단 버튼 */}
           <div className="gray-line" />
           <div className="px-2 pt-4">
-            <button className="primary-btn-style long-button">교환하기</button>
+            <button
+              onClick={onBuyClick}
+              className="primary-btn-style long-button"
+            >
+              교환하기
+            </button>
           </div>
         </motion.div>
       </motion.div>

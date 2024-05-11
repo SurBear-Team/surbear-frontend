@@ -10,6 +10,8 @@ interface ListCardProps {
   onBanClick?: () => void;
   openType?: boolean;
   surveyOwner?: string;
+  hasCancel?: boolean;
+  onCancelClick?: () => void;
 }
 
 export const ListCard = ({
@@ -22,6 +24,8 @@ export const ListCard = ({
   onBanClick,
   openType,
   surveyOwner,
+  hasCancel,
+  onCancelClick,
 }: ListCardProps) => {
   return (
     <div className="w-full flex gap-2 justify-between h-16 px-6 items-center bg-white border-b-[1px] border-gray-4">
@@ -79,6 +83,14 @@ export const ListCard = ({
         {surveyOwner && (
           <div className="flex items-center font-medium text-gray-9 text-xs whitespace-nowrap">
             {surveyOwner}
+          </div>
+        )}
+        {hasCancel && (
+          <div
+            onClick={onCancelClick}
+            className="rounded-full border border-red-1 px-2 py-1 whitespace-nowrap text-xs font-semibold text-red-1 cursor-pointer"
+          >
+            취소
           </div>
         )}
       </div>

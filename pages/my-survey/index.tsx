@@ -63,9 +63,15 @@ export default function MySurvey() {
     });
     return data;
   };
-  const { data: mySurveyData } = useQuery<ISurvey[]>("surveys", fetchSurveys, {
-    enabled: !!token,
-  });
+  const { data: mySurveyData } = useQuery<ISurvey[]>(
+    "my-surveys",
+    fetchSurveys,
+    {
+      enabled: !!token,
+      cacheTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 5,
+    }
+  );
 
   // 설문 삭제 다이얼로그 띄우기
   const handleDeleteSurvey = (id: number) => {
@@ -81,7 +87,7 @@ export default function MySurvey() {
   // 다이얼로그에서 설문 삭제 클릭
   const deleteSurveyClick = async (id: number) => {
     await axios.delete(`${baseUrl}/survey/management/${id}`);
-    queryClient.invalidateQueries("surveys");
+    queryClient.invalidateQueries("my-surveys");
   };
 
   // 설문 시작 다이얼로그 띄우기
@@ -106,7 +112,7 @@ export default function MySurvey() {
     axios
       .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
-        queryClient.invalidateQueries("surveys");
+        queryClient.invalidateQueries("my-surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
       .catch((err) => console.log(err));
@@ -134,7 +140,7 @@ export default function MySurvey() {
     axios
       .put(`${baseUrl}/survey/management/ongoing-type`, requestBody)
       .then(() => {
-        queryClient.invalidateQueries("surveys");
+        queryClient.invalidateQueries("my-surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
       .catch((err) => console.log(err));

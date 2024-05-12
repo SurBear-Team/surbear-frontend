@@ -9,6 +9,7 @@ import api from "@/pages/api/config";
 import { useRecoilValue } from "recoil";
 import { surveyIdAtom } from "../../surveyState";
 import { korToEngTypeMapping } from "../../components/typeMapping";
+import { useQueryClient } from "react-query";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -38,6 +39,7 @@ export const MakeSurvey = ({
     "주관식",
   ];
 
+  const queryClient = useQueryClient();
   const surveyId = useRecoilValue(surveyIdAtom);
 
   const [showType, setShowType] = useState(false);

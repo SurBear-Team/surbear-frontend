@@ -183,7 +183,10 @@ export const MakeSurvey = ({
           required: isChecked,
         },
       })
-      .then(() => {});
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
 
     // 저장 후 입력 필드 초기화
     setQuestionTitle("");
@@ -193,7 +196,7 @@ export const MakeSurvey = ({
 
   const onSaveAndAddClick = () => {
     onSaveClick();
-    setIsNewSurvey?.((prevState) => true);
+    setIsNewSurvey?.(() => true);
   };
 
   return (

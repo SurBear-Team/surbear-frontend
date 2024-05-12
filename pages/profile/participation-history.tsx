@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ListCard } from "./components/ListCard";
 import { getTimeAsString } from "../utils";
+import { useQuery } from "react-query";
 
 export interface IHistory {
   createdAt: string;
@@ -15,23 +16,35 @@ export interface IHistory {
 
 export default function SurveyHistory() {
   const router = useRouter();
+  const [token, setToken] = useState("");
 
-  const [data, setData] = useState<IHistory[]>();
   useEffect(() => {
-    if (typeof window !== undefined) {
-      const token = localStorage.getItem("surbearToken");
-      if (token !== undefined) {
-        api
-          .get(`/member/survey/history`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res) => {
-            const data = res.data;
-            setData(data);
-          });
-      }
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      setToken(storedToken);
     }
   }, []);
+
+  const fetchSurveyHistory = async () => {
+    const { data } = await api.get("/member/survey/history", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  };
+  const { data } = useQuery<IHistory[]>(
+    ["surveyHistory", token],
+    fetchSurveyHistory,
+    {
+      enabled: !!token,
+      cacheTime: 1000 * 60 * 5,
+      staleTime: 1000 * 60 * 5,
+    }
+  );
+
+  // 결과 보기 버튼 누르면
+  const moveToResult = (id: number) => {
+    router.push(`/result/${id}`);
+  };
 
   return (
     <>
@@ -44,6 +57,9 @@ export default function SurveyHistory() {
               getTime={getTimeAsString(el.createdAt)}
               content={el.title}
               openType={el.openType}
+              viewResult={() => {
+                moveToResult(el.id);
+              }}
             />
           ))}
         </div>

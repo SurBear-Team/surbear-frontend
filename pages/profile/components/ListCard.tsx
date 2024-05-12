@@ -12,6 +12,7 @@ interface ListCardProps {
   surveyOwner?: string;
   hasCancel?: boolean;
   onCancelClick?: () => void;
+  viewResult?: () => void;
 }
 
 export const ListCard = ({
@@ -26,6 +27,7 @@ export const ListCard = ({
   surveyOwner,
   hasCancel,
   onCancelClick,
+  viewResult,
 }: ListCardProps) => {
   return (
     <div className="w-full flex gap-2 justify-between h-16 px-6 items-center bg-white border-b-[1px] border-gray-4">
@@ -70,7 +72,10 @@ export const ListCard = ({
         {openType !== undefined && (
           <div className="flex items-center">
             {openType === true ? (
-              <button className="small-Btn primary-btn-style text-sm font-bold whitespace-nowrap">
+              <button
+                onClick={viewResult}
+                className="small-Btn primary-btn-style text-sm font-bold whitespace-nowrap"
+              >
                 결과 보기
               </button>
             ) : (

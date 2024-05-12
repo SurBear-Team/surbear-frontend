@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 interface IPointHistory {
   id: number;
-  payerId: number;
-  recipientId: number;
+  payer: string;
+  recipient: string;
   description: string;
   paidPoint: number;
   paymentType: string;
@@ -41,8 +41,8 @@ export default function PointHistory() {
             <ListCard
               key={el.id}
               getTime=""
-              content={`${el.recipientId} 에게 ${el.paidPoint} 포인트 지급`}
-              surveyOwner={`지급자 : ${el.payerId}`}
+              content={`${el.recipient} 에게 ${el.paidPoint} 포인트 지급`}
+              surveyOwner={`지급자 : ${el.payer}`}
               hasCancel
               onCancelClick={() => {
                 api

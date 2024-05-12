@@ -3,6 +3,7 @@ import { ListCard } from "./components/ListCard";
 import { TopBar } from "../components/TopBar/TopBar";
 import { useEffect, useState } from "react";
 import api from "../api/config";
+import { getTimeAsString } from "../utils";
 
 interface IPointHistory {
   deleted: boolean;
@@ -10,6 +11,7 @@ interface IPointHistory {
   memberId: number;
   paymentItem: string;
   usedPoint: number;
+  updatedAt: string;
 }
 
 export default function PointHistory() {
@@ -39,7 +41,8 @@ export default function PointHistory() {
         <div className="inner-screen">
           {data?.map((el) => (
             <ListCard
-              getTime=""
+              key={el.id}
+              getTime={getTimeAsString(el.updatedAt)}
               content={el.paymentItem}
               plusMinus={"-"}
               point={el.usedPoint + ""}

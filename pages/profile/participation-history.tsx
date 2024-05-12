@@ -40,6 +40,7 @@ export default function SurveyHistory() {
         <div className="inner-screen">
           {data?.map((el) => (
             <ListCard
+              key={el.id}
               getTime={getTimeAsString(el.createdAt)}
               content={el.title}
               openType={el.openType}

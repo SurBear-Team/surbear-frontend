@@ -91,6 +91,7 @@ export default function Store() {
             </div>
             {showDetail && (
               <ItemDetail
+                key={detailId!}
                 goodsCode={detailId!}
                 onBackClick={() => setShowDetail((prev) => !prev)}
                 onBuyClick={() => router.push(`/store/${detailId}`)}

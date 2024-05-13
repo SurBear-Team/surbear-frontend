@@ -8,6 +8,8 @@ import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import api from "@/pages/api/config";
 import { useRecoilValue } from "recoil";
 import { surveyIdAtom } from "../../surveyState";
+import { korToEngTypeMapping } from "../../components/typeMapping";
+import { useQueryClient } from "react-query";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -37,15 +39,8 @@ export const MakeSurvey = ({
     "주관식",
   ];
 
+  const queryClient = useQueryClient();
   const surveyId = useRecoilValue(surveyIdAtom);
-
-  const typeMapping: { [key: string]: string } = {
-    "객관식 - 단일 선택": "SINGLE_CHOICE",
-    "객관식 - 다중 선택": "MULTIPLE_CHOICE",
-    단답형: "SHORT_ANSWER",
-    슬라이더: "SLIDER",
-    주관식: "SUBJECTIVE",
-  };
 
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState("객관식 - 단일 선택");
@@ -63,7 +58,8 @@ export const MakeSurvey = ({
 
   // 객, 단, 슬 선택하는 함수
   const handleTypeSelect = (selectedTypeType: string) => {
-    const englishType = typeMapping[selectedTypeType] || "SINGLE_CHOICE";
+    const englishType =
+      korToEngTypeMapping[selectedTypeType] || "SINGLE_CHOICE";
     setTypeType(selectedTypeType);
     setShowType(false);
     setNowType(englishType);
@@ -122,8 +118,7 @@ export const MakeSurvey = ({
   };
 
   // (단답형) 최대 글자 수
-  const [count, setCount] = useState(7883); // 255는 임시
-
+  const [count, setCount] = useState(788183);
   // (공통) 저장 버튼
   const onSaveClick = () => {
     const isTitleEmpty = !questionTitle.trim();
@@ -190,7 +185,10 @@ export const MakeSurvey = ({
           required: isChecked,
         },
       })
-      .then(() => {});
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
 
     // 저장 후 입력 필드 초기화
     setQuestionTitle("");
@@ -200,7 +198,7 @@ export const MakeSurvey = ({
 
   const onSaveAndAddClick = () => {
     onSaveClick();
-    setIsNewSurvey?.((prevState) => true);
+    setIsNewSurvey?.(() => true);
   };
 
   return (

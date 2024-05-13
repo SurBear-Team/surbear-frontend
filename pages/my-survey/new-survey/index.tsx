@@ -7,10 +7,10 @@ import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
-import { OrderChangeCard } from "../components/OrderChangeCard";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { useRecoilState } from "recoil";
 import { surveyIdAtom } from "../surveyState";
+import { useQueryClient } from "react-query";
 
 export interface NewSurveyProps {
   title: string;
@@ -34,65 +34,9 @@ export default function NewSurvey() {
 
   const [saveDialog, setSaveDialog] = useState(false);
 
-  const [showOrderChange, setShowOrderChange] = useState(false);
-
   // (공통)페이지
   const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
   const [currentPage, setCurrentPage] = useState(0);
-
-  // 순서 변경 전 순서 저장
-  const [originalPage, setOriginalPage] = useState<NewSurveyProps[]>([]);
-
-  // 질문 순서를 위로 이동
-  const handleOrderUp = (index: number) => {
-    // 첫 번째 질문이 아닌 경우
-    if (index > 0) {
-      // 현재 페이지 질문을 복사해 새로운 배열 생성
-      const newPage = [...surveyPages[currentPage]];
-      [newPage[index], newPage[index - 1]] = [
-        newPage[index - 1],
-        newPage[index],
-      ]; // 선택한 질문과 바로 위 질문을 스왑
-      setSurveyPages(
-        surveyPages.map((page, pageIndex) =>
-          pageIndex === currentPage ? newPage : page
-        ) // 변경된 페이지 배열로 업데이트
-      );
-    }
-  };
-
-  // 질문 순서를 아래로 이동
-  const handleOrderDown = (index: number) => {
-    // 마지막 질문이 아닌 경우
-    if (index < surveyPages[currentPage].length - 1) {
-      // 현재 페이지 질문을 복사해 새로운 배열 생성
-      const newPage = [...surveyPages[currentPage]];
-      [newPage[index], newPage[index + 1]] = [
-        newPage[index + 1],
-        newPage[index],
-      ]; // 선택한 질문과 바로 아래 질문을 스왑
-      setSurveyPages(
-        surveyPages.map((page, pageIndex) =>
-          pageIndex === currentPage ? newPage : page
-        ) // 변경된 페이지 배열로 업데이트
-      );
-    }
-  };
-
-  const showOrderChangeModal = () => {
-    // 현재 페이지의 상태를 복사하여 저장
-    setOriginalPage([...surveyPages[currentPage]]);
-    setShowOrderChange(true);
-  };
-
-  const handleCancelOrderChange = () => {
-    setSurveyPages(
-      surveyPages.map((page, idx) =>
-        idx === currentPage ? [...originalPage] : page
-      )
-    ); // 원래 페이지로 복구
-    setShowOrderChange(false);
-  };
 
   // (공통) 설문 만들기
   const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
@@ -175,9 +119,35 @@ export default function NewSurvey() {
     setAlertDialog((prev) => !prev);
   };
 
+  // GPT 보여줄지
+  const [showRecommendation, setShowRecommendation] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [questions, setQuestions] = useState([]);
+
+  // 사용자의 질문을 API로 보내고 답변 받기
+  const fetchChatGPTResponse = async (title: string | null) => {
+    setIsLoading(true);
+    const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표를 붙이지 말고 한국어로 부탁해.`;
+    const response = await fetch("/api/chatgpt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question: prompt }),
+    });
+
+    const data = await response.json();
+    const splitQuestions = data.answers[0].split("\n"); // 응답을 줄바꿈으로 분할
+    setQuestions(splitQuestions);
+    setIsLoading(false);
+  };
+
+  const onGptRecommendationClick = () => {
+    fetchChatGPTResponse(surveyTitle);
+  };
+
   // GPT
-  const [showGTP, setShowGPT] = useState(true);
-  const [questions, setQuestions] = useState([surveyTitle, "222", "333"]);
+  const [showGTP, setShowGPT] = useState(false);
   const addGPTClick = () => {
     if (selectedQuestion) {
       setShowGPT(false);
@@ -191,9 +161,11 @@ export default function NewSurvey() {
     setSelectedQuestion(question);
   };
 
+  const queryClient = useQueryClient();
   // 설문조사 저장 버튼
   const saveSurvey = () => {
     setSaveDialog((prev) => !prev);
+    queryClient.invalidateQueries("my-surveys");
   };
 
   const onSaveClick = () => {
@@ -251,7 +223,6 @@ export default function NewSurvey() {
                   setEditData(componentData);
                 }}
                 onDelete={() => deleteQuestion(index)}
-                onOrderChange={() => showOrderChangeModal()}
               />
             )
           )}
@@ -313,6 +284,7 @@ export default function NewSurvey() {
                 }
                 leftText="취소"
                 onLeftClick={() => {
+                  queryClient.invalidateQueries("my-surveys");
                   setShowCloseDialog((prev) => !prev);
                 }}
                 rightText="예"
@@ -324,24 +296,46 @@ export default function NewSurvey() {
             </>
           )}
 
-          {showOrderChange && (
-            <OrderChangeCard
-              orderTitle="질문 순서 변경"
-              orderContents={surveyPages[currentPage].map(
-                (question) => question.title
-              )} // 질문 제목만 전달
-              onOrderUpClick={handleOrderUp}
-              onOrderDownClick={handleOrderDown}
-              onCancleClick={handleCancelOrderChange}
-              onMoveClick={() => setShowOrderChange(false)}
-            />
+          {/* 추천 보여줄까? */}
+          {showRecommendation && (
+            <>
+              <Overlay onClick={() => {}} />
+              <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
+                {/* 타이틀 */}
+                <span className="whitespace-nowrap sm-gray-9-text text-base">
+                  ChatGPT가 질문을 추천해드려요! <br />
+                  추천을 받으시겠어요?
+                </span>
+                {/* 버튼들 */}
+                <div className="w-full flex gap-4">
+                  <button
+                    onClick={() => {
+                      setShowRecommendation(false);
+                    }}
+                    className="long-button bg-white text-gray-5 border-gray-5 w-full"
+                  >
+                    아니요
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowRecommendation(false);
+                      onGptRecommendationClick();
+                      setShowGPT(true);
+                    }}
+                    className="long-button primary-btn-style w-full"
+                  >
+                    예
+                  </button>
+                </div>
+              </div>
+            </>
           )}
 
           {/* GPT */}
           {showGTP && (
             <>
               <Overlay onClick={() => {}} />
-              <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[400px]">
+              <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5">
                 {/* 타이틀 */}
                 <span className="whitespace-nowrap sm-gray-9-text text-base">
                   이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!
@@ -350,24 +344,27 @@ export default function NewSurvey() {
                   </div>
                 </span>
                 {/* 추천 받은 질문들 */}
-                <div className="flex flex-col gap-4">
-                  {questions.map((question) => (
-                    <div key={question} className="flex items-center gap-2">
-                      <div
-                        className={`check-box min-w-4 ${
-                          selectedQuestion === question
-                            ? "bg-[#6E7CF2]"
-                            : "bg-white border border-gray-7"
-                        }`}
-                        onClick={() => handleSelectQuestion(question)}
-                      />
-                      {question}
-                    </div>
-                  ))}
-                </div>
-
-                {/* 회색선 */}
-                <div className="gray-line my-6" />
+                {isLoading ? (
+                  <div>로딩 중...</div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {questions.map((question, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div
+                          className={`check-box min-w-4 ${
+                            selectedQuestion === question
+                              ? "bg-[#6E7CF2]"
+                              : "bg-white border border-gray-7"
+                          }`}
+                          onClick={() => handleSelectQuestion(question)}
+                        />
+                        <div className="text-gray-9 text-sm font-medium">
+                          {question}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* 버튼들 */}
                 <div className="w-full flex gap-4">

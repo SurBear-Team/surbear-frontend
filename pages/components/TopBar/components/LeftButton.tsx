@@ -15,12 +15,16 @@ export default function LeftButton({ hasBack, title, onClick }: IBackButton) {
   return (
     <>
       {hasBack ? (
-        <div
-          onClick={onClick ? onClick : onBackClick}
-          className="flex gap-2 items-center cursor-pointer flex-shrink-0"
-        >
-          <ArrowBackIcon />
-          <span className="font-semibold text-gray-9 text-base">{title}</span>
+        <div className="flex gap-2 items-center w-full">
+          <div
+            className="cursor-pointer"
+            onClick={onClick ? onClick : onBackClick}
+          >
+            <ArrowBackIcon />
+          </div>
+          <span className="font-semibold text-gray-9 text-base whitespace-nowrap overflow-hidden text-ellipsis">
+            {title}
+          </span>
         </div>
       ) : (
         <span className="text-base font-semibold whitespace-nowrap">

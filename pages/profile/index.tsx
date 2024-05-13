@@ -24,14 +24,33 @@ export default function Profile() {
             setMemberInfo(info);
           })
           .catch((err) => console.log(err));
+        api
+          .get("/member/profile/counting/participation", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => setParticipated(res.data))
+          .catch((err) => console.log(err));
+        api
+          .get("/member/profile/counting/survey", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => setRegistered(res.data))
+          .catch((err) => console.log(err));
+        api
+          .get("/product/history/counting", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => setProductCount(res.data))
+          .catch((err) => console.log(err));
       }
     }
   }, []);
 
   const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
 
-  console.log(memberInfo);
-
+  const [productCount, setProductCount] = useState(0);
+  const [registered, setRegistered] = useState(0);
+  const [participated, setParticipated] = useState(0);
   return (
     <>
       <TopBar title={memberInfo?.nickname!} hasSetting />
@@ -49,23 +68,23 @@ export default function Profile() {
         />
         <ProfileCard
           title="상품 교환 횟수"
-          content={`0 번`}
+          content={`${productCount} 번`}
           onClick={() => {
-            console.log("상품 교환 횟수");
+            router.push("/profile/payments-history");
           }}
         />
         <ProfileCard
           title="등록한 설문조사 개수"
-          content={`0 번`}
+          content={`${registered} 번`}
           onClick={() => {
-            console.log("등설개");
+            router.push("/profile/my-survey-history");
           }}
         />
         <ProfileCard
           title="참여한 설문조사 개수"
-          content={`0 개`}
+          content={`${participated} 개`}
           onClick={() => {
-            router.push("/profile/survey-history");
+            router.push("/profile/participation-history");
           }}
         />
       </div>

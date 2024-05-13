@@ -86,11 +86,8 @@ export default function Browse() {
     <>
       <TopBar
         title="설문 둘러보기"
-        hasSearch
         subTitle="전체"
         hasCategory
-        orderList={orderList}
-        orderType={orderType}
         onOrderSelect={(selected: string) => handleOrderSelect(selected)}
       />
 

@@ -14,16 +14,18 @@ export default function ManagerHistory() {
     <>
       <TopBar title="관리자 내역 조회" hasBack noShadow />
       <div className="white-screen flex-col justify-start pt-12">
-        <SettingCard
-          title="설문조사 강제 삭제 내역"
-          onClick={() => setShowPopUp((prev) => !prev)}
-        />
-        <SettingCard
-          title="포인트 지급 내역"
-          onClick={() => {
-            router.push("/manager/history/point");
-          }}
-        />
+        <div className="inner-screen">
+          <SettingCard
+            title="설문조사 강제 삭제 내역"
+            onClick={() => setShowPopUp((prev) => !prev)}
+          />
+          <SettingCard
+            title="포인트 지급 내역"
+            onClick={() => {
+              router.push("/manager/history/point");
+            }}
+          />
+        </div>
       </div>
       {showPopUp && (
         <>

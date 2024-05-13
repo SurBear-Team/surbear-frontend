@@ -1,24 +1,57 @@
 import { useRouter } from "next/router";
-import { ArrowBackIcon } from "../components/styles/Icons";
 import { ListCard } from "./components/ListCard";
 import { TopBar } from "../components/TopBar/TopBar";
+import { useEffect, useState } from "react";
+import api from "../api/config";
+import { getTimeAsString } from "../utils";
+
+interface IPointHistory {
+  deleted: boolean;
+  description: string;
+  id: number;
+  paidPoint: number;
+  payerId: number;
+  paymentType: string;
+  recipientId: number;
+  updatedAt: string;
+}
 
 export default function PointHistory() {
   const router = useRouter();
+  const [data, setData] = useState<IPointHistory[]>();
 
-  let PointList = ["ex1", "ex2", "ex3", "ex4", "ex5", "ex6"];
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      const token = localStorage.getItem("surbearToken");
+      if (token !== undefined) {
+        api
+          .get("/point/history", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((res) => {
+            setData(res.data.reverse());
+          })
+          .catch((err) => console.log(err));
+      }
+    }
+  }, []);
+
   return (
     <>
       <TopBar hasBack noShadow title="현재 포인트 내역" />
       <div className="white-screen flex-col pt-[50px] justify-start">
         <div className="inner-screen">
-          {PointList.map((index) => (
+          {data?.map((el) => (
             <ListCard
-              key={index}
-              getTime={"2024.03.15"}
-              content={`설문조사 참여`}
-              plusMinus={`+`}
-              point={`10pt`}
+              key={el.id}
+              getTime={getTimeAsString(el.updatedAt)}
+              content={el.description}
+              plusMinus={
+                el.paymentType === "CANCEL" || el.paymentType === "BUY_PRODUCT"
+                  ? "-"
+                  : "+"
+              }
+              point={el.paidPoint + ""}
             />
           ))}
         </div>

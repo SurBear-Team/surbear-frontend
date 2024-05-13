@@ -75,11 +75,11 @@ input::-webkit-inner-spin-button {
   }
 
   .long-button {
-    @apply w-full font-semibold rounded-full py-2 cursor-pointer border;
+    @apply w-full font-semibold rounded-full py-2 cursor-pointer border whitespace-nowrap;
   }
 
   .main-input {
-    @apply p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
+    @apply p-2 w-full border border-gray-4 text-gray-9 font-semibold placeholder:font-semibold placeholder:text-gray-4;
   }
 
   /* 회색글씨 */
@@ -103,7 +103,7 @@ input::-webkit-inner-spin-button {
   }
 
   .gray-line {
-    @apply bg-gray-2 h-[1px] flex justify-center;
+    @apply bg-gray-2 h-[1px] flex justify-center flex-shrink-0;
   }
 
   .check-box {

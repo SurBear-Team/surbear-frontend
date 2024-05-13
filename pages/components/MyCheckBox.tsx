@@ -1,7 +1,7 @@
 import { SmallCheckIcon } from "./styles/Icons";
 
 interface CheckBoxProps {
-  isChecked: boolean;
+  isChecked: boolean | undefined;
   onCheckClick: () => void;
 }
 

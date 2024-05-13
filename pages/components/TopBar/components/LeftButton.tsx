@@ -15,7 +15,7 @@ export default function LeftButton({ hasBack, title, onClick }: IBackButton) {
   return (
     <>
       {hasBack ? (
-        <div className="flex gap-2 items-center flex-shrink-0 w-full">
+        <div className="flex gap-2 items-center w-full">
           <div
             className="cursor-pointer"
             onClick={onClick ? onClick : onBackClick}

@@ -11,7 +11,7 @@ export default function MemberInfoDialog({
   onBtnClick,
 }: IMemberInfoDialog) {
   return (
-    <div className="card w-3/4 p-8 fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col gap-6">
+    <div className="card w-4/5 p-8 fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col gap-6 max-w-lg">
       <div className="flex flex-col gap-4">
         <span className="text-base font-semibold">회원 정보 조회</span>
         <div className="text-gray-9 gap-1 flex-col flex">

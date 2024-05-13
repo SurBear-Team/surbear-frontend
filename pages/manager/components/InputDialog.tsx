@@ -25,7 +25,7 @@ export const InputDialog = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-3/4 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col py-8 px-6 rounded-lg z-50 bg-white shadow-md"
+      className="w-4/5 max-w-lg absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col py-8 px-6 rounded-lg z-50 bg-white shadow-md"
     >
       <div className="text-gray-9 font-semibold">{title}</div>
       <input

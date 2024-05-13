@@ -61,7 +61,7 @@ export default function MySurvey() {
     const { data } = await api.get(`/survey/management/list`, {
       headers,
     });
-    return data;
+    return data.reverse();
   };
   const { data: mySurveyData } = useQuery<ISurvey[]>(
     "my-surveys",

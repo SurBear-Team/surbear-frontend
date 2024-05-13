@@ -66,7 +66,7 @@ export default function Store() {
         title="상품 교환"
         hasSearch
         subTitle={
-          goodsSearch === "" ? "전체" : `'${goodsSearch}'에 대한 검색 결과`
+          goodsSearch === "" ? "전체" : `'${goodsSearch}' 에 대한 검색 결과`
         }
       />
       <div className="screen">

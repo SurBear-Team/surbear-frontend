@@ -39,7 +39,7 @@ interface IProgressBar {
 function ProgressBar({ progress }: IProgressBar) {
   return (
     <div className="flex items-center gap-1 font-semibold text-[10px] text-gray-9">
-      <span>진행도</span>
+      <span className="whitespace-nowrap">진행도</span>
       <div className="w-16 h-2 bg-gray-3 rounded-full relative">
         <div
           style={{ width: `${progress}%` }}

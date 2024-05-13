@@ -36,33 +36,35 @@ export default function PointHistory() {
     <>
       <TopBar title="포인트 지급 내역" hasBack noShadow />
       <div className="white-screen flex-col justify-start pt-[66px]">
-        {data?.map((el) => {
-          return (
-            <ListCard
-              key={el.id}
-              getTime=""
-              content={`${el.recipient} 에게 ${el.paidPoint} 포인트 지급`}
-              surveyOwner={`지급자 : ${el.payer}`}
-              hasCancel
-              onCancelClick={() => {
-                api
-                  .post(
-                    "/point/canceling",
-                    {},
-                    {
-                      headers: { Authorization: `Bearer ${token}` },
-                      params: { pointHistoryId: el.id },
-                    }
-                  )
-                  .then((res) => {
-                    alert("지급이 취소되었습니다.");
-                    setUpdateList((prev) => prev + 1);
-                  })
-                  .catch((err) => alert("사용자 인증을 확인해주세요."));
-              }}
-            />
-          );
-        })}
+        <div className="inner-screen">
+          {data?.map((el) => {
+            return (
+              <ListCard
+                key={el.id}
+                getTime=""
+                content={`${el.recipient} 에게 ${el.paidPoint} 포인트 지급`}
+                surveyOwner={`지급자 : ${el.payer}`}
+                hasCancel
+                onCancelClick={() => {
+                  api
+                    .post(
+                      "/point/canceling",
+                      {},
+                      {
+                        headers: { Authorization: `Bearer ${token}` },
+                        params: { pointHistoryId: el.id },
+                      }
+                    )
+                    .then((res) => {
+                      alert("지급이 취소되었습니다.");
+                      setUpdateList((prev) => prev + 1);
+                    })
+                    .catch((err) => alert("사용자 인증을 확인해주세요."));
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
     </>
   );

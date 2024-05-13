@@ -27,7 +27,7 @@ export const Checkbox = ({
     {!isAll && (
       <button
         onClick={showSheet}
-        className="flex text-xs border border-[#6E7CF2] text-[#6E7CF2] px-2 py-1 font-bold ml-[14px] rounded-2xl"
+        className="flex flex-shrink-0 text-xs border border-[#6E7CF2] text-[#6E7CF2] px-2 py-1 font-bold ml-[14px] rounded-2xl"
       >
         보기
       </button>

@@ -252,7 +252,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   return (
     <>
       <Overlay onClick={() => {}} />
-      <div className="card fixed bg-white w-auto gap-4 shadow-md z-50">
+      <div className="card fixed bg-white w-4/5 max-w-lg min-w-80 gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
           <div className="sm-gray-9-text text-base">
@@ -294,7 +294,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         </div>
 
         {/* 결과비공개여부 최대인원 */}
-        <div className="flex gap-8">
+        <div className="flex w-full justify-between">
           {/* 결과 비공개 여부 */}
           <div className="flex items-center gap-2">
             <div className="sm-gray-9-text text-base whitespace-nowrap">
@@ -307,7 +307,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           </div>
 
           {/* 최대 인원 */}
-          <div className="flex justify-between w-full items-center gap-2">
+          <div className="flex justify-between items-center gap-2">
             <div className="sm-gray-9-text text-base">최대 인원</div>
             <input
               value={maxPeople === "788183" ? "" : maxPeople}

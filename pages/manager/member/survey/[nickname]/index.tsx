@@ -21,6 +21,10 @@ export default function MemberSurvey() {
     if (nickname !== undefined) {
       api.get(`/role/participating`, { params: { nickname } }).then((res) => {
         const data = res.data;
+        data.sort((a: ISurvey, b: ISurvey) => {
+          if (a.startDate > b.startDate) return -1;
+          if (a.startDate < b.startDate) return 1;
+        });
         setData(data);
       });
     }

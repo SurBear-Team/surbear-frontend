@@ -35,7 +35,7 @@ export const TabBar = () => {
             router.push("/store");
           }}
           Icon={<PointIcon active={isActive("/store")} />}
-          text="포인트 교환"
+          text="상품 교환"
           isActive={isActive("/store")}
         />
 

@@ -60,7 +60,12 @@ export default function Browse() {
           `/survey/management/${currentPage}/${CARD_PER_PAGE}?type=${categoryType}`
         )
         .then((res) => {
-          setData(res.data.content);
+          const getTime = new Date().toISOString().slice(0, 19) + "Z";
+          const original = res.data.content;
+          const filtered = original.filter(
+            (el: ISurvey) => el.deadLine > getTime
+          );
+          setData(filtered);
           setLastPage(res.data.totalPages);
         })
         .catch((err) => console.log(err));
@@ -86,11 +91,8 @@ export default function Browse() {
     <>
       <TopBar
         title="설문 둘러보기"
-        hasSearch
         subTitle="전체"
         hasCategory
-        orderList={orderList}
-        orderType={orderType}
         onOrderSelect={(selected: string) => handleOrderSelect(selected)}
       />
 

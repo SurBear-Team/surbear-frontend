@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
@@ -13,6 +13,15 @@ interface DialogState {
 
 export default function SignIn() {
   const router = useRouter();
+
+  // 로그인 여부 확인
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      if (localStorage.getItem("surbearToken") !== undefined) {
+        router.push("/browse");
+      }
+    }
+  }, []);
 
   const [dialog, setDialog] = useState<DialogState>({
     open: false,

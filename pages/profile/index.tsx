@@ -36,15 +36,21 @@ export default function Profile() {
           })
           .then((res) => setRegistered(res.data))
           .catch((err) => console.log(err));
+        api
+          .get("/product/history/counting", {
+            headers: { Authorization: `Bearer ${checkToken}` },
+          })
+          .then((res) => setProductCount(res.data))
+          .catch((err) => console.log(err));
       }
     }
   }, []);
 
   const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
 
+  const [productCount, setProductCount] = useState(0);
   const [registered, setRegistered] = useState(0);
   const [participated, setParticipated] = useState(0);
-
   return (
     <>
       <TopBar title={memberInfo?.nickname!} hasSetting />
@@ -62,9 +68,9 @@ export default function Profile() {
         />
         <ProfileCard
           title="상품 교환 횟수"
-          content={`0 번`}
+          content={`${productCount} 번`}
           onClick={() => {
-            console.log("상품 교환 횟수");
+            router.push("/profile/payments-history");
           }}
         />
         <ProfileCard

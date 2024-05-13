@@ -17,13 +17,17 @@ export default function SurveyDelete() {
   const { nickname } = router.query;
   const [data, setData] = useState<IDeletedSurvey[]>();
   useEffect(() => {
-    if (nickname !== undefined) {
+    if (nickname !== undefined && nickname !== "undefined") {
       api
         .get("/deletion/list", { params: { nickname: nickname } })
-        .then((res) => setData(res.data))
+        .then((res) => {
+          if (res.data !== undefined) setData(res.data);
+        })
         .catch((err) => console.log(err));
     }
   }, [nickname]);
+  console.log(data);
+
   return (
     <>
       <TopBar title="설문조사 강제 삭제 내역" hasBack noShadow />

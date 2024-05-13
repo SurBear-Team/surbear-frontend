@@ -1,6 +1,7 @@
 import api from "@/pages/api/config";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { ListCard } from "@/pages/profile/components/ListCard";
+import { getTimeAsString } from "@/pages/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,7 @@ interface IPointHistory {
   paidPoint: number;
   paymentType: string;
   deleted: boolean;
+  updatedAt: string;
 }
 
 export default function PointHistory() {
@@ -35,7 +37,7 @@ export default function PointHistory() {
           params: { nickname: nickname },
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then((res) => setData(res.data))
+        .then((res) => setData(res.data.reverse()))
         .catch((err) => console.log(err));
     }
   }, []);
@@ -48,9 +50,13 @@ export default function PointHistory() {
           {data?.map((el) => (
             <ListCard
               key={el.id}
-              getTime=""
+              getTime={getTimeAsString(el.updatedAt)}
               content={el.description}
-              plusMinus={el.paymentType === "CANCEL" ? "-" : "+"}
+              plusMinus={
+                el.paymentType === "CANCEL" || el.paymentType === "BUY_PRODUCT"
+                  ? "-"
+                  : "+"
+              }
               point={el.paidPoint + ""}
             />
           ))}

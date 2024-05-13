@@ -1,4 +1,4 @@
-import { BanIcon, SettingIcon } from "@/pages/components/styles/Icons";
+import { BanIcon } from "@/pages/components/styles/Icons";
 
 interface ListCardProps {
   getTime: string;
@@ -37,9 +37,12 @@ export const ListCard = ({
           {content}
         </div>
         {plusMinus && point && (
-          <div className="text-gray-9 font-semibold">
-            {plusMinus}
-            {point}
+          <div
+            className={`text-gray-9 font-semibold whitespace-nowrap ${
+              plusMinus === "+" ? "text-primary-1" : "text-red-1"
+            }`}
+          >
+            {`${plusMinus} ${point}`}
           </div>
         )}
         {status && (

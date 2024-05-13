@@ -31,9 +31,9 @@ export const Dialog = ({
     <>
       <Overlay onClick={onLeftClick!} />
 
-      <div className="card justify-center fixed w-3/4 px-6 py-8 gap-8 bg-white z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="card justify-center fixed max-w-lg w-4/5 px-6 py-8 gap-8 bg-white z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="flex flex-col w-full justify-center items-center gap-4">
-          <div className="text-gray-9 text-center font-semibold w-full whitespace-nowrap">
+          <div className="text-gray-9 text-center font-semibold w-full">
             {title}
           </div>
           {/* 본문 */}
@@ -42,7 +42,6 @@ export const Dialog = ({
               {content}
             </div>
           )}
-
         </div>
         {/* 텍스트에리어 */}
         {hasTextarea && (

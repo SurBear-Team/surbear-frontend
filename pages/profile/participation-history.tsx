@@ -27,11 +27,17 @@ export default function SurveyHistory() {
           })
           .then((res) => {
             const data = res.data;
+            data.sort((a: IHistory, b: IHistory) => {
+              if (a.createdAt > b.createdAt) return -1;
+              if (a.createdAt < b.createdAt) return 1;
+            });
             setData(data);
           });
       }
     }
   }, []);
+
+  console.log(data);
 
   return (
     <>
@@ -40,6 +46,7 @@ export default function SurveyHistory() {
         <div className="inner-screen">
           {data?.map((el) => (
             <ListCard
+              key={el.id}
               getTime={getTimeAsString(el.createdAt)}
               content={el.title}
               openType={el.openType}

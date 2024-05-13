@@ -7,12 +7,10 @@ import { getTimeAsString } from "../utils";
 
 interface IPointHistory {
   deleted: boolean;
-  description: string;
   id: number;
-  paidPoint: number;
-  payerId: number;
-  paymentType: string;
-  recipientId: number;
+  memberId: number;
+  paymentItem: string;
+  usedPoint: number;
   updatedAt: string;
 }
 
@@ -25,7 +23,7 @@ export default function PointHistory() {
       const token = localStorage.getItem("surbearToken");
       if (token !== undefined) {
         api
-          .get("/point/history", {
+          .get("/product/history", {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
@@ -45,13 +43,9 @@ export default function PointHistory() {
             <ListCard
               key={el.id}
               getTime={getTimeAsString(el.updatedAt)}
-              content={el.description}
-              plusMinus={
-                el.paymentType === "CANCEL" || el.paymentType === "BUY_PRODUCT"
-                  ? "-"
-                  : "+"
-              }
-              point={el.paidPoint + ""}
+              content={el.paymentItem}
+              plusMinus={"-"}
+              point={el.usedPoint + ""}
             />
           ))}
         </div>

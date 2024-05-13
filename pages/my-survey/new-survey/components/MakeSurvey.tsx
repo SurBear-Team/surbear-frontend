@@ -9,6 +9,7 @@ import api from "@/pages/api/config";
 import { useRecoilValue } from "recoil";
 import { surveyIdAtom } from "../../surveyState";
 import { korToEngTypeMapping } from "../../components/typeMapping";
+import { useQueryClient } from "react-query";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -38,6 +39,7 @@ export const MakeSurvey = ({
     "주관식",
   ];
 
+  const queryClient = useQueryClient();
   const surveyId = useRecoilValue(surveyIdAtom);
 
   const [showType, setShowType] = useState(false);
@@ -183,7 +185,10 @@ export const MakeSurvey = ({
           required: isChecked,
         },
       })
-      .then(() => {});
+      .then(() => {})
+      .catch((error) => {
+        console.error(error);
+      });
 
     // 저장 후 입력 필드 초기화
     setQuestionTitle("");
@@ -193,7 +198,7 @@ export const MakeSurvey = ({
 
   const onSaveAndAddClick = () => {
     onSaveClick();
-    setIsNewSurvey?.((prevState) => true);
+    setIsNewSurvey?.(() => true);
   };
 
   return (

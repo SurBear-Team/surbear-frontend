@@ -24,7 +24,7 @@ export const TypeDropDown = ({
         <div className="sm-gray-9-text text-center w-full">{typeType}</div>
         <TriangleDownIcon />
         {showType && (
-          <div className="left-0 top-full sm-gray-9-text text-center w-full absolute rounded border-[1px] border-gray-4 bg-white">
+          <div className="left-0 top-full sm-gray-9-text text-center w-full absolute rounded border-[1px] border-gray-4 bg-white z-20">
             {typeList?.map((data, index) => (
               <div
                 key={index}

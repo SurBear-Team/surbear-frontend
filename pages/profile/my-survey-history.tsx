@@ -20,7 +20,7 @@ export default function SurveyHistory() {
           })
           .then((res) => {
             const data = res.data;
-            setData(data);
+            setData(data.reverse());
           });
       }
     }
@@ -33,6 +33,7 @@ export default function SurveyHistory() {
         <div className="inner-screen">
           {data?.map((el) => (
             <ListCard
+              key={el.id}
               getTime={getTimeAsString(el.startDate)}
               content={el.title}
               status={el.ongoingType}

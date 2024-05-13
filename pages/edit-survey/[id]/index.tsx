@@ -1,6 +1,6 @@
 import api from "@/pages/api/config";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
 import { editSurveyTitleAtom } from "../editSurveyState";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ import {
 
 export default function EditSurveyPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { id: surveyId } = router.query; // 현재 id 가져오기
   const surveyTitle = useRecoilValue(editSurveyTitleAtom); // recoil로 가져온 제목
   // 새 설문 만들기 창
@@ -172,6 +173,7 @@ export default function EditSurveyPage() {
   // 설문조사 저장 버튼
   const saveSurvey = () => {
     setSaveDialog((prev) => !prev);
+    queryClient.invalidateQueries("my-surveys");
   };
   const onSaveClick = () => {
     localStorage.removeItem("surveyTitle");
@@ -531,6 +533,7 @@ export default function EditSurveyPage() {
               rightText="예"
               onRightClick={() => {
                 router.back();
+                queryClient.invalidateQueries("my-surveys");
               }}
               isDelete={true}
             />

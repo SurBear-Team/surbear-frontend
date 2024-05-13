@@ -26,6 +26,12 @@ export default function SignUpDetail() {
     open: false,
     title: "",
   });
+  const showDialog = (title: string) => {
+    setDialog({ open: true, title: title });
+  };
+  const hideDialog = () => {
+    setDialog({ open: false, title: "" });
+  };
 
   // 사용자가 입력하는 닉네임
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
@@ -49,15 +55,9 @@ export default function SignUpDetail() {
       const axiosError = error as AxiosError;
       // (409) 이미 가입한 닉네임이면
       if (axiosError.response && axiosError.response.status === 409) {
-        setDialog({
-          open: true,
-          title: "이미 가입한 닉네임이에요",
-        });
+        showDialog("이미 가입한 닉네임이에요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 오류가 발생했어요",
-        });
+        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
       }
     }
   };
@@ -108,10 +108,7 @@ export default function SignUpDetail() {
   // 다음 버튼
   const onNextClick = async () => {
     if (!userNickname.trim()) {
-      setDialog({
-        open: true,
-        title: "닉네임을 입력해주세요",
-      });
+      showDialog("닉네임을 입력해주세요");
       return;
     }
 
@@ -126,19 +123,12 @@ export default function SignUpDetail() {
       console.error(axiosError);
       // (409) 중복
       if (axiosError.response && axiosError.response.status === 409) {
-        setDialog({
-          open: true,
-          title: "이미 가입한 계정이에요",
-        });
+        showDialog("이미 가입한 계정이에요");
       } else {
-        setDialog({
-          open: true,
-          title: "회원가입에 실패했습니다. 다시 시도해주세요",
-        });
+        showDialog("회원가입에 실패했습니다. 다시 시도해주세요");
       }
     }
   };
-
   return (
     <>
       <TopBar hasBack noShadow title="회원가입" />
@@ -219,9 +209,7 @@ export default function SignUpDetail() {
             <Dialog
               title={dialog.title}
               rightText="확인"
-              onRightClick={() => {
-                setDialog((current) => ({ ...current, open: false }));
-              }}
+              onRightClick={hideDialog}
               onlyOneBtn
             />
           )}

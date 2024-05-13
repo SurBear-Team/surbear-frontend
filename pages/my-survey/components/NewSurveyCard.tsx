@@ -6,7 +6,7 @@ import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
 import { getTime } from "@/pages/utils";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { surveyIdAtom } from "../surveyState";
@@ -46,7 +46,7 @@ interface NewSurveyCardProps {
 export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   const isEdit = !!surveyId; // surveyId가 있다면 isEdit은 true
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   // 유저 토큰
   const [token, setToken] = useState(0);
   useEffect(() => {
@@ -238,6 +238,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         );
         if (response.status === 200) {
           setRecoilSurveyId(response.data);
+          queryClient.invalidateQueries("my-surveys");
           router.push("/my-survey/new-survey");
         } else {
           showDialog("설문 생성에 실패했습니다.");

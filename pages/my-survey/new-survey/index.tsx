@@ -24,8 +24,13 @@ export default function NewSurvey() {
   const router = useRouter();
 
   const [, setSurveyId] = useRecoilState(surveyIdAtom);
-
-  const surveyTitle = localStorage.getItem("surveyTitle");
+  const [surveyTitle, setSurveyTitle] = useState("");
+  useEffect(() => {
+    const localTitle = localStorage.getItem("surveyTitle");
+    if (localTitle) {
+      setSurveyTitle(localTitle);
+    }
+  }, []);
 
   const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
@@ -165,12 +170,12 @@ export default function NewSurvey() {
   // 설문조사 저장 버튼
   const saveSurvey = () => {
     setSaveDialog((prev) => !prev);
-    queryClient.invalidateQueries("my-surveys");
   };
 
   const onSaveClick = () => {
     localStorage.removeItem("surveyTitle");
     setSurveyId("");
+    queryClient.invalidateQueries("my-surveys");
     router.push("/my-survey");
   };
 
@@ -256,7 +261,6 @@ export default function NewSurvey() {
               title={alertText}
               leftText="취소"
               rightText="삭제"
-              onlyOneBtn={false}
               onLeftClick={() => {
                 setAlertDialog((prev) => !prev);
               }}
@@ -289,6 +293,7 @@ export default function NewSurvey() {
                 }}
                 rightText="예"
                 onRightClick={() => {
+                  queryClient.invalidateQueries("my-surveys");
                   router.back();
                 }}
                 isDelete={true}

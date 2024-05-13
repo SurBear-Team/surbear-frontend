@@ -10,6 +10,7 @@ import { SurveyTabBar } from "./components/SurveyTabBar";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { useRecoilState } from "recoil";
 import { surveyIdAtom } from "../surveyState";
+import { useQueryClient } from "react-query";
 
 export interface NewSurveyProps {
   title: string;
@@ -160,9 +161,11 @@ export default function NewSurvey() {
     setSelectedQuestion(question);
   };
 
+  const queryClient = useQueryClient();
   // 설문조사 저장 버튼
   const saveSurvey = () => {
     setSaveDialog((prev) => !prev);
+    queryClient.invalidateQueries("my-surveys");
   };
 
   const onSaveClick = () => {
@@ -281,6 +284,7 @@ export default function NewSurvey() {
                 }
                 leftText="취소"
                 onLeftClick={() => {
+                  queryClient.invalidateQueries("my-surveys");
                   setShowCloseDialog((prev) => !prev);
                 }}
                 rightText="예"

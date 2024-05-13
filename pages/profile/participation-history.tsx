@@ -27,11 +27,17 @@ export default function SurveyHistory() {
           })
           .then((res) => {
             const data = res.data;
+            data.sort((a: IHistory, b: IHistory) => {
+              if (a.createdAt > b.createdAt) return -1;
+              if (a.createdAt < b.createdAt) return 1;
+            });
             setData(data);
           });
       }
     }
   }, []);
+
+  console.log(data);
 
   return (
     <>

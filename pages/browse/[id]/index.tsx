@@ -147,7 +147,6 @@ export default function Survey() {
                             questionId: id,
                             answers: [selected],
                           };
-                          console.log(newAnswer);
                           const otherAnswers = answers.filter(
                             (el) => el.questionId !== id
                           );

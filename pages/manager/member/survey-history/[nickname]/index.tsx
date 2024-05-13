@@ -24,6 +24,10 @@ export default function MemberSurvey() {
         .get(`/role/participating/history`, { params: { nickname } })
         .then((res) => {
           const data = res.data;
+          data.sort((a: IMemberHistory, b: IMemberHistory) => {
+            if (a.createdAt > b.createdAt) return -1;
+            if (a.createdAt < b.createdAt) return 1;
+          });
           setData(data);
         });
     }

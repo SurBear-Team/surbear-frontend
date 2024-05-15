@@ -8,12 +8,27 @@ import api from "@/pages/api/config";
 import { IMemberInfo } from "@/pages/manager/member";
 import { getAge, getConstAge } from "@/pages/utils";
 import { InputDialog } from "@/pages/manager/components/InputDialog";
+import { useQueryClient } from "react-query";
+import { Dialog } from "@/pages/components/Dialog";
 
 export default function MemberUpdate() {
   const router = useRouter();
   const [updateList, setUpdateList] = useState(0);
+  const queryClient = useQueryClient();
 
   const [token, setToken] = useState("");
+
+  const [showDialog, setShowDialog] = useState({
+    open: false,
+    title: "",
+  });
+  const openDialog = (title: string) => {
+    setShowDialog({ open: true, title: title });
+  };
+  const hideDialog = () => {
+    setShowDialog({ open: false, title: "" });
+  };
+
   useEffect(() => {
     if (typeof window !== undefined) {
       const checkToken = localStorage.getItem("surbearToken");
@@ -51,7 +66,6 @@ export default function MemberUpdate() {
   const toggleShowSheet = () => {
     setShowSheet(!showSheet);
   };
-
   return (
     <>
       <TopBar hasBack title="회원 정보 조회" noShadow />
@@ -115,14 +129,19 @@ export default function MemberUpdate() {
                               { headers: { Authorization: `Bearer ${token}` } }
                             )
                             .then((res) => {
-                              alert("회원 정보가 수정되었습니다");
+                              openDialog("회원 정보가 수정되었습니다");
                               setShowNicknameDialog((prev) => !prev);
                               setUpdateList((prev) => prev + 1);
+                              queryClient.invalidateQueries("member");
                             })
-                            .catch((err) => console.log(res));
+                            .catch((err) =>
+                              openDialog(
+                                "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+                              )
+                            );
                         }
                       })
-                      .catch((err) => alert("중복된 닉네임입니다."));
+                      .catch((err) => openDialog("중복된 닉네임입니다."));
                   }
                 }}
                 placeholder="변경할 닉네임을 입력해주세요."
@@ -145,13 +164,27 @@ export default function MemberUpdate() {
                     { age: newAge, nickname: nickname },
                     { headers: { Authorization: `Bearer ${token}` } }
                   )
-                  .then((res) => setUpdateList((prev) => prev + 1))
+                  .then((res) => {
+                    setUpdateList((prev) => prev + 1);
+                    queryClient.invalidateQueries("member");
+                  })
                   .catch((err) =>
-                    alert("오류가 발생하였습니다. 다시 시도해주세요")
+                    openDialog(
+                      "네트워크 오류가 발생하였습니다. 다시 시도해주세요"
+                    )
                   );
               }}
             />
           </>
+        )}
+
+        {showDialog.open && (
+          <Dialog
+            title={showDialog.title}
+            onlyOneBtn
+            rightText="확인"
+            onRightClick={hideDialog}
+          />
         )}
       </div>
     </>

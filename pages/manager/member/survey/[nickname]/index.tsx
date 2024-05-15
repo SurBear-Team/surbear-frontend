@@ -30,6 +30,8 @@ export default function MemberSurvey() {
     }
   }, [updateList, nickname]);
 
+  console.log(data);
+
   const [token, setToken] = useState("");
   useEffect(() => {
     if (typeof window !== undefined) {

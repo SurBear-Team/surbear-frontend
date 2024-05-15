@@ -38,15 +38,26 @@ export const MakeSurvey = ({
     "슬라이더",
     "주관식",
   ];
-
-  const queryClient = useQueryClient();
   const surveyId = useRecoilValue(surveyIdAtom);
 
   const [showType, setShowType] = useState(false);
   const [typeType, setTypeType] = useState("객관식 - 단일 선택");
   const [nowType, setNowType] = useState("SINGLE_CHOICE");
-  const [alertDialog, setAlertDialog] = useState(false);
-  const [alertText, setAlertText] = useState("");
+
+  // 원버튼 다이얼로그
+  const [oneBtnDialog, setOneBtnDialog] = useState<{
+    open: boolean;
+    title: string;
+  }>({
+    open: false,
+    title: "",
+  });
+  const showOneBtnDialog = (message: string) => {
+    setOneBtnDialog({ open: true, title: message });
+  };
+  const hideOneBtnDialog = () => {
+    setOneBtnDialog({ open: false, title: "" });
+  };
 
   // 필수 답변 체크 박스
   const [isChecked, setIsChecked] = useState(false);
@@ -102,8 +113,7 @@ export const MakeSurvey = ({
       const newChoices = choices.filter((_, i) => i !== index);
       setChoices(newChoices);
     } else {
-      setAlertDialog(true);
-      setAlertText("답변은 최소 2개");
+      showOneBtnDialog("답변은 최소 2개로 해주세요");
     }
   };
   // (객관식) 답변 onChange
@@ -123,14 +133,12 @@ export const MakeSurvey = ({
   const onSaveClick = () => {
     const isTitleEmpty = !questionTitle.trim();
     if (isTitleEmpty) {
-      setAlertDialog(true);
-      setAlertText("제목을 입력해주세요.");
+      showOneBtnDialog("제목을 입력해주세요");
       return; // 함수 중단
     }
 
     if (hasDuplicates) {
-      setAlertDialog(true);
-      setAlertText("중복된 답변이 있습니다. 다시 확인해주세요.");
+      showOneBtnDialog("중복된 답변이 있습니다. 다시 확인해주세요");
       return;
     }
 
@@ -141,8 +149,7 @@ export const MakeSurvey = ({
     ) {
       const isEmptyAnswer = choices.some((choice) => !choice.trim());
       if (isEmptyAnswer) {
-        setAlertDialog(true);
-        setAlertText("답변을 모두 입력해주세요.");
+        showOneBtnDialog("답변을 모두 입력해주세요");
         return; // 함수 중단
       }
       const multipleChoiceSurveyData = {
@@ -188,6 +195,7 @@ export const MakeSurvey = ({
       .then(() => {})
       .catch((error) => {
         console.error(error);
+        showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
       });
 
     // 저장 후 입력 필드 초기화
@@ -281,14 +289,12 @@ export const MakeSurvey = ({
         />
       </div>
       <div className="fixed h-screen z-50 flex justify-center">
-        {alertDialog && (
+        {oneBtnDialog.open && (
           <Dialog
-            title={alertText}
-            onlyOneBtn={true}
+            title={oneBtnDialog.title}
+            onlyOneBtn
             rightText="닫기"
-            onRightClick={() => {
-              setAlertDialog((prev) => !prev);
-            }}
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

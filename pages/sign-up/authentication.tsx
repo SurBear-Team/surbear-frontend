@@ -29,15 +29,18 @@ export default function Authentication() {
     open: false,
     title: "",
   });
+  const showDialog = (title: string) => {
+    setDialog({ open: true, title: title });
+  };
+  const hideDialog = () => {
+    setDialog({ open: false, title: "" });
+  };
 
   // 가입된 메일인지 확인
   const checkDuplicate = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
-      setDialog({
-        open: true,
-        title: "유효하지 않은 이메일이에요",
-      });
+      showDialog("유효하지 않은 이메일이에요");
       return; // 잘못된 이메일 입력하고 버튼 누르면 함수 종료
     }
     try {
@@ -49,25 +52,16 @@ export default function Authentication() {
       if (response.data === true) {
         handleSendCode();
       } else {
-        setDialog({
-          open: true,
-          title: "인증번호 전송에 실패했어요",
-        });
+        showDialog("인증번호 전송에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       // (409) 이미 가입한 이메일이면
       if (axiosError.response && axiosError.response.status === 409) {
-        setDialog({
-          open: true,
-          title: "이미 가입한 이메일이에요",
-        });
+        showDialog("이미 가입한 이메일이에요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 오류가 발생했어요",
-        });
+        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
       }
     }
   };
@@ -80,27 +74,18 @@ export default function Authentication() {
       });
       setVeriCode(response.data); // POST하고 받은 번호 저장
 
-      setDialog({
-        open: true,
-        title: "인증번호가 전송되었어요",
-      });
+      showDialog("인증번호가 전송되었어요");
       setCodeSent(true); // 코드 받았음 true
 
       // 5분 후 인증번호 초기화 및 세션 만료 알림
       setTimeout(() => {
         setVeriCode("");
-        setDialog({
-          open: true,
-          title: "세션이 만료됐어요 다시 인증해주세요",
-        });
+        showDialog("세션이 만료됐어요 다시 인증해주세요");
         setInputVeriCode("");
       }, 5 * 60 * 1000); // 5분
     } catch (error) {
       console.error(error);
-      setDialog({
-        open: true,
-        title: "네트워크 오류가 발생했어요",
-      });
+      showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
     }
   };
 
@@ -114,31 +99,19 @@ export default function Authentication() {
 
       if (response.status === 200) {
         setIsVerified(true); // 인증성공 true
-        setDialog({
-          open: true,
-          title: "인증에 성공했어요",
-        });
+        showDialog("인증에 성공했어요");
         setUserEmail(inputEmail); // recoil에 이메일 저장
       } else {
-        setDialog({
-          open: true,
-          title: "인증에 실패했어요",
-        });
+        showDialog("인증에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       // (401) 인증번호 틀리면
       if (axiosError.response && axiosError.response.status === 401) {
-        setDialog({
-          open: true,
-          title: "인증 번호를 확인해주세요",
-        });
+        showDialog("인증 번호를 확인해주세요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 오류가 발생했어요",
-        });
+        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
       }
     }
   };
@@ -148,10 +121,7 @@ export default function Authentication() {
     {
       isVerified
         ? router.push("/sign-up")
-        : setDialog({
-            open: true,
-            title: "이메일 인증을 완료해주세요",
-          });
+        : showDialog("이메일 인증을 완료해주세요");
     }
   };
 
@@ -214,9 +184,7 @@ export default function Authentication() {
             <Dialog
               title={dialog.title}
               rightText="확인"
-              onRightClick={() => {
-                setDialog((current) => ({ ...current, open: false }));
-              }}
+              onRightClick={hideDialog}
               onlyOneBtn
             />
           )}

@@ -32,7 +32,13 @@ export const CreatedQuestion = ({
           key={index}
           className="flex w-full p-2 mb-4 items-center gap-3 border-[1px] border-gray-4 rounded-lg"
         >
-          <div className="check-box bg-white border-[1px] border-gray-7 min-w-4" />
+          <div
+            className={`${
+              type === "객관식 - 다중 선택"
+                ? "check-box"
+                : "w-4 h-4 rounded-full"
+            } bg-white border-[1px] border-gray-7 min-w-4`}
+          />
           <div className="sm-gray-9-text font-normal">{answer}</div>
         </div>
       ))}

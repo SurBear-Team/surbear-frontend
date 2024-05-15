@@ -14,7 +14,7 @@ import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAn
 import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 import { NewSurveyProps } from "@/pages/my-survey/new-survey";
 import { EditTabBar } from "../components/EditTabBar";
-import { DialogState, SurveyData, SurveyQuestion } from "../editInterface";
+import { SurveyData, SurveyQuestion } from "../editInterface";
 import {
   korToEngTypeMapping,
   engToKorTypeMapping,
@@ -29,11 +29,19 @@ export default function EditSurveyPage() {
   const [isNewSurvey, setIsNewSurvey] = useState(false);
 
   // 원버튼 다이얼로그
-  const [oneBtnDialog, setOneBtnDialog] = useState<DialogState>({
+  const [oneBtnDialog, setOneBtnDialog] = useState<{
+    open: boolean;
+    title: string;
+  }>({
     open: false,
     title: "",
-    text: "",
   });
+  const showOneBtnDialog = (message: string) => {
+    setOneBtnDialog({ open: true, title: message });
+  };
+  const hideOneBtnDialog = () => {
+    setOneBtnDialog({ open: false, title: "" });
+  };
 
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
@@ -162,11 +170,7 @@ export default function EditSurveyPage() {
         refetch();
       }
     } catch (error) {
-      setOneBtnDialog({
-        open: true,
-        text: "닫기",
-        title: "네트워크 에러. 나중에 다시 시도해주세요",
-      });
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
     }
   };
 
@@ -212,11 +216,7 @@ export default function EditSurveyPage() {
       const newChoices = choices.filter((_, i) => i !== index);
       setChoices(newChoices);
     } else {
-      setOneBtnDialog({
-        open: true,
-        title: "답변은 최소 2개입니다",
-        text: "확인",
-      });
+      showOneBtnDialog("답변은 최소 2개입니다");
     }
   };
 
@@ -254,11 +254,7 @@ export default function EditSurveyPage() {
     try {
       const isTitleEmpty = !questionTitle.trim();
       if (isTitleEmpty) {
-        setOneBtnDialog({
-          open: true,
-          title: "제목을 입력해주세요",
-          text: "확인",
-        });
+        showOneBtnDialog("제목을 입력해주세요");
         return; // 함수 중단
       }
 
@@ -271,11 +267,7 @@ export default function EditSurveyPage() {
         // 중복 답변 확인
         const choiceSet = new Set(choices); // Set은 배열을 객체로 만들고, 중복된 값을 제거함
         if (choiceSet.size !== choices.length) {
-          setOneBtnDialog({
-            open: true,
-            title: "중복된 답변이 있습니다. 다시 확인해 주세요",
-            text: "확인",
-          });
+          showOneBtnDialog("중복된 답변이 있습니다. 다시 확인해 주세요");
           return; // 함수 중단
         }
         surveyData = {
@@ -322,11 +314,7 @@ export default function EditSurveyPage() {
         refetch();
       }
     } catch (error) {
-      setOneBtnDialog({
-        open: true,
-        title: "네트워크 에러. 나중에 다시 시도해주세요",
-        text: "닫기",
-      });
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
     }
   };
 
@@ -516,7 +504,6 @@ export default function EditSurveyPage() {
               isDelete={true}
             />
           )}
-
           {showCloseDialog && (
             <Dialog
               title={
@@ -538,19 +525,6 @@ export default function EditSurveyPage() {
               isDelete={true}
             />
           )}
-
-          {/* 원버튼 다이얼로그 */}
-          {oneBtnDialog.open && (
-            <Dialog
-              title={oneBtnDialog.title}
-              rightText={oneBtnDialog.text}
-              onlyOneBtn
-              onRightClick={() => {
-                setOneBtnDialog((current) => ({ ...current, open: false }));
-              }}
-            />
-          )}
-
           {/* 저장하기 누르면 나오는 다이얼로그 */}
           {saveDialog && (
             <Dialog
@@ -561,6 +535,15 @@ export default function EditSurveyPage() {
             />
           )}
 
+          {/* 원버튼 다이얼로그 */}
+          {oneBtnDialog.open && (
+            <Dialog
+              title={oneBtnDialog.title}
+              rightText="확인"
+              onlyOneBtn
+              onRightClick={hideOneBtnDialog}
+            />
+          )}
           {editIndex === null && !isNewSurvey && (
             <EditTabBar
               setIsNewSurvey={setIsNewSurvey}

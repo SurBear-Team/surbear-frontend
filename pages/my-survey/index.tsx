@@ -178,26 +178,27 @@ export default function MySurvey() {
       <div className="screen pt-[50px]">
         <div className="list-screen">
           <div className="list">
-            {mySurveyData?.map(
-              (data, index) =>
-                !data.deleted && ( // 삭제되지 않은거만 보이게
-                  <MySurveyCard
-                    key={index}
-                    category={data.surveyType}
-                    title={data.title}
-                    onDeleteClick={() => handleDeleteSurvey(data.id)}
-                    beforeStart={data.ongoingType === "PAUSE"} // true면 설문 시작 나옴
-                    beforeFinish={data.ongoingType === "PROGRESS"} // true면 설문 종료 나옴
-                    showResult={data.ongoingType === "CLOSE"} // true면 결과 보기 나옴
-                    onUpdateClick={() => handleEditSurvey(data.id.toString())}
-                    onStartClick={() => handleStartSurvey(data.id)}
-                    onFinishClick={() => handleFinishSurvey(data.id)}
-                    onResultClick={() =>
-                      handleShowResult(data.id.toString(), data.title)
-                    }
-                  />
-                )
-            )}
+            {token &&
+              mySurveyData?.map(
+                (data, index) =>
+                  !data.deleted && ( // 삭제되지 않은거만 보이게
+                    <MySurveyCard
+                      key={index}
+                      category={data.surveyType}
+                      title={data.title}
+                      onDeleteClick={() => handleDeleteSurvey(data.id)}
+                      beforeStart={data.ongoingType === "PAUSE"} // true면 설문 시작 나옴
+                      beforeFinish={data.ongoingType === "PROGRESS"} // true면 설문 종료 나옴
+                      showResult={data.ongoingType === "CLOSE"} // true면 결과 보기 나옴
+                      onUpdateClick={() => handleEditSurvey(data.id.toString())}
+                      onStartClick={() => handleStartSurvey(data.id)}
+                      onFinishClick={() => handleFinishSurvey(data.id)}
+                      onResultClick={() =>
+                        handleShowResult(data.id.toString(), data.title)
+                      }
+                    />
+                  )
+              )}
           </div>
         </div>
         {showNewSurveyCard && (

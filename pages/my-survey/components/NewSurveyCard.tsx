@@ -5,28 +5,17 @@ import { useRouter } from "next/router";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
-import { getTime } from "@/pages/utils";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { surveyIdAtom } from "../surveyState";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-// get으로 가져온 시간 보여주기 위해
-const formatDeadline = (deadline: string | number | Date) => {
-  const date = new Date(deadline);
-  const year = date.getFullYear();
-  const month = `0${date.getMonth() + 1}`.slice(-2);
-  const day = `0${date.getDate()}`.slice(-2);
-  const hour = `0${date.getHours()}`.slice(-2);
-  const minute = `0${date.getMinutes()}`.slice(-2);
-
-  return `${year}-${month}-${day}T${hour}:${minute}`;
-};
 
 interface SurveyData {
   surveyType: string;
@@ -78,7 +67,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       setCategory(categoryMapping[data.surveyType] || "ETC");
       setIsChecked(data.openType === true);
       setMaxPeople(data.maximumNumberOfPeople.toString() || "");
-      setDeadline(formatDeadline(data.deadLine));
+      setDeadline(new Date(data.deadLine));
     },
   });
 
@@ -153,11 +142,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     setMaxPeople(e.target.value);
   };
 
-  const [deadline, setDeadline] = useState("");
-  // 종료 시간 onChange
-  const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDeadline(e.target.value);
-  };
+  const [deadline, setDeadline] = useState<Date | null>(null);
 
   // 유효성 검사
   // false를 반환할 수 있음
@@ -170,18 +155,11 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     const descriptionTrimmed = description.trim(); // 앞뒤 공백 제거
 
     if (!deadline) {
-      showDialog("종료 시간을 입력해주세요.");
+      showDialog("종료 날짜와 시간을 입력해주세요.");
       return false;
     }
 
-    const { year, month, date, hour, minute } = getTime(deadline);
-    const isoDeadline = new Date(
-      year,
-      month - 1,
-      date,
-      hour,
-      minute
-    ).toISOString();
+    const isoDeadline = deadline.toISOString(); // 분과 초를 00으로 고정
 
     if (!titleTrimmed || !descriptionTrimmed) {
       showDialog("설문 주제와 설문 설명을 입력해주세요");
@@ -319,15 +297,19 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           </div>
         </div>
 
-        {/* 종료 시간 */}
+        {/* 종료 날짜 및 시간 */}
         <div className="w-full flex flex-col gap-1">
           <div className="sm-gray-9-text text-base whitespace-nowrap">
-            종료 시간
+            종료 날짜 및 시간
           </div>
-          <input
-            value={deadline}
-            onChange={handleEndTimeChange}
-            type="datetime-local"
+          <DatePicker
+            selected={deadline} // 사용자가 선택한 날짜 상태
+            onChange={(date: Date) => setDeadline(date)}
+            showTimeSelect // 시간 선택 기능 활성화
+            timeFormat="HH"
+            timeIntervals={60} // 시간을 1시간 단위로 설정
+            dateFormat="yyyy년 MM월 dd일 HH시"
+            timeCaption="시간" // 시간 선택 부분에 써있는거
             className="w-full p-2 border border-gray-4 sm-gray-9-text"
           />
         </div>

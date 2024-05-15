@@ -14,8 +14,9 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "target": "es2015"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/chatgpt.js"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", ".next"]
 }

@@ -1,6 +1,7 @@
 import api from "@/pages/api/config";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { ListCard } from "@/pages/profile/components/ListCard";
+import { getTimeAsString } from "@/pages/utils";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,7 @@ interface IPointHistory {
   paidPoint: number;
   paymentType: string;
   deleted: boolean;
+  updatedAt: string;
 }
 
 export default function PointHistory() {
@@ -41,7 +43,7 @@ export default function PointHistory() {
             return (
               <ListCard
                 key={el.id}
-                getTime=""
+                getTime={getTimeAsString(el.updatedAt)}
                 content={`${el.recipient} 에게 ${el.paidPoint} 포인트 지급`}
                 surveyOwner={`지급자 : ${el.payer}`}
                 hasCancel

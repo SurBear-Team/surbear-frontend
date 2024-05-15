@@ -65,10 +65,16 @@ export default function Member() {
             title="회원 포인트 내역 조회"
             onClick={() => {
               setShowPopUp((prev) => !prev);
-              setPopUpType("pointHistory");
+              setPopUpType("memberPointHistory");
             }}
           />
-          <SettingCard title="회원 상품 교환 내역 조회" onClick={() => {}} />
+          <SettingCard
+            title="회원 상품 교환 내역 조회"
+            onClick={() => {
+              setShowPopUp((prev) => !prev);
+              setPopUpType("memberGoodsHistory");
+            }}
+          />
           <SettingCard
             title="포인트 지급"
             onClick={() => {
@@ -210,7 +216,27 @@ export default function Member() {
               }}
             />
           )}
-          {popUpType === "pointHistory" && (
+          {popUpType === "memberGoodsHistory" && (
+            <InputDialog
+              title="회원 상품 교환 내역 조회"
+              placeholder="조회할 닉네임을 입력해주세요"
+              leftText="취소"
+              rightText="조회"
+              onLeftClick={() => setShowPopUp((prev) => !prev)}
+              onRightClick={(data) => {
+                if (data.nickname !== undefined) {
+                  const nickname = data.nickname;
+                  api
+                    .get(`/role/${nickname}`)
+                    .then((res) => {
+                      router.push(`/manager/member/goods-history/${nickname}`);
+                    })
+                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
+                }
+              }}
+            />
+          )}
+          {popUpType === "memberPointHistory" && (
             <InputDialog
               title="회원 포인트 내역 조회"
               placeholder="조회할 닉네임을 입력해주세요"

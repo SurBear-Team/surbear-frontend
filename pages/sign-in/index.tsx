@@ -17,7 +17,7 @@ export default function SignIn() {
   // 로그인 여부 확인
   useEffect(() => {
     if (typeof window !== undefined) {
-      if (localStorage.getItem("surbearToken") !== undefined) {
+      if (localStorage.getItem("surbearToken") !== null) {
         router.push("/browse");
       }
     }

@@ -9,6 +9,7 @@ import Pagination from "../browse/components/Pagination";
 import { useRecoilState } from "recoil";
 import { goodsSearchAtom } from "../atoms";
 import { useRouter } from "next/router";
+import { Dialog } from "../components/Dialog";
 
 interface IGoods {
   createdAt: string;
@@ -26,6 +27,10 @@ export default function Store() {
   const [showDetail, setShowDetail] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
 
+  const [oneBtnDialog, setOneBtnDialog] = useState({
+    open: false,
+    title: "",
+  });
   const [data, setData] = useState<IGoods[]>();
 
   const [goodsSearch, setGoodsSearch] = useRecoilState(goodsSearchAtom);
@@ -94,7 +99,18 @@ export default function Store() {
                 key={detailId!}
                 goodsCode={detailId!}
                 onBackClick={() => setShowDetail((prev) => !prev)}
-                onBuyClick={() => router.push(`/store/${detailId}`)}
+                onBuyClick={() => {
+                  if (typeof window !== undefined) {
+                    if (localStorage.getItem("surbearToken") !== null) {
+                      router.push(`/store/${detailId}`);
+                    } else {
+                      setOneBtnDialog({
+                        open: true,
+                        title: "로그인이 필요한 서비스입니다",
+                      });
+                    }
+                  }
+                }}
               />
             )}
           </AnimatePresence>
@@ -114,6 +130,16 @@ export default function Store() {
         }}
       />
       <TabBar />
+      {oneBtnDialog.open && (
+        <Dialog
+          onlyOneBtn
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onRightClick={() => {
+            router.push("/sign-in");
+          }}
+        />
+      )}
     </>
   );
 }

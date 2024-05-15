@@ -10,19 +10,17 @@ export default function FoundId() {
         <CharSVG />
       </div>
       <div className="text-center font-semibold text-xl text-gray-9">
-        {`비밀번호 재설정이`}
-        <br />
-        {`완료되었습니다`}
+        상품 교환이 완료되었습니다
       </div>
       <div className="gray-line mt-12 w-full" />
 
       <button
         className="long-button w-full mt-4 primary-btn-style"
         onClick={() => {
-          router.push("/sign-in");
+          router.push("/store");
         }}
       >
-        로그인 페이지로
+        메인 페이지로
       </button>
     </div>
   );

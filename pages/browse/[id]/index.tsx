@@ -100,8 +100,7 @@ export default function Survey() {
                 api
                   .post(`/survey/answer/${surveyAnswerId}`, answers)
                   .then((res) => {
-                    alert("설문조사가 제출되었습니다.");
-                    router.push("/browse");
+                    router.push("/browse/done");
                   })
                   .catch((err) =>
                     alert("설문조사 제출 실패! 다시 시도해주세요")
@@ -112,6 +111,8 @@ export default function Survey() {
               alert("사용자 인식 실패! 로그인 후 다시 시도해주세요")
             );
         }
+      } else {
+        alert("로그인 상태를 확인해주세요.");
       }
     }
   };
@@ -198,6 +199,7 @@ export default function Survey() {
                         index={index + 1}
                         title={el.surveyQuestion.content}
                         required={el.surveyQuestion.required}
+                        maxText={el.surveyQuestion.maxText}
                         onSelect={(selected: string) => {
                           const id = el.surveyQuestion.id;
                           const newAnswer = {

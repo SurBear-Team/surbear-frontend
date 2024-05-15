@@ -70,10 +70,10 @@ export default function Detail({
                 {data.title}
               </div>
               <div className="flex flex-col sm-gray-text">
-                <span>작성자 : {data.surveyAuthorId}</span>
                 <span>지급 포인트 : {data.point}pt</span>
-                <span>총 문항 수 : n개</span>
-                <span>참여한 사람 : n명 / {data.maximumNumberOfPeople}명</span>
+                <span>
+                  최대 참여 가능 인원 : {data.maximumNumberOfPeople}명
+                </span>
                 <span>
                   설문 시작일 : {startedTime.year}년 {startedTime.month}월{" "}
                   {startedTime.date}일

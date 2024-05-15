@@ -82,7 +82,7 @@ export default function Survey() {
     }
   }, [answers]);
 
-  const [lastPage, setLastPage] = useState(0);
+  const [lastPage, setLastPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
   const onConfirm = () => {
@@ -119,6 +119,7 @@ export default function Survey() {
       }
     }
   };
+
   return (
     <>
       <TopBar
@@ -150,7 +151,6 @@ export default function Survey() {
                             questionId: id,
                             answers: [selected],
                           };
-                          console.log(newAnswer);
                           const otherAnswers = answers.filter(
                             (el) => el.questionId !== id
                           );

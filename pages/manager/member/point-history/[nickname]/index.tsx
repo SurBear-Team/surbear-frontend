@@ -52,7 +52,11 @@ export default function PointHistory() {
               key={el.id}
               getTime={getTimeAsString(el.updatedAt)}
               content={el.description}
-              plusMinus={el.paymentType === "CANCEL" ? "-" : "+"}
+              plusMinus={
+                el.paymentType === "CANCEL" || el.paymentType === "BUY_PRODUCT"
+                  ? "-"
+                  : "+"
+              }
               point={el.paidPoint + ""}
             />
           ))}

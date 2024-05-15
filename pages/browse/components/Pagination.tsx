@@ -43,7 +43,7 @@ export default function Pagination({
           onClick={onPrevClick}
           className="w-6 h-6 rounded-full border bg-white border-primary-1 justify-center items-center flex shadow-md cursor-pointer"
         >
-          <PrevPageIcon />
+          <PrevPageIcon isBlue />
         </div>
         {getPages().map((el, index) =>
           // 페이지에 1보다 작은 수가 있다면 공간만 차지하게 함
@@ -71,7 +71,7 @@ export default function Pagination({
           onClick={onNextClick}
           className="w-6 h-6 rounded-full border bg-white border-primary-1 justify-center items-center flex shadow-md cursor-pointer"
         >
-          <NextPageIcon />
+          <NextPageIcon isBlue />
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ export default function SurveyHistory() {
           })
           .then((res) => {
             const data = res.data;
-            setData(data);
+            setData(data.reverse());
           });
       }
     }

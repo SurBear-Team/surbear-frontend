@@ -3,7 +3,7 @@ import SurveyCard from "../components/SurveyCard";
 import { TabBar } from "../components/TabBar";
 import { Dialog } from "../components/Dialog";
 import Detail from "./components/Detail";
-import { ISurvey, orderList } from "./data";
+import { ISurvey } from "./data";
 import { AnimatePresence } from "framer-motion";
 import { TopBar } from "../components/TopBar/TopBar";
 import Pagination from "./components/Pagination";
@@ -18,11 +18,13 @@ export default function Browse() {
   // 유저 토큰
   const [token, setToken] = useState<number | null>(null);
   useEffect(() => {
-    const storedToken = localStorage.getItem("surbearToken");
-    if (storedToken) {
-      const decoded = jwtDecode<JwtPayload>(storedToken);
-      if (decoded && decoded.sub) {
-        setToken(parseInt(decoded.sub));
+    if (typeof window !== undefined) {
+      const storedToken = localStorage.getItem("surbearToken");
+      if (storedToken) {
+        const decoded = jwtDecode<JwtPayload>(storedToken);
+        if (decoded && decoded.sub) {
+          setToken(parseInt(decoded.sub));
+        }
       }
     }
   }, []);
@@ -44,9 +46,6 @@ export default function Browse() {
   };
 
   const [categoryType, setCategoryType] = useRecoilState(categoryTypeAtom);
-  useEffect(() => {
-    setCategoryType("ALL");
-  }, []);
 
   const [orderType, setOrderType] = useState("최신순");
   const handleOrderSelect = (selectedOrderType: string) => {

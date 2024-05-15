@@ -23,7 +23,7 @@ export default function CompleteSignUp() {
         {`${nickname} 님`} <br />
         회원가입을 축하합니다!
       </div>
-      <div className="gray-line mt-12" />
+      <div className="gray-line mt-12 w-full" />
       <button
         className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
         onClick={() => {

@@ -6,6 +6,7 @@ interface IShortAnswer {
   required: boolean;
   onSelect: (selected: string) => void;
   initial: string[];
+  maxText: number;
 }
 
 export default function ShortAnswer({
@@ -14,6 +15,7 @@ export default function ShortAnswer({
   required,
   onSelect,
   initial,
+  maxText,
 }: IShortAnswer) {
   const [answer, setAnswer] = useState("");
   useEffect(() => {
@@ -26,8 +28,9 @@ export default function ShortAnswer({
         {required && <span className="text-red-1">*</span>}
       </span>
       <input
+        maxLength={maxText}
         type="text"
-        className="main-input text-gray-9"
+        className="main-input text-gray-9 font-normal"
         value={answer}
         onChange={(event) => {
           const value = event.target.value;

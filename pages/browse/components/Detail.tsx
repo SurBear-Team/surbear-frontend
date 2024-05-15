@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { useRouter } from "next/router";
 import { getTime } from "@/pages/utils";
+import { useState } from "react";
+import { Dialog } from "@/pages/components/Dialog";
 
 interface IDetail {
   layoutId: number;
@@ -22,11 +24,25 @@ export default function Detail({
 }: IDetail) {
   const router = useRouter();
   const onStartClick = () => {
-    router.push(`/browse/${data.id}`);
+    if (token !== null) {
+      router.push(`/browse/${data.id}`);
+    } else {
+      setOneBtnDialog({
+        open: true,
+        title: "로그인이 필요한 서비스입니다",
+      });
+    }
   };
+
+  const [oneBtnDialog, setOneBtnDialog] = useState({
+    open: false,
+    title: "",
+  });
   const startedTime = getTime(data.startDate);
   const deadline = getTime(data.deadLine);
   const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
+
+  console.log(token);
 
   return (
     <>
@@ -105,6 +121,16 @@ export default function Detail({
           )}
         </motion.div>
       </motion.div>
+      {oneBtnDialog.open && (
+        <Dialog
+          onlyOneBtn
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onRightClick={() => {
+            router.push("/sign-in");
+          }}
+        />
+      )}
     </>
   );
 }

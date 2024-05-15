@@ -27,7 +27,7 @@ export default function FoundId() {
         <br />
         {`${userId} 입니다`}
       </div>
-      <div className="gray-line mt-12" />
+      <div className="gray-line mt-12 w-full" />
       <button
         className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
         onClick={() => {

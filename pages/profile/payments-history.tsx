@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import api from "../api/config";
 import { getTimeAsString } from "../utils";
 
-interface IPointHistory {
+interface IPaymentsHistory {
   deleted: boolean;
   id: number;
   memberId: number;
@@ -14,9 +14,9 @@ interface IPointHistory {
   updatedAt: string;
 }
 
-export default function PointHistory() {
+export default function PaymentsHistory() {
   const router = useRouter();
-  const [data, setData] = useState<IPointHistory[]>();
+  const [data, setData] = useState<IPaymentsHistory[]>();
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -36,7 +36,7 @@ export default function PointHistory() {
 
   return (
     <>
-      <TopBar hasBack noShadow title="현재 포인트 내역" />
+      <TopBar hasBack noShadow title="상품 교환 내역" />
       <div className="white-screen flex-col pt-[50px] justify-start">
         <div className="inner-screen">
           {data?.map((el) => (

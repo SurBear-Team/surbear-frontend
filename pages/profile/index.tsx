@@ -5,6 +5,7 @@ import { TabBar } from "../components/TabBar";
 import { TopBar } from "../components/TopBar/TopBar";
 import api from "../api/config";
 import { IMemberInfo } from "../manager/member";
+import { Dialog } from "../components/Dialog";
 
 export default function Profile() {
   const router = useRouter();
@@ -13,7 +14,10 @@ export default function Profile() {
     if (typeof window !== undefined) {
       const checkToken = localStorage.getItem("surbearToken");
       if (checkToken === null) {
-        router.push("/sign-in");
+        setOneBtnDialog({
+          open: true,
+          title: "로그인이 필요한 서비스입니다",
+        });
       } else {
         api
           .get("/member", {
@@ -45,6 +49,10 @@ export default function Profile() {
       }
     }
   }, []);
+  const [oneBtnDialog, setOneBtnDialog] = useState({
+    open: false,
+    title: "",
+  });
 
   const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
 
@@ -74,7 +82,7 @@ export default function Profile() {
           }}
         />
         <ProfileCard
-          title="등록한 설문조사 개수"
+          title="제작한 설문조사 개수"
           content={`${registered} 번`}
           onClick={() => {
             router.push("/profile/my-survey-history");
@@ -89,6 +97,16 @@ export default function Profile() {
         />
       </div>
       <TabBar />
+      {oneBtnDialog.open && (
+        <Dialog
+          onlyOneBtn
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onRightClick={() => {
+            router.push("/sign-in");
+          }}
+        />
+      )}
     </>
   );
 }

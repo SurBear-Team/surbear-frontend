@@ -1,22 +1,22 @@
 import CharSVG from "@/pages/components/styles/CharSVG";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { findIdAtom } from "../findStatus";
 import api from "@/pages/api/config";
+import { useQuery } from "react-query";
 
 export default function FoundId() {
   const router = useRouter();
-
   const [userEmail, setUserEmail] = useRecoilState(findIdAtom);
-  const [userId, setUserId] = useState("");
 
-  useEffect(() => {
-    api.get(`/member/userId?email=${userEmail}`).then((data) => {
-      setUserId(data.data);
-    });
-  }, []);
-
+  const fetchFindId = async () => {
+    const { data } = await api.get(`/member/userId?email=${userEmail}`);
+    return data;
+  };
+  const { data: userId } = useQuery(["findId"], fetchFindId, {
+    cacheTime: 1000 * 60,
+    staleTime: 1000 * 60,
+  });
   return (
     <div className="screen flex-col px-12">
       <div className="flex justify-center mb-8">
@@ -27,7 +27,7 @@ export default function FoundId() {
         <br />
         {`${userId} 입니다`}
       </div>
-      <div className="gray-line mt-12" />
+      <div className="gray-line mt-12 w-full" />
       <button
         className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
         onClick={() => {

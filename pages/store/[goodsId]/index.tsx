@@ -238,10 +238,7 @@ export default function BuyGoods() {
                   { headers: { Authorization: `Bearer ${token}` } }
                 )
                 .then((res) => {
-                  alert(
-                    "상품 구매가 완료되었습니다. 상품이 발송되기까지 시간이 걸릴 수 있습니다."
-                  );
-                  router.push("/store");
+                  router.push("/store/done");
                 })
                 .catch((err) => console.log(err));
             }}

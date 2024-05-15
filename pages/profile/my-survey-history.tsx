@@ -28,7 +28,7 @@ export default function SurveyHistory() {
 
   return (
     <>
-      <TopBar hasBack noShadow title="등록한 설문조사 내역" />
+      <TopBar hasBack noShadow title="제작한 설문조사 내역" />
       <div className="white-screen flex-col pt-[50px] justify-start">
         <div className="inner-screen">
           {data?.map((el) => (

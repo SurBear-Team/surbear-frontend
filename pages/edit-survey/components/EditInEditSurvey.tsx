@@ -34,9 +34,20 @@ export const EditInEditSurvey = ({
     setIsChecked((isChecked) => !isChecked);
   };
 
-  // (공통) 다이얼로그
-  const [alertDialog, setAlertDialog] = useState(false);
-  const [alertText, setAlertText] = useState("");
+  // (공통) 원버튼 alert다이얼로그
+  const [oneBtnDialog, setOneBtnDialog] = useState<{
+    open: boolean;
+    title: string;
+  }>({
+    open: false,
+    title: "",
+  });
+  const showOneBtnDialog = (message: string) => {
+    setOneBtnDialog({ open: true, title: message });
+  };
+  const hideOneBtnDialog = () => {
+    setOneBtnDialog({ open: false, title: "" });
+  };
 
   // (공통) 원래 질문 제목
   const [questionTitle, setQuestionTitle] = useState(initialData?.title);
@@ -96,8 +107,7 @@ export const EditInEditSurvey = ({
     );
     if (isDuplicate) {
       // 중복 답변이 있는 경우
-      setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
-      setAlertDialog(true);
+      showOneBtnDialog("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
       return; // 함수 종료
     }
 
@@ -134,8 +144,7 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
-      setAlertDialog(true);
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
     }
   };
 
@@ -176,8 +185,7 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
-      setAlertDialog(true);
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
     }
     setDeleteQuestionDialog(false);
   };
@@ -204,8 +212,7 @@ export const EditInEditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       }
     } catch (error) {
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요");
-      setAlertDialog(true);
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
     }
   };
   return (
@@ -341,14 +348,12 @@ export const EditInEditSurvey = ({
       </div>
 
       <div className="flex justify-center items-center">
-        {alertDialog && (
+        {oneBtnDialog.open && (
           <Dialog
-            title={alertText}
+            title={oneBtnDialog.title}
             onlyOneBtn={true}
             rightText={"닫기"}
-            onRightClick={() => {
-              setAlertDialog((prev) => !prev);
-            }}
+            onRightClick={hideOneBtnDialog}
           />
         )}
 

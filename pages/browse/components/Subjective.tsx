@@ -27,7 +27,7 @@ export default function Subjective({
           {required && <span className="text-red-1">*</span>}
         </span>
         <textarea
-          className="main-input text-gray-9"
+          className="main-input text-gray-9 font-normal"
           rows={4}
           cols={50}
           value={answer}

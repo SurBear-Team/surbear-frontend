@@ -38,7 +38,7 @@ export default function PointHistory() {
 
   return (
     <>
-      <TopBar hasBack noShadow title="현재 포인트 내역" />
+      <TopBar hasBack noShadow title="포인트 내역" />
       <div className="white-screen flex-col pt-[50px] justify-start">
         <div className="inner-screen">
           {data?.map((el) => (

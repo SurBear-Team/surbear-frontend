@@ -28,15 +28,18 @@ export default function FindId() {
     open: false,
     title: "",
   });
+  const showDialog = (title: string) => {
+    setDialog({ open: true, title: title });
+  };
+  const hideDialog = () => {
+    setDialog({ open: false, title: "" });
+  };
 
   // 가입한 메일인지 찾기
   const veriEmail = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
-      setDialog({
-        open: true,
-        title: "유효하지 않은 이메일이에요",
-      });
+      showDialog("유효하지 않은 이메일이에요");
       return;
     }
     try {
@@ -51,10 +54,7 @@ export default function FindId() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 404) {
-        setDialog({
-          open: true,
-          title: "존재하지 않는 이메일이에요",
-        });
+        showDialog("존재하지 않는 이메일이에요");
       }
     }
   };
@@ -65,28 +65,19 @@ export default function FindId() {
         email: inputEmail,
       });
       setVeriCode(response.data);
-      setDialog({
-        open: true,
-        title: "인증번호가 전송되었어요",
-      });
+      showDialog("인증번호가 전송되었어요");
       setCodeSent(true);
 
       // 5분 후 인증번호 초기화 및 세션 만료 알림
       setTimeout(() => {
         setVeriCode("");
-        setDialog({
-          open: true,
-          title: "세션이 만료됐어요 다시 인증해주세요",
-        });
+        showDialog("세션이 만료됐어요 다시 인증해주세요");
         setInputVeriCode("");
       }, 5 * 60 * 1000); // 5분
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
-      setDialog({
-        open: true,
-        title: "네트워크 오류가 발생했어요",
-      });
+      showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
     }
   };
 
@@ -99,29 +90,17 @@ export default function FindId() {
 
       if (response.status === 200) {
         setIsVerified(true);
-        setDialog({
-          open: true,
-          title: "인증에 성공했어요",
-        });
+        showDialog("인증에 성공했어요");
       } else {
-        setDialog({
-          open: true,
-          title: "인증에 실패했어요",
-        });
+        showDialog("인증에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 401) {
-        setDialog({
-          open: true,
-          title: "인증 번호를 확인해주세요",
-        });
+        showDialog("인증 번호를 확인해주세요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 오류가 발생했어요",
-        });
+        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
       }
     }
   };
@@ -131,10 +110,7 @@ export default function FindId() {
       setUserId(inputEmail);
       router.push("/sign-in/find-id/done");
     } else {
-      setDialog({
-        open: true,
-        title: "이메일 인증을 완료해주세요",
-      });
+      showDialog("이메일 인증을 완료해주세요");
     }
   };
 
@@ -197,9 +173,7 @@ export default function FindId() {
             <Dialog
               title={dialog.title}
               rightText="확인"
-              onRightClick={() => {
-                setDialog((current) => ({ ...current, open: false }));
-              }}
+              onRightClick={hideDialog}
               onlyOneBtn
             />
           )}

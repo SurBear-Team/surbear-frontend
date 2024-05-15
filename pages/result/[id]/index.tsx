@@ -129,7 +129,7 @@ export default function Result() {
         hasBack
         onLeftClick={() => {
           localStorage.removeItem("resultTitle");
-          router.push("/my-survey");
+          router.back();
         }}
         subTitle={resultTitle}
       />

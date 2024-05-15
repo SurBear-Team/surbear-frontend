@@ -9,6 +9,7 @@ import ShortAnswer from "../components/ShortAnswer";
 import Slider from "../components/Slider";
 import { Dialog } from "@/pages/components/Dialog";
 import { JwtPayload, jwtDecode } from "jwt-decode";
+import { useQueryClient } from "react-query";
 
 export interface IOption {
   id: number;
@@ -45,6 +46,8 @@ export default function Survey() {
   const router = useRouter();
   const { id } = router.query;
   const [title, setTitle] = useState("");
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (id !== undefined) {
@@ -101,6 +104,7 @@ export default function Survey() {
                   .post(`/survey/answer/${surveyAnswerId}`, answers)
                   .then((res) => {
                     alert("설문조사가 제출되었습니다.");
+                    queryClient.invalidateQueries("surveyHistory");
                     router.push("/browse");
                   })
                   .catch((err) =>

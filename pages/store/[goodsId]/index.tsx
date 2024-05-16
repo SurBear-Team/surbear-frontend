@@ -7,6 +7,7 @@ import { Overlay } from "@/pages/components/styles/Overlay";
 import { Checkbox } from "@/pages/sign-up/Components/CheckBox";
 import { useForm } from "react-hook-form";
 import ConfirmDialog from "../components/ConfirmDialog";
+import { useQueryClient } from "react-query";
 
 export interface IBuyInfo {
   goodsName: string;
@@ -17,6 +18,7 @@ export interface IBuyInfo {
 export default function BuyGoods() {
   const router = useRouter();
   const { goodsId } = router.query;
+  const queryClient = useQueryClient();
 
   // 상품 정보 조회 및 가격 저장
   const [data, setData] = useState<IGoodsDetail>();
@@ -239,6 +241,7 @@ export default function BuyGoods() {
                 )
                 .then((res) => {
                   router.push("/store/done");
+                  queryClient.invalidateQueries("product-count");
                 })
                 .catch((err) => console.log(err));
             }}

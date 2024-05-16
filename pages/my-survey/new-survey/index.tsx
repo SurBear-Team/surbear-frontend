@@ -23,7 +23,7 @@ export interface NewSurveyProps {
 export default function NewSurvey() {
   const router = useRouter();
 
-  const [, setSurveyId] = useRecoilState(surveyIdAtom);
+  const [surveyId, setSurveyId] = useRecoilState(surveyIdAtom);
   const [surveyTitle, setSurveyTitle] = useState("");
   useEffect(() => {
     const localTitle = localStorage.getItem("surveyTitle");
@@ -133,18 +133,37 @@ export default function NewSurvey() {
   const fetchChatGPTResponse = async (title: string | null) => {
     setIsLoading(true);
     const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표를 붙이지 말고 한국어로 부탁해.`;
-    const response = await fetch("/api/chatgpt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question: prompt }),
-    });
+    try {
+      const response = await fetch("/api/chatgpt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: prompt }),
+      });
 
-    const data = await response.json();
-    const splitQuestions = data.answers[0].split("\n"); // 응답을 줄바꿈으로 분할
-    setQuestions(splitQuestions);
-    setIsLoading(false);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error from /api/chatgpt:", errorData);
+        throw new Error(errorData.error || "Unknown error");
+      }
+
+      const data = await response.json();
+
+      // 응답 데이터가 유효한지 확인
+      if (data && data.answers && data.answers[0]) {
+        const splitQuestions = data.answers[0].split("\n"); // 응답을 줄바꿈으로 분할
+        setQuestions(splitQuestions);
+      } else {
+        console.error("Invalid response format:", data);
+        setQuestions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching ChatGPT response:", error);
+      setQuestions([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onGptRecommendationClick = () => {

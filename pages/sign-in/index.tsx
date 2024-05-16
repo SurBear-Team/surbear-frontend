@@ -55,6 +55,7 @@ export default function SignIn() {
         queryClient.invalidateQueries("product-count");
         queryClient.invalidateQueries("registered");
         queryClient.invalidateQueries("participation");
+        queryClient.invalidateQueries("my-surveys");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -140,6 +141,7 @@ export default function SignIn() {
               queryClient.invalidateQueries("product-count");
               queryClient.invalidateQueries("registered");
               queryClient.invalidateQueries("participation");
+              queryClient.invalidateQueries("my-surveys");
             }}
           >
             로그인 없이 시작

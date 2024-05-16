@@ -61,7 +61,7 @@ export default function ItemDetail({
           <div className="gray-line mt-2 mb-4" />
           {/* 설문 정보 */}
           <div className="flex flex-grow relative overflow-y-scroll hide-scrollbar">
-            <div className="absolute flex flex-col">
+            <div className="absolute flex flex-col w-full">
               <div className="flex px-2">
                 <div className="flex flex-col gap-4">
                   <div className="w-full px-6">
@@ -85,12 +85,12 @@ export default function ItemDetail({
               <div className="gray-line mt-4" />
               <div className="flex font-semibold text-gray-9 text-base overflow-y-scroll hide-scrollbar">
                 <div className="w-full px-2 py-4 flex flex-col gap-4">
-                  <div>
-                    <div className="font-bold mb-1">[상품 안내]</div>
-                    <span className="font-normal whitespace-pre-wrap text-sm">{`${data?.content}`}</span>
+                  <div className="flex flex-col gap-1">
+                    <div className="font-bold">[상품 안내]</div>
+                    <span className="font-normal whitespace-pre-wrap text-sm break-words">{`${data?.content}`}</span>
                   </div>
-                  <div>
-                    <div className="font-bold mb-1">[이용 안내]</div>
+                  <div className="flex flex-col gap-1">
+                    <div className="font-bold">[이용 안내]</div>
                     <div className="font-normal text-sm whitespace-pre-wrap">
                       {`교환 유효기간은 발행일로부터 ${data?.limitDay}일입니다.`}
                     </div>

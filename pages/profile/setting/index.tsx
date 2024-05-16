@@ -5,6 +5,8 @@ import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import api from "@/pages/api/config";
 import { IMemberInfo } from "@/pages/manager/member";
+import { IManagerList } from "@/pages/manager/administration/inquiry";
+
 import { useQuery } from "react-query";
 
 export default function ProfileSetting() {
@@ -32,6 +34,25 @@ export default function ProfileSetting() {
 
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
+
+  // 관리자 메뉴 활성화
+  const [isManager, setIsManager] = useState(false);
+  useEffect(() => {
+    if (memberInfo !== undefined) {
+      api
+        .get("/role/list")
+        .then((res) => {
+          const managerList = res.data;
+          const checkAuth = managerList.findIndex(
+            (el: IManagerList) => el.memberId === memberInfo.id
+          );
+          if (checkAuth !== -1) {
+            setIsManager(true);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [memberInfo]);
   return (
     <>
       <TopBar title="설정" hasBack noShadow />
@@ -39,22 +60,22 @@ export default function ProfileSetting() {
         <div className="inner-screen">
           <SettingCard
             title="회원 정보 조회"
-            onClick={() => {
-              router.push("/profile/setting/update");
-            }}
+            onClick={() => router.push("/profile/setting/update")}
           />
           <SettingCard
             title="로그아웃"
-            onClick={() => {
-              setShowLogoutDialog(true);
-            }}
+            onClick={() => setShowLogoutDialog(true)}
           />
           <SettingCard
             title="회원 탈퇴"
-            onClick={() => {
-              setShowWithdrawalDialog(true);
-            }}
+            onClick={() => setShowWithdrawalDialog(true)}
           />
+          {isManager && (
+            <SettingCard
+              title="관리자 메뉴"
+              onClick={() => router.push("/manager")}
+            />
+          )}
         </div>
         {showLogoutDialog && (
           <>

@@ -30,8 +30,6 @@ export default function MemberSurvey() {
     }
   }, [updateList, nickname]);
 
-  console.log(data);
-
   const [token, setToken] = useState("");
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -53,7 +51,12 @@ export default function MemberSurvey() {
               getTime={getTimeAsString(el.startDate)}
               content={el.title}
               status={el.ongoingType}
-              hasBan
+              hasBan={
+                el.ongoingType === "DELETION" ||
+                el.ongoingType === "FORCED_DELETION"
+                  ? false
+                  : true
+              }
               onBanClick={() => {
                 if (
                   el.ongoingType !== "DELETION" &&

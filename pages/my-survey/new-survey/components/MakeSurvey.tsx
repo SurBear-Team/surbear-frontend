@@ -31,6 +31,7 @@ export const MakeSurvey = ({
   setIsNewSurvey,
   page,
 }: MakeSurveyProps) => {
+  const queryClient = useQueryClient();
   const typeList = [
     "객관식 - 단일 선택",
     "객관식 - 다중 선택",
@@ -130,7 +131,7 @@ export const MakeSurvey = ({
   // (단답형) 최대 글자 수
   const [count, setCount] = useState(788183);
   // (공통) 저장 버튼
-  const onSaveClick = () => {
+  const onSaveClick = async () => {
     const isTitleEmpty = !questionTitle.trim();
     if (isTitleEmpty) {
       showOneBtnDialog("제목을 입력해주세요");
@@ -179,8 +180,8 @@ export const MakeSurvey = ({
       addNewSurveyComponent(sliderSurveyData);
     }
 
-    api
-      .post("/survey/question", {
+    try {
+      const response = await api.post("/survey/question", {
         answers: choices, // 객관식일때만
         surveyQuestion: {
           surveyId: surveyId,
@@ -191,17 +192,21 @@ export const MakeSurvey = ({
           maxText: count, // 임시
           required: isChecked,
         },
-      })
-      .then(() => {})
-      .catch((error) => {
-        console.error(error);
-        showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
       });
 
-    // 저장 후 입력 필드 초기화
-    setQuestionTitle("");
-    setChoices(["", ""]);
-    setFirstTitle("");
+      console.log("리스폰스", response);
+
+      // 저장 후 입력 필드 초기화
+      setQuestionTitle("");
+      setChoices(["", ""]);
+      setFirstTitle("");
+
+      // 데이터 갱신을 위해 refetch 호출
+      queryClient.invalidateQueries("new-survey");
+    } catch (error) {
+      console.error(error);
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요");
+    }
   };
 
   const onSaveAndAddClick = () => {
@@ -268,7 +273,7 @@ export const MakeSurvey = ({
           </>
         )}
 
-        {typeType === "단답형" && (
+        {(typeType === "단답형" || typeType === "주관식") && (
           <>
             <ShortAnswerType setCount={setCount} />
             <div className="gray-line mt-8" />

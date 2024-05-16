@@ -16,15 +16,15 @@ export default function ManageGPT() {
         <div className="inner-screen">
           <ListCard
             content="completion_tokens"
-            surveyOwner={`${data.completion_tokens} 토큰`}
+            surveyOwner={`${data?.completion_tokens} 토큰`}
           />
           <ListCard
             content="prompt_tokens"
-            surveyOwner={`${data.prompt_tokens} 토큰`}
+            surveyOwner={`${data?.prompt_tokens} 토큰`}
           />
           <ListCard
             content="total_tokens"
-            surveyOwner={`${data.total_tokens} 토큰`}
+            surveyOwner={`${data?.total_tokens} 토큰`}
           />
         </div>
       </div>

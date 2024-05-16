@@ -42,8 +42,6 @@ export default function Detail({
   const deadline = getTime(data.deadLine);
   const [{ key, value }] = category.filter((el) => el.key === data.surveyType);
 
-  console.log(token);
-
   return (
     <>
       <Overlay onClick={onBackClick} />

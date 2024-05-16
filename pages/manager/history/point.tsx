@@ -1,4 +1,5 @@
 import api from "@/pages/api/config";
+import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { ListCard } from "@/pages/profile/components/ListCard";
 import { getTimeAsString } from "@/pages/utils";
@@ -34,6 +35,9 @@ export default function PointHistory() {
     }
   }, []);
 
+  const [showWarning, setShowWarning] = useState(false);
+  const [id, setId] = useState<null | number>();
+
   return (
     <>
       <TopBar title="포인트 지급 내역" hasBack noShadow />
@@ -48,26 +52,40 @@ export default function PointHistory() {
                 surveyOwner={`지급자 : ${el.payer}`}
                 hasCancel
                 onCancelClick={() => {
-                  api
-                    .post(
-                      "/point/canceling",
-                      {},
-                      {
-                        headers: { Authorization: `Bearer ${token}` },
-                        params: { pointHistoryId: el.id },
-                      }
-                    )
-                    .then((res) => {
-                      alert("지급이 취소되었습니다.");
-                      setUpdateList((prev) => prev + 1);
-                    })
-                    .catch((err) => alert("사용자 인증을 확인해주세요."));
+                  setId(el.id);
+                  setShowWarning((prev) => !prev);
                 }}
               />
             );
           })}
         </div>
       </div>
+      {showWarning && (
+        <Dialog
+          isDelete
+          title="포인트 지급을 취소하시겠습니까?"
+          leftText="취소"
+          rightText="확인"
+          onLeftClick={() => setShowWarning((prev) => !prev)}
+          onRightClick={() =>
+            api
+              .post(
+                "/point/canceling",
+                {},
+                {
+                  headers: { Authorization: `Bearer ${token}` },
+                  params: { pointHistoryId: id },
+                }
+              )
+              .then((res) => {
+                alert("지급이 취소되었습니다.");
+                setUpdateList((prev) => prev + 1);
+                setShowWarning((prev) => !prev);
+              })
+              .catch((err) => alert("사용자 인증을 확인해주세요."))
+          }
+        />
+      )}
     </>
   );
 }

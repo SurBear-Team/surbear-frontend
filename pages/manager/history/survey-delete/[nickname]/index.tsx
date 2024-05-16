@@ -21,12 +21,17 @@ export default function SurveyDelete() {
       api
         .get("/deletion/list", { params: { nickname: nickname } })
         .then((res) => {
-          if (res.data !== undefined) setData(res.data);
+          if (res.data !== undefined)
+            setData(
+              res.data.sort((a: IDeletedSurvey, b: IDeletedSurvey) => {
+                if (a.createdAt > b.createdAt) return -1;
+                if (a.createdAt < b.createdAt) return 1;
+              })
+            );
         })
         .catch((err) => console.log(err));
     }
   }, [nickname]);
-  console.log(data);
 
   return (
     <>

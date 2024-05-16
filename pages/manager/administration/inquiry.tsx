@@ -6,7 +6,7 @@ import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import api from "@/pages/api/config";
 
-interface IManagerList {
+export interface IManagerList {
   memberId: number;
   nickname: string;
   roleId: number;

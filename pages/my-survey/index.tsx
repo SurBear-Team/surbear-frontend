@@ -234,7 +234,7 @@ export default function MySurvey() {
             title={oneBtnDialog.title}
             rightText="확인"
             onRightClick={() => {
-              router.back();
+              router.push("/sign-in");
             }}
           />
         )}

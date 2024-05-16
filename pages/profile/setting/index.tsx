@@ -7,31 +7,33 @@ import api from "@/pages/api/config";
 import { IMemberInfo } from "@/pages/manager/member";
 import { IManagerList } from "@/pages/manager/administration/inquiry";
 
+import { useQuery } from "react-query";
+
 export default function ProfileSetting() {
   const router = useRouter();
-  const [memberInfo, setMemberInfo] = useState<IMemberInfo>();
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
+  const [token, setToken] = useState("");
 
-  // 로그인 여부 감지
   useEffect(() => {
-    if (typeof window !== undefined) {
-      const checkToken = localStorage.getItem("surbearToken");
-      if (checkToken === null) {
-        router.push("/sign-in");
-      } else {
-        api
-          .get("/member", {
-            headers: { Authorization: `Bearer ${checkToken}` },
-          })
-          .then((res) => {
-            const info = res.data;
-            setMemberInfo(info);
-          })
-          .catch((err) => console.log(err));
-      }
+    const storedToken = localStorage.getItem("surbearToken");
+    if (storedToken) {
+      setToken(storedToken);
     }
   }, []);
+
+  const fetchMember = async () => {
+    const { data } = await api.get("/member", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  };
+  const { data: memberInfo } = useQuery<IMemberInfo>(["member"], fetchMember, {
+    enabled: !!token,
+    staleTime: 1000 * 5 * 60,
+    cacheTime: 1000 * 5 * 60,
+  });
+
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showWithdrawalDialog, setShowWithdrawalDialog] = useState(false);
 
   // 관리자 메뉴 활성화
   const [isManager, setIsManager] = useState(false);
@@ -51,7 +53,6 @@ export default function ProfileSetting() {
         .catch((err) => console.log(err));
     }
   }, [memberInfo]);
-
   return (
     <>
       <TopBar title="설정" hasBack noShadow />

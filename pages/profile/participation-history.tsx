@@ -29,7 +29,6 @@ export default function SurveyHistory() {
     const { data } = await api.get("/member/survey/history", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("데이타", data);
     if (data) {
       data.sort((a: IHistory, b: IHistory) => {
         if (a.createdAt > b.createdAt) return -1;

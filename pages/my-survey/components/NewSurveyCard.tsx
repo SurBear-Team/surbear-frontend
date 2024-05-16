@@ -217,6 +217,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         if (response.status === 200) {
           setRecoilSurveyId(response.data);
           queryClient.invalidateQueries("my-surveys");
+          queryClient.invalidateQueries("registered");
           router.push("/my-survey/new-survey");
         } else {
           showDialog("설문 생성에 실패했습니다.");

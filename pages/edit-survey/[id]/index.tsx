@@ -360,7 +360,7 @@ export default function EditSurveyPage() {
               <CreatedQuestion
                 key={index}
                 answerIndex={index + 1}
-                type={engToKorTypeMapping[item.surveyQuestion.questionType]}
+                type={item.surveyQuestion.questionType}
                 title={item.surveyQuestion.content}
                 answerList={item.options.map((option) => option.answer)}
                 count={item.surveyQuestion.maxText}

@@ -52,6 +52,9 @@ export default function SignIn() {
         localStorage.setItem("surbearToken", response?.data?.accessToken);
         router.push("/browse");
         queryClient.invalidateQueries("member");
+        queryClient.invalidateQueries("product-count");
+        queryClient.invalidateQueries("registered");
+        queryClient.invalidateQueries("participation");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -134,6 +137,9 @@ export default function SignIn() {
             onClick={() => {
               router.push("/browse");
               queryClient.invalidateQueries("member");
+              queryClient.invalidateQueries("product-count");
+              queryClient.invalidateQueries("registered");
+              queryClient.invalidateQueries("participation");
             }}
           >
             로그인 없이 시작

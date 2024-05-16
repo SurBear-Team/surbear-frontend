@@ -273,7 +273,7 @@ export const MakeSurvey = ({
           </>
         )}
 
-        {typeType === "단답형" && (
+        {(typeType === "단답형" || typeType === "주관식") && (
           <>
             <ShortAnswerType setCount={setCount} />
             <div className="gray-line mt-8" />

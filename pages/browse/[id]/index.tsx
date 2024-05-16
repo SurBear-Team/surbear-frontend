@@ -104,6 +104,7 @@ export default function Survey() {
                   .post(`/survey/answer/${surveyAnswerId}`, answers)
                   .then((res) => {
                     queryClient.invalidateQueries("surveyHistory");
+                    queryClient.invalidateQueries("member");
                     router.push("/browse/done");
                   })
                   .catch((err) =>

@@ -93,6 +93,11 @@ export const EditSurvey = ({
       setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
       return;
     }
+    if (!updatedAnswer.trim()) {
+      setAlertDialog(true);
+      setAlertText("답변을 모두 입력해주세요.");
+      return;
+    }
 
     const payload = {
       surveyQuestion: {

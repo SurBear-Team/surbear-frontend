@@ -1,52 +1,45 @@
 import { useEffect, useState } from "react";
-import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
-import { TypeDropDown } from "../../components/TypeDropDown";
-import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
-import { ShortAnswerType } from "./ShortAnswerQuestion";
-import { NewSurveyProps } from "..";
 import { Dialog } from "@/pages/components/Dialog";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import { ShortAnswerType } from "./ShortAnswerQuestion";
+import {
+  MinusIcon,
+  PlusIcon,
+  SaveIcon,
+  UpdateIcon,
+} from "@/pages/components/styles/Icons";
+import api from "@/pages/api/config";
+import { NewSurveyProps } from "..";
+import {
+  engToKorTypeMapping,
+  korToEngTypeMapping,
+} from "../../components/typeMapping";
 
 interface EditSurveyProps {
   initialData: NewSurveyProps;
   onSave: (updatedData: NewSurveyProps) => void;
   onCancel: () => void;
+  refetch: () => void;
+  setEditIndex: (index: number | null) => void;
+  currentPage: number;
 }
 
 export const EditSurvey = ({
   initialData,
   onSave,
   onCancel,
+  refetch,
+  setEditIndex,
+  currentPage,
 }: EditSurveyProps) => {
-  const typeList = [
-    "객관식 - 단일 선택",
-    "객관식 - 다중 선택",
-    "단답형",
-    "슬라이더",
-    "주관식",
-  ];
+  const typeType = initialData?.type;
 
-  const [showType, setShowType] = useState(false);
-  const [typeType, setTypeType] = useState(initialData?.type);
+  const [choices, setChoices] = useState(initialData?.choices || []);
+  const [disabledInputs, setDisabledInputs] = useState(
+    choices?.map(() => true) ?? []
+  );
 
-  // 객, 단, 슬 선택하는 함수
-  const handleTypeSelect = (selectedTypeType: string) => {
-    setTypeType(selectedTypeType);
-    setShowType(false);
-    if (
-      selectedTypeType === "객관식 - 단일 선택" ||
-      selectedTypeType === "객관식 - 다중 선택"
-    ) {
-      if (!choices || choices.length < 2) {
-        setChoices(["", ""]); // 객관식 선택 시 최소 2개의 빈 답변으로 초기화
-      }
-    } else {
-      setChoices([]); // 객관식이 아닌 경우 선택지를 비움
-    }
-  };
-
-  // 필수 답변 체크 박스
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(initialData?.required);
   const handleCheckboxChange = () => {
     setIsChecked((isChecked) => !isChecked);
   };
@@ -54,101 +47,206 @@ export const EditSurvey = ({
   const [alertDialog, setAlertDialog] = useState(false);
   const [alertText, setAlertText] = useState("");
 
-  // (공통) 원래 질문 제목
   const [questionTitle, setQuestionTitle] = useState(initialData?.title);
+  const [count, setCount] = useState(initialData?.count);
 
-  // (객관식) 답변들 배열, 처음엔 빈 답변 2개
-  const [choices, setChoices] = useState(initialData?.choices);
-  // (객관식) 새 답변 추가
-  const addChoice = () => {
-    setChoices((prevChoices = []) => [...prevChoices, ""]);
+  const [deleteQuestionDialog, setDeleteQuestionDialog] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const showDeleteConfirmation = (index: number) => {
+    setDeleteQuestionDialog(true);
+    setDeleteIndex(index);
   };
-  // (객관식) 답변 삭제
-  const deleteChoice = (index: number) => {
-    setChoices((prevChoices = []) => {
-      if (prevChoices.length > 2) {
-        return prevChoices.filter((_, i) => i !== index);
-      } else {
-        setAlertDialog(true);
-        setAlertText("답변은 최소 2개입니다.");
-        return prevChoices;
-      }
-    });
-  };
-  // (객관식) 중복된 답변 체크
-  const [hasDuplicates, setHasDuplicates] = useState(false);
 
-  // 객관식 답변들의 상태가 변경될 때마다 중복 체크
-  useEffect(() => {
-    const uniqueChoices = new Set(choices);
-    setHasDuplicates(uniqueChoices.size !== choices?.length);
-  }, [choices]);
-  // (객관식) 답변 onChange
-  const handleChoiceChange = (index: number, newText: string) => {
-    setChoices((prevChoices = []) =>
-      prevChoices.map((choice, choiceIndex) =>
-        index === choiceIndex ? newText : choice
-      )
+  const addNewChoice = () => {
+    setChoices([...choices, ""]);
+    setDisabledInputs([...disabledInputs, false]);
+  };
+
+  const enableEdit = (index: number) => {
+    setDisabledInputs(
+      disabledInputs.map((disabled, idx) => (idx === index ? false : disabled))
     );
   };
 
-  // (공통) 수정 버튼
-  const onEditClick = () => {
-    if (!questionTitle.trim()) {
-      setAlertDialog(true);
-      setAlertText("제목을 입력해주세요.");
-      return;
-    }
-
-    if (
-      hasDuplicates &&
-      (typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택")
-    ) {
-      setAlertDialog(true);
-      setAlertText("중복된 답변이 있습니다. 다시 확인해주세요.");
-      return;
-    }
-
-    // (객관식) 답변 배열에 빈 문자열이 있는지 확인
-    if (typeType === "객관식" && choices?.some((choice) => !choice.trim())) {
-      setAlertDialog(true);
-      setAlertText("답변을 모두 입력해주세요.");
-      return;
-    }
-
-    // 모든 조건을 충족시킨 경우, 수정된 데이터를 저장
-    const updatedData = {
-      title: questionTitle,
-      type: typeType,
-      choices:
-        typeType === "객관식 - 단일 선택" || typeType === "객관식 - 다중 선택"
-          ? choices
-          : undefined,
-      count: typeType === "단답형" ? count : undefined,
-    };
-    onSave(updatedData);
+  const handleInputChange = (index: number, value: string) => {
+    setChoices(choices.map((choice, idx) => (idx === index ? value : choice)));
   };
 
-  // (단답형) 최대 글자 수
-  const [count, setCount] = useState(initialData?.count); // 255는 임시
+  const handleSaveChanges = async (optionIndex: number) => {
+    setDisabledInputs(
+      disabledInputs.map((disabled, idx) =>
+        idx === optionIndex ? true : disabled
+      )
+    );
+    const updatedAnswer = choices[optionIndex];
+    const initialOption =
+      initialData.options && initialData.options[optionIndex]
+        ? initialData.options[optionIndex]
+        : { id: undefined, answer: "" };
+    const isOptionNew = initialOption.id === undefined;
+
+    const isDuplicate = choices.some(
+      (choice, idx) => choice.trim() === updatedAnswer && idx !== optionIndex
+    );
+    if (isDuplicate) {
+      setAlertDialog(true);
+      setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
+      return;
+    }
+
+    const payload = {
+      surveyQuestion: {
+        id: initialData.id,
+        surveyId: initialData.surveyId,
+        questionType: initialData.type,
+        content: initialData.title,
+        page: initialData.page,
+        questionOrder: initialData.questionOrder,
+        maxText: initialData.count,
+        required: initialData.required,
+        deleted: false,
+      },
+      options: [
+        {
+          beforeChangeSurveyQuestionOptionList: isOptionNew
+            ? {}
+            : { id: initialOption.id, answer: initialOption.answer },
+          afterChangeSurveyQuestionOptionList: {
+            id: initialOption.id,
+            answer: updatedAnswer,
+            deleteFlag: false,
+            creationFlag: isOptionNew,
+          },
+        },
+      ],
+    };
+
+    console.log("Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+      const response = await api.post(`/survey/question-options`, payload);
+
+      if (response.status === 200) {
+        setEditIndex(null);
+        refetch();
+      } else {
+        console.error("질문 수정 중 오류가 발생했습니다:", response);
+        setAlertDialog(true);
+        setAlertText("질문 수정 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("질문 수정 중 오류가 발생했습니다:", error);
+      setAlertDialog(true);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+    }
+  };
+
+  const handleDeleteQuestion = async (optionIndex: number) => {
+    const initialOption = initialData.options
+      ? initialData.options[optionIndex]
+      : null;
+    if (!initialOption) {
+      setAlertDialog(true);
+      setAlertText("해당 답변을 찾을 수 없습니다.");
+      return;
+    }
+
+    const payload = {
+      surveyQuestion: {
+        id: initialData.id,
+        surveyId: initialData.surveyId,
+        questionType: initialData.type,
+        content: initialData.title,
+        page: initialData.page,
+        questionOrder: initialData.questionOrder,
+        maxText: initialData.count,
+        required: initialData.required,
+        deleted: false,
+      },
+      options: [
+        {
+          beforeChangeSurveyQuestionOptionList: {
+            id: initialOption.id,
+            answer: initialOption.answer,
+          },
+          afterChangeSurveyQuestionOptionList: {
+            id: initialOption.id,
+            answer: initialOption.answer,
+            deleteFlag: true,
+            creationFlag: false,
+          },
+        },
+      ],
+    };
+
+    console.log("Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+      const response = await api.post(`/survey/question-options`, payload);
+
+      if (response.status === 200) {
+        setEditIndex(null);
+        refetch();
+      } else {
+        console.error("답변 삭제 중 오류가 발생했습니다:", response);
+        setAlertDialog(true);
+        setAlertText("답변 삭제 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("답변 삭제 중 오류가 발생했습니다:", error);
+      setAlertDialog(true);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+    }
+
+    setDeleteQuestionDialog(false);
+  };
+
+  const handleSaveQuestion = async () => {
+    const payload = {
+      surveyQuestion: {
+        id: initialData.id,
+        surveyId: initialData.surveyId,
+        questionType: initialData.type, // 질문 타입
+        content: questionTitle, // 질문 제목
+        page: initialData.page,
+        questionOrder: initialData.questionOrder,
+        maxText: count,
+        required: isChecked,
+        deleted: false,
+      },
+    };
+
+    console.log("Payload:", JSON.stringify(payload, null, 2));
+
+    try {
+      const response = await api.post(`/survey/question-options`, payload);
+
+      if (response.status === 200) {
+        setEditIndex(null); // editIndex를 null로 설정
+        refetch(); // 데이터 다시 가져오기
+      } else {
+        console.error("질문 수정 중 오류가 발생했습니다:", response);
+        setAlertDialog(true);
+        setAlertText("질문 수정 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("질문 수정 중 오류가 발생했습니다:", error);
+      setAlertDialog(true);
+      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+    }
+  };
 
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
       <div className="sm-gray-9-text text-base pb-4">질문 수정</div>
-      {/* 형식 필수답변 */}
       <div className="flex justify-center items-center gap-4">
         <div className="flex gap-4 w-full items-center">
-          {/* 형식 고르기 */}
           <div className="sm-gray-9-text text-base whitespace-nowrap">형식</div>
-          <TypeDropDown
-            onShowTypeClick={() => {
-              setShowType((prev) => !prev);
-            }}
-            showType={showType}
-            typeType={typeType}
-            typeList={typeList}
-            onTypeSelect={handleTypeSelect}
-          />
+          <div className="drop-down-bar">
+            <div className="sm-gray-9-text text-center w-full">
+              {engToKorTypeMapping[typeType]}
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-1 items-center">
@@ -162,7 +260,6 @@ export const EditSurvey = ({
         </div>
       </div>
 
-      {/* 질문 제목 */}
       <div className="flex flex-col gap-1">
         <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
         <input
@@ -173,40 +270,97 @@ export const EditSurvey = ({
         />
       </div>
 
-      {/* 답변들 */}
-      {(typeType === "객관식 - 단일 선택" ||
-        typeType === "객관식 - 다중 선택") && (
+      {(typeType === "SINGLE_CHOICE" || typeType === "MULTIPLE_CHOICE") && (
         <>
-          {/* 회색선 */}
           <div className="gray-line my-8" />
-          <MultipleChoiceQuestion
-            choices={choices || ["", ""]}
-            addChoice={addChoice}
-            deleteChoice={deleteChoice}
-            handleChoiceChange={handleChoiceChange}
+          {choices?.map((choice: string, index: number) => (
+            <div key={index} className="flex flex-col gap-1">
+              <div className="sm-gray-9-text text-base pt-2">
+                답변 {index + 1}
+              </div>
+              <input
+                className="main-input text-gray-9"
+                value={choice}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                placeholder="답변을 입력해주세요"
+                disabled={disabledInputs[index]}
+              />
+
+              <div className="flex gap-2 justify-end">
+                {!disabledInputs[index] ? (
+                  <div
+                    onClick={() => handleSaveChanges(index)}
+                    className="flex items-center gap-1 cursor-pointer"
+                  >
+                    <SaveIcon isSmall={true} />
+                    <div className="text-primary-1 font-semibold text-sm">
+                      답변 저장
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => enableEdit(index)}
+                    className="flex items-center gap-1 cursor-pointer"
+                  >
+                    <UpdateIcon />
+                    <div className="text-primary-1 font-semibold text-sm">
+                      답변 수정
+                    </div>
+                  </div>
+                )}
+                <div
+                  onClick={() => showDeleteConfirmation(index)}
+                  className="flex items-center gap-1 cursor-pointer"
+                >
+                  <MinusIcon />
+                  <div className="text-red-1 font-semibold text-sm">
+                    답변 삭제
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            className="medium-Btn white-bg-primary-btn self-center w-auto mt-6 flex items-center gap-1"
+            onClick={addNewChoice}
+          >
+            <PlusIcon /> 새 답변 추가
+          </button>
+        </>
+      )}
+
+      {(typeType === "SHORT_ANSWER" || typeType === "SUBJECTIVE") && (
+        <>
+          <ShortAnswerType
+            setCount={setCount}
+            hasLimit={initialData?.count !== 788183}
+            value={initialData?.count}
           />
-        </>
-      )}
-
-      {(typeType === "단답형" || typeType === "주관식") && (
-        <>
-          <ShortAnswerType setCount={setCount} />
           <div className="gray-line mt-8" />
         </>
       )}
 
-      {typeType === "슬라이더" && (
+      {typeType === "SLIDER" && (
         <>
           <div className="gray-line mt-8" />
         </>
       )}
 
-      {/* 취소 수정 */}
-      <CancleSaveButtonFrame
-        onCancleClick={onCancel}
-        onEditClick={onEditClick}
-        isEdit={true}
-      />
+      <div className="flex justify-end p-0 mt-6 gap-2">
+        <button
+          onClick={onCancel}
+          className="small-Btn w-auto bg-white text-gray-5 border-gray-5"
+        >
+          취소
+        </button>
+
+        <button
+          onClick={handleSaveQuestion}
+          className="small-Btn w-auto white-bg-primary-btn"
+        >
+          저장
+        </button>
+      </div>
 
       <div className="flex justify-center items-center">
         {alertDialog && (
@@ -214,9 +368,18 @@ export const EditSurvey = ({
             title={alertText}
             onlyOneBtn={true}
             rightText={"닫기"}
-            onRightClick={() => {
-              setAlertDialog((prev) => !prev);
-            }}
+            onRightClick={() => setAlertDialog(false)}
+          />
+        )}
+
+        {deleteQuestionDialog && (
+          <Dialog
+            title="해당 답변을 삭제하시겠습니까?"
+            rightText="예"
+            onRightClick={() => handleDeleteQuestion(deleteIndex!)}
+            leftText="취소"
+            onLeftClick={() => setDeleteQuestionDialog(false)}
+            isDelete
           />
         )}
       </div>

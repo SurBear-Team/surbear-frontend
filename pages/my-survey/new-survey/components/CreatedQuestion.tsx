@@ -1,3 +1,5 @@
+import { engToKorTypeMapping } from "../../components/typeMapping";
+
 interface CreatedQuestionProps {
   answerIndex: number;
   type: string;
@@ -24,7 +26,7 @@ export const CreatedQuestion = ({
         <div className="sm-gray-9-text text-base pr-2">{`${answerIndex}.`}</div>
         <div className="sm-gray-9-text text-base">{title}</div>
       </div>
-      <div className="pb-6 sm-gray-9-text">{type}</div>
+      <div className="pb-6 sm-gray-9-text">{engToKorTypeMapping[type]}</div>
 
       {/* 질문답변 */}
       {answerList?.map((answer: string, index: number) => (
@@ -34,15 +36,13 @@ export const CreatedQuestion = ({
         >
           <div
             className={`${
-              type === "객관식 - 다중 선택"
-                ? "check-box"
-                : "w-4 h-4 rounded-full"
+              type === "MULTIPLE_CHOICE" ? "check-box" : "w-4 h-4 rounded-full"
             } bg-white border-[1px] border-gray-7 min-w-4`}
           />
           <div className="sm-gray-9-text font-normal">{answer}</div>
         </div>
       ))}
-      {type === "단답형" && count && (
+      {(type === "SHORT_ANSWER" || type === "SUBJECTIVE") && count && (
         <div>최대 글자수: {count === 788183 ? "제한 없음" : count}</div>
       )}
       {/* 수정 삭제 버튼 */}

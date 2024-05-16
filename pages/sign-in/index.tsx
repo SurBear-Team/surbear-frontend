@@ -5,6 +5,7 @@ import LogoSVG from "../components/styles/LogoSVG";
 import api from "../api/config";
 import { AxiosError } from "axios";
 import { Dialog } from "../components/Dialog";
+import { useQueryClient } from "react-query";
 
 interface DialogState {
   open: boolean;
@@ -13,6 +14,7 @@ interface DialogState {
 
 export default function SignIn() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // 로그인 여부 확인
   useEffect(() => {
@@ -49,6 +51,7 @@ export default function SignIn() {
       if (response.status === 200) {
         localStorage.setItem("surbearToken", response?.data?.accessToken);
         router.push("/browse");
+        queryClient.invalidateQueries("member");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -130,6 +133,7 @@ export default function SignIn() {
             className="long-button mt-7 bg-white border-primary-1 text-primary-1"
             onClick={() => {
               router.push("/browse");
+              queryClient.invalidateQueries("member");
             }}
           >
             로그인 없이 시작

@@ -1,7 +1,7 @@
 import { BanIcon } from "@/pages/components/styles/Icons";
 
 interface ListCardProps {
-  getTime: string;
+  getTime?: string;
   content: string;
   plusMinus?: any;
   point?: string;

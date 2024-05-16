@@ -28,6 +28,12 @@ export default function ManagerAdministration() {
               router.push("/manager/administration/inquiry");
             }}
           />
+          <SettingCard
+            title="GPT Token 사용량 확인"
+            onClick={() => {
+              router.push("/manager/administration/gpt");
+            }}
+          />
         </div>
 
         {showPopUp && (

@@ -16,15 +16,6 @@ export default function SignIn() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // 로그인 여부 확인
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      if (localStorage.getItem("surbearToken") !== null) {
-        router.push("/browse");
-      }
-    }
-  }, []);
-
   const [dialog, setDialog] = useState<DialogState>({
     open: false,
     title: "",

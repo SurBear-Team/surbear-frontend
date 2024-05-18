@@ -271,6 +271,7 @@ export default function NewSurvey() {
   const onSaveClick = () => {
     localStorage.removeItem("surveyTitle");
     setSurveyId("");
+    localStorage.removeItem("surveyTitle");
     queryClient.invalidateQueries("my-surveys");
     router.push("/my-survey");
   };
@@ -361,12 +362,12 @@ export default function NewSurvey() {
                 }
                 leftText="취소"
                 onLeftClick={() => {
-                  queryClient.invalidateQueries("my-surveys");
                   setShowCloseDialog((prev) => !prev);
                 }}
                 rightText="예"
                 onRightClick={() => {
                   queryClient.invalidateQueries("my-surveys");
+                  localStorage.removeItem("surveyTitle");
                   router.back();
                 }}
                 isDelete={true}

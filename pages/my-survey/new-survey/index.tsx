@@ -287,7 +287,7 @@ export default function NewSurvey() {
       />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
-          <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
+          <div className="base-gray-9-text py-6 pl-6 self-start">
             {`${currentPage + 1} 페이지`}
           </div>
           {surveyQuestions
@@ -379,7 +379,7 @@ export default function NewSurvey() {
             <>
               <Overlay onClick={() => {}} />
               <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
-                <span className="whitespace-nowrap sm-gray-9-text text-base">
+                <span className="whitespace-nowrap base-gray-9-text">
                   ChatGPT가 질문을 추천해드려요! <br />
                   추천을 받으시겠어요?
                 </span>
@@ -411,9 +411,9 @@ export default function NewSurvey() {
             <>
               <Overlay onClick={() => {}} />
               <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5">
-                <span className="whitespace-nowrap sm-gray-9-text text-base">
+                <span className="whitespace-nowrap base-gray-9-text">
                   이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!
-                  <div className="whitespace-nowrap sm-gray-9-text text-base pt-2">
+                  <div className="whitespace-nowrap base-gray-9-text pt-2">
                     마음에 드는 질문을 선택할 수 있어요!
                   </div>
                 </span>

@@ -217,21 +217,19 @@ export const EditInEditSurvey = ({
   };
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
-      <div className="sm-gray-9-text text-base pb-4">질문 수정</div>
+      <div className="base-gray-9-text pb-4">질문 수정</div>
       {/* 형식 필수답변 */}
       <div className="flex justify-center items-center gap-4">
         <div className="flex gap-4 w-full items-center">
           {/* 형식 표시 */}
-          <div className="sm-gray-9-text text-base whitespace-nowrap">형식</div>
+          <div className="base-gray-9-text whitespace-nowrap">형식</div>
           <div className="drop-down-bar">
             <div className="sm-gray-9-text text-center w-full">{typeType}</div>
           </div>
         </div>
 
         <div className="flex gap-1 items-center">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
-            필수 답변
-          </div>
+          <div className="base-gray-9-text whitespace-nowrap">필수 답변</div>
           <MyCheckBox
             isChecked={isChecked}
             onCheckClick={handleCheckboxChange}
@@ -241,7 +239,7 @@ export const EditInEditSurvey = ({
 
       {/* 질문 제목 */}
       <div className="flex flex-col gap-1">
-        <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
+        <div className="base-gray-9-text pt-2">질문 제목</div>
         <input
           className="main-input text-gray-9"
           value={questionTitle}
@@ -258,9 +256,7 @@ export const EditInEditSurvey = ({
           <div className="gray-line my-8" />
           {choices?.map((choice: string, index: number) => (
             <div key={index} className="flex flex-col gap-1">
-              <div className="sm-gray-9-text text-base pt-2">
-                답변 {index + 1}
-              </div>
+              <div className="base-gray-9-text pt-2">답변 {index + 1}</div>
               <input
                 className="main-input text-gray-9"
                 value={choice}

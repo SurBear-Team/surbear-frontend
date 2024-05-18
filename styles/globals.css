@@ -92,6 +92,11 @@ input::-webkit-inner-spin-button {
     @apply text-gray-9 font-semibold text-sm;
   }
 
+  /* 16px text-9 글씨 */
+  .base-gray-9-text {
+    @apply sm-gray-9-text text-base;
+  }
+
   /* 파란배경 버튼 색 */
   .primary-btn-style {
     @apply border-primary-1 bg-primary-1 text-white;

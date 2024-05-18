@@ -139,7 +139,7 @@ export default function Result() {
           {data &&
             data.map((item, index) => (
               <>
-                <div key={index} className="sm-gray-9-text text-base pb-4">
+                <div key={index} className="base-gray-9-text pb-4">
                   {index + 1}. {item.surveyQuestion.content}
                 </div>
 

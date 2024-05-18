@@ -55,7 +55,7 @@ export const ShortAnswerType = ({
       />
 
       <div className="flex justify-between w-full items-center">
-        <div className="sm-gray-9-text text-base">최대 글자수 제한</div>
+        <div className="base-gray-9-text">최대 글자수 제한</div>
         <input
           type="number"
           value={inputValue === "788183" ? "" : inputValue}

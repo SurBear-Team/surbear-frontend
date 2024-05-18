@@ -235,7 +235,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       <div className="card fixed bg-white w-4/5 max-w-lg min-w-80 gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">
+          <div className="base-gray-9-text">
             {isEdit ? "설문 수정하기" : "새 설문 주제"}
           </div>
           <input
@@ -249,7 +249,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 설문 설명 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">설문 설명</div>
+          <div className="base-gray-9-text">설문 설명</div>
           <textarea
             value={description}
             onChange={handleDescriptionChange}
@@ -259,9 +259,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 카테고리 */}
         <div className="flex w-full items-center gap-4">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
-            카테고리
-          </div>
+          <div className="base-gray-9-text whitespace-nowrap">카테고리</div>
           <TypeDropDown
             onShowTypeClick={() => {
               setShowCategory((prev) => !prev);
@@ -277,7 +275,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         <div className="flex w-full justify-between">
           {/* 결과 비공개 여부 */}
           <div className="flex items-center gap-2">
-            <div className="sm-gray-9-text text-base whitespace-nowrap">
+            <div className="base-gray-9-text whitespace-nowrap">
               결과 비공개 여부
             </div>
             <MyCheckBox
@@ -288,7 +286,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
           {/* 최대 인원 */}
           <div className="flex justify-between items-center gap-2">
-            <div className="sm-gray-9-text text-base">최대 인원</div>
+            <div className="base-gray-9-text">최대 인원</div>
             <input
               value={maxPeople === "788183" ? "" : maxPeople}
               onChange={handleMaxPersonChange}
@@ -300,7 +298,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 종료 날짜 및 시간 */}
         <div className="w-full flex flex-col gap-1">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
+          <div className="base-gray-9-text whitespace-nowrap">
             종료 날짜 및 시간
           </div>
           <DatePicker

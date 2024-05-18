@@ -17,7 +17,7 @@ export default function Subjective({
 }: ISubjective) {
   const [answer, setAnswer] = useState("");
   useEffect(() => {
-    setAnswer(initial[0]);
+    setAnswer(initial[0] ? initial[0] : "");
   }, [initial]);
   return (
     <>

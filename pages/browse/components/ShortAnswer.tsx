@@ -19,7 +19,7 @@ export default function ShortAnswer({
 }: IShortAnswer) {
   const [answer, setAnswer] = useState("");
   useEffect(() => {
-    setAnswer(initial[0]);
+    setAnswer(initial[0] ? initial[0] : "");
   }, [initial]);
   return (
     <div className="w-full px-6 py-8 gap-6 flex flex-col">

@@ -6,10 +6,10 @@ import MultipleChoice from "../components/MultipleChoice";
 import api from "@/pages/api/config";
 import Subjective from "../components/Subjective";
 import ShortAnswer from "../components/ShortAnswer";
-import Slider from "../components/Slider";
 import { Dialog } from "@/pages/components/Dialog";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useQueryClient } from "react-query";
+import RangeSlider from "../components/RangeSlider";
 
 export interface IOption {
   id: number;
@@ -256,21 +256,10 @@ export default function Survey() {
                     );
                   if (el.surveyQuestion.questionType === "SLIDER")
                     return (
-                      <Slider
+                      <RangeSlider
                         key={el.surveyQuestion.id}
                         index={index + 1}
                         title={el.surveyQuestion.content}
-                        onChange={(ratio: number) => {
-                          const id = el.surveyQuestion.id;
-                          const newAnswer = {
-                            questionId: id,
-                            answers: [ratio + ""],
-                          };
-                          const otherAnswers = answers.filter(
-                            (el) => el.questionId !== id
-                          );
-                          setAnswers([...otherAnswers, newAnswer]);
-                        }}
                         initial={
                           answers
                             .find(
@@ -279,6 +268,17 @@ export default function Survey() {
                             )
                             ?.answers.map(Number) || []
                         }
+                        onChange={(value: number) => {
+                          const id = el.surveyQuestion.id;
+                          const newAnswer = {
+                            questionId: id,
+                            answers: [value + ""],
+                          };
+                          const otherAnswers = answers.filter(
+                            (el) => el.questionId !== id
+                          );
+                          setAnswers([...otherAnswers, newAnswer]);
+                        }}
                       />
                     );
                 }

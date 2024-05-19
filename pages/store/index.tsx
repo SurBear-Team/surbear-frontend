@@ -6,7 +6,7 @@ import ItemDetail from "./components/ItemDetail";
 import { useEffect, useState } from "react";
 import api from "../api/config";
 import Pagination from "../browse/components/Pagination";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { goodsSearchAtom } from "../atoms";
 import { useRouter } from "next/router";
 import { Dialog } from "../components/Dialog";
@@ -33,7 +33,7 @@ export default function Store() {
 
   const [data, setData] = useState<IGoods[]>();
 
-  const [goodsSearch] = useRecoilValue(goodsSearchAtom);
+  const [goodsSearch, setGoodsSearch] = useRecoilState(goodsSearchAtom);
 
   const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState(0);
@@ -56,7 +56,7 @@ export default function Store() {
           setData(currentData);
           setLastPage(Math.ceil(temp.length / 20));
         })
-        .catch((err) => showOneBtnDialog("검색 결과가 없습니다."));
+        .catch((err) => console.error("검색 결과가 없습니다."));
     }
   }, [page, goodsSearch]);
 

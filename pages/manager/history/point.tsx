@@ -1,9 +1,9 @@
 import api from "@/pages/api/config";
 import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 import { ListCard } from "@/pages/profile/components/ListCard";
 import { getTimeAsString } from "@/pages/utils";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface IPointHistory {
@@ -20,7 +20,8 @@ interface IPointHistory {
 export default function PointHistory() {
   const [updateList, setUpdateList] = useState(0);
 
-  const router = useRouter();
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
   const [data, setData] = useState<IPointHistory[]>();
   useEffect(() => {
     api.get("/point").then((res) => setData(res.data.reverse()));
@@ -78,12 +79,21 @@ export default function PointHistory() {
                 }
               )
               .then((res) => {
-                alert("지급이 취소되었습니다.");
+                showOneBtnDialog("지급이 취소되었습니다.");
                 setUpdateList((prev) => prev + 1);
                 setShowWarning((prev) => !prev);
               })
-              .catch((err) => alert("사용자 인증을 확인해주세요."))
+              .catch((err) => showOneBtnDialog("사용자 인증을 확인해주세요."))
           }
+        />
+      )}
+
+      {oneBtnDialog.open && (
+        <Dialog
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onlyOneBtn
+          onRightClick={hideOneBtnDialog}
         />
       )}
     </>

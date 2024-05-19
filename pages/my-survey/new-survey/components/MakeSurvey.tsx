@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { surveyIdAtom } from "../../surveyState";
 import { korToEngTypeMapping } from "../../components/typeMapping";
 import { useQueryClient } from "react-query";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -46,19 +47,8 @@ export const MakeSurvey = ({
   const [nowType, setNowType] = useState("SINGLE_CHOICE");
 
   // 원버튼 다이얼로그
-  const [oneBtnDialog, setOneBtnDialog] = useState<{
-    open: boolean;
-    title: string;
-  }>({
-    open: false,
-    title: "",
-  });
-  const showOneBtnDialog = (message: string) => {
-    setOneBtnDialog({ open: true, title: message });
-  };
-  const hideOneBtnDialog = () => {
-    setOneBtnDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 필수 답변 체크 박스
   const [isChecked, setIsChecked] = useState(false);

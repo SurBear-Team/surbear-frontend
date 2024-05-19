@@ -3,6 +3,7 @@ import { ISurvey } from "@/pages/browse/data";
 import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { Overlay } from "@/pages/components/styles/Overlay";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 import { ListCard } from "@/pages/profile/components/ListCard";
 import { getTimeAsString } from "@/pages/utils";
 import { useRouter } from "next/router";
@@ -10,7 +11,8 @@ import { useEffect, useState } from "react";
 
 export default function MemberSurvey() {
   const router = useRouter();
-
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
   const [showPopUp, setShowPopUp] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const [updateList, setUpdateList] = useState(0);
@@ -38,7 +40,7 @@ export default function MemberSurvey() {
         setToken(checkToken);
       }
     }
-  });
+  }, []);
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function MemberSurvey() {
                   setShowPopUp((prev) => !prev);
                   setSelected(el.id);
                 } else {
-                  alert("이미 삭제된 설문조사입니다.");
+                  showOneBtnDialog("이미 삭제된 설문조사입니다.");
                 }
               }}
             />
@@ -89,22 +91,31 @@ export default function MemberSurvey() {
                     headers: { Authorization: `Bearer ${token}` },
                   })
                   .then((res) => {
-                    alert("설문조사가 강제 삭제 되었습니다.");
+                    showOneBtnDialog("설문조사가 강제 삭제 되었습니다.");
                     setUpdateList((prev) => prev + 1);
                     setShowPopUp((prev) => !prev);
                   })
                   .catch((err) => {
-                    alert("이미 삭제된 설문조사입니다.");
+                    showOneBtnDialog("이미 삭제된 설문조사입니다.");
                     setShowPopUp((prev) => !prev);
                   });
               } else if (token === "") {
-                alert("관리자 권한이 필요합니다.");
+                showOneBtnDialog("관리자 권한이 필요합니다.");
               }
             }}
             title="해당 설문조사를 강제 삭제하시겠습니까?"
             isDelete
           />
         </>
+      )}
+
+      {oneBtnDialog.open && (
+        <Dialog
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onlyOneBtn
+          onRightClick={hideOneBtnDialog}
+        />
       )}
     </>
   );

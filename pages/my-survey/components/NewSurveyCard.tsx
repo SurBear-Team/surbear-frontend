@@ -13,6 +13,7 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -72,17 +73,8 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   });
 
   // 다이얼로그
-  const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
-    open: false,
-    text: "",
-  });
-  const showDialog = (message: string) => {
-    setDialog({ open: true, text: message });
-  };
-  const hideDialog = () => {
-    setDialog({ open: false, text: "" });
-  };
-
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
   // 제목
   const [surveyTitle, setSurveyTitle] = useState("");
 
@@ -155,20 +147,20 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     const descriptionTrimmed = description.trim(); // 앞뒤 공백 제거
 
     if (!deadline) {
-      showDialog("종료 날짜와 시간을 입력해주세요.");
+      showOneBtnDialog("종료 날짜와 시간을 입력해주세요.");
       return false;
     }
 
     const isoDeadline = deadline.toISOString(); // 분과 초를 00으로 고정
 
     if (!titleTrimmed || !descriptionTrimmed) {
-      showDialog("설문 주제와 설문 설명을 입력해주세요");
+      showOneBtnDialog("설문 주제와 설문 설명을 입력해주세요");
       return false;
     } else if (isNaN(parsedMaxPerson) || parsedMaxPerson <= 0) {
-      showDialog("유효한 최대 인원 수를 입력해주세요");
+      showOneBtnDialog("유효한 최대 인원 수를 입력해주세요");
       return false;
     } else if (new Date(isoDeadline) < now) {
-      showDialog("종료 시간은 현재 이후로 입력해주세요");
+      showOneBtnDialog("종료 시간은 현재 이후로 입력해주세요");
       return false;
     }
 
@@ -204,7 +196,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         })
         .catch((error) => {
           console.error("설문 수정 오류 : ", error);
-          showDialog("설문 수정에 실패했습니다.");
+          showOneBtnDialog("설문 수정에 실패했습니다.");
         });
     } else {
       try {
@@ -220,11 +212,11 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           queryClient.invalidateQueries("registered");
           router.push("/my-survey/new-survey");
         } else {
-          showDialog("설문 생성에 실패했습니다.");
+          showOneBtnDialog("설문 생성에 실패했습니다.");
         }
       } catch (error) {
         console.error(error);
-        showDialog("설문 생성에 실패했습니다.");
+        showOneBtnDialog("설문 생성에 실패했습니다.");
       }
     }
   };
@@ -335,12 +327,12 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
       {/* 오류 다이얼로그 */}
       <div className="fixed h-screen flex items-center justify-center z-50">
-        {dialog.open && (
+        {oneBtnDialog.open && (
           <Dialog
-            title={dialog.text}
-            onlyOneBtn={true}
-            rightText={"닫기"}
-            onRightClick={hideDialog}
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

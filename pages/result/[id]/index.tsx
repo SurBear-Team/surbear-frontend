@@ -15,15 +15,14 @@ import {
 import { ShortAnswerSubjective } from "../components/ShortAnswerSubjective";
 import { SurveyResult } from "../components/resultInterface";
 import { Dialog } from "@/pages/components/Dialog";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function Result() {
   const { id } = router.query;
   const [resultTitle, setResultTitle] = useState("");
 
-  const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
-    open: false,
-    text: "",
-  });
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   useEffect(() => {
     const title = localStorage.getItem("resultTitle");
@@ -63,10 +62,9 @@ export default function Result() {
       const response = await api.post("/survey/result", requestBody);
       setSurveyResult(response.data);
     } catch (error) {
-      setDialog({
-        open: true,
-        text: "네트워크 에러가 발생했습니다. \n 나중에 다시 시도해주세요",
-      });
+      showOneBtnDialog(
+        "네트워크 에러가 발생했습니다. \n 나중에 다시 시도해주세요"
+      );
 
       console.error(error);
     }
@@ -238,14 +236,12 @@ export default function Result() {
               </>
             ))}
 
-          {dialog.open && (
+          {oneBtnDialog.open && (
             <Dialog
-              onlyOneBtn
-              title={dialog.text}
+              title={oneBtnDialog.title}
               rightText="확인"
-              onRightClick={(current) => {
-                setDialog({ ...current, open: false });
-              }}
+              onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </div>

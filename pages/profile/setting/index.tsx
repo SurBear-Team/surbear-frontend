@@ -8,10 +8,13 @@ import { IMemberInfo } from "@/pages/manager/member";
 import { IManagerList } from "@/pages/manager/administration/inquiry";
 
 import { useQuery } from "react-query";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function ProfileSetting() {
   const router = useRouter();
   const [token, setToken] = useState("");
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("surbearToken");
@@ -88,7 +91,6 @@ export default function ProfileSetting() {
                 }}
                 rightText="확인"
                 onRightClick={() => {
-                  alert("로그아웃이 완료되었습니다.");
                   localStorage.removeItem("surbearToken");
                   router.push("/sign-in");
                 }}
@@ -117,13 +119,24 @@ export default function ProfileSetting() {
                       router.push("/sign-in");
                     })
                     .catch((res) =>
-                      alert("오류가 발생하였습니다. 다시 시도해주세요.")
+                      showOneBtnDialog(
+                        "오류가 발생하였습니다. 다시 시도해주세요."
+                      )
                     );
                 }}
                 isDelete={true}
               />
             </div>
           </>
+        )}
+
+        {oneBtnDialog.open && (
+          <Dialog
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
+          />
         )}
       </div>
     </>

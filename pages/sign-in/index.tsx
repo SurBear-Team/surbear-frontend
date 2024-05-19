@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
@@ -6,20 +6,14 @@ import api from "../api/config";
 import { AxiosError } from "axios";
 import { Dialog } from "../components/Dialog";
 import { useQueryClient } from "react-query";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 export default function SignIn() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [inputId, setInputId] = useState("");
   const [inputPassword, setInputPassword] = useState("");
@@ -52,15 +46,11 @@ export default function SignIn() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 404) {
-        setDialog({
-          open: true,
-          title: "아이디 혹은 비밀번호를 확인해주세요",
-        });
+        showOneBtnDialog("아이디 혹은 비밀번호를 확인해주세요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 에러. 나중에 다시 시도해주세요",
-        });
+        showOneBtnDialog(
+          "네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
@@ -139,14 +129,12 @@ export default function SignIn() {
           </button>
         </div>
 
-        {dialog.open && (
+        {oneBtnDialog.open && (
           <Dialog
-            title={dialog.title}
+            title={oneBtnDialog.title}
             rightText="확인"
-            onRightClick={() => {
-              setDialog((current) => ({ ...current, open: false }));
-            }}
             onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

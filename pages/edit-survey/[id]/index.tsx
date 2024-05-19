@@ -19,6 +19,7 @@ import {
   korToEngTypeMapping,
   engToKorTypeMapping,
 } from "@/pages/my-survey/components/typeMapping";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function EditSurveyPage() {
   const router = useRouter();
@@ -29,19 +30,8 @@ export default function EditSurveyPage() {
   const [isNewSurvey, setIsNewSurvey] = useState(false);
 
   // 원버튼 다이얼로그
-  const [oneBtnDialog, setOneBtnDialog] = useState<{
-    open: boolean;
-    title: string;
-  }>({
-    open: false,
-    title: "",
-  });
-  const showOneBtnDialog = (message: string) => {
-    setOneBtnDialog({ open: true, title: message });
-  };
-  const hideOneBtnDialog = () => {
-    setOneBtnDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면

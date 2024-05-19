@@ -8,6 +8,8 @@ import { Checkbox } from "@/pages/sign-up/Components/CheckBox";
 import { useForm } from "react-hook-form";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { useQueryClient } from "react-query";
+import { Dialog } from "@/pages/components/Dialog";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export interface IBuyInfo {
   goodsName: string;
@@ -19,6 +21,8 @@ export default function BuyGoods() {
   const router = useRouter();
   const { goodsId } = router.query;
   const queryClient = useQueryClient();
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 상품 정보 조회 및 가격 저장
   const [data, setData] = useState<IGoodsDetail>();
@@ -73,13 +77,13 @@ export default function BuyGoods() {
   const onSubmit = (num: any) => {
     const { phoneNum } = num;
     if (remain < 0) {
-      alert("포인트가 부족합니다.");
+      showOneBtnDialog("포인트가 부족합니다.");
     } else if (isNaN(+phoneNum)) {
-      alert("전화번호는 숫자만 입력해주세요.");
+      showOneBtnDialog("전화번호는 숫자만 입력해주세요.");
     } else if (phoneNum.length !== 11) {
-      alert("올바른 전화번호를 입력해주세요.");
+      showOneBtnDialog("올바른 전화번호를 입력해주세요.");
     } else if (checkItems.length !== terms.length) {
-      alert("약관에 동의해주세요.");
+      showOneBtnDialog("약관에 동의해주세요.");
     } else {
       setInfo({
         goodsName: data?.goodsName!,
@@ -247,6 +251,15 @@ export default function BuyGoods() {
             }}
           />
         </>
+      )}
+
+      {oneBtnDialog.open && (
+        <Dialog
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onlyOneBtn
+          onRightClick={hideOneBtnDialog}
+        />
       )}
     </>
   );

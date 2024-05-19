@@ -6,9 +6,13 @@ import { InputDialog } from "../components/InputDialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import api from "@/pages/api/config";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import { Dialog } from "@/pages/components/Dialog";
 
 export default function ManagerAdministration() {
   const router = useRouter();
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [showPopUp, setShowPopUp] = useState(false);
   return (
@@ -52,18 +56,29 @@ export default function ManagerAdministration() {
                   api
                     .post(`/role?nickname=${nickname}`)
                     .then((res) => {
-                      alert(`${nickname} 님을 관리자로 등록하였습니다.`);
+                      showOneBtnDialog(
+                        `${nickname} 님을 관리자로 등록하였습니다.`
+                      );
                       setShowPopUp((prev) => !prev);
                     })
                     .catch((err) => {
-                      console.log(err);
-                      alert(err.response.data.message);
+                      console.error(err);
+                      showOneBtnDialog(err.response.data.message);
                     });
                 }
               }}
             />
             <Overlay onClick={() => {}} />
           </>
+        )}
+
+        {oneBtnDialog.open && (
+          <Dialog
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
+          />
         )}
       </div>
     </>

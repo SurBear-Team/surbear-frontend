@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
 import { CreatedQuestion } from "./components/CreatedQuestion";
-import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
@@ -43,8 +42,6 @@ export default function NewSurvey() {
 
   const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
-  const [alertDialog, setAlertDialog] = useState(false);
-  const [alertText, setAlertText] = useState("");
 
   const [saveDialog, setSaveDialog] = useState(false);
 
@@ -79,7 +76,6 @@ export default function NewSurvey() {
       setSurveyQuestions(formattedQuestions);
     },
   });
-  console.log("설문 전체 데이터:", data);
 
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editData, setEditData] = useState<NewSurveyProps | null>(null);
@@ -137,52 +133,6 @@ export default function NewSurvey() {
     }
   };
 
-  const onSaveEdit = async (updatedData: NewSurveyProps) => {
-    try {
-      const existingQuestion = surveyQuestions[editIndex!];
-
-      const formattedOptions =
-        updatedData.choices?.map((choice, index) => ({
-          beforeChangeSurveyQuestionOptionList: existingQuestion.options![index]
-            ? {
-                id: existingQuestion.options![index].id,
-                answer: existingQuestion.options![index].answer,
-              }
-            : { id: 0, answer: "" },
-          afterChangeSurveyQuestionOptionList: {
-            id: existingQuestion.options![index]
-              ? existingQuestion.options![index].id
-              : 0,
-            answer: choice,
-            deleteFlag: false,
-            creationFlag: !existingQuestion.options![index],
-          },
-        })) || [];
-
-      await api.post("/survey/question-options", {
-        surveyQuestion: {
-          id: existingQuestion.id,
-          surveyId: surveyId,
-          questionType: updatedData.type,
-          content: updatedData.title,
-          page: currentPage + 1,
-          questionOrder: 0, // 필요한 값 설정
-          maxText: updatedData.count || 0, // 필요한 값 설정
-          required: existingQuestion.required,
-          deleted: false,
-        },
-        options: formattedOptions,
-      });
-
-      const updatedQuestions = [...surveyQuestions];
-      updatedQuestions[editIndex!] = updatedData;
-      setSurveyQuestions(updatedQuestions);
-      setEditIndex(null);
-    } catch (error) {
-      console.error("질문 수정 중 오류가 발생했습니다:", error);
-    }
-  };
-
   const goToNextPage = () => {
     if (currentPage < Math.max(...surveyQuestions.map((q) => q.page || 0))) {
       setCurrentPage(currentPage + 1);
@@ -195,22 +145,13 @@ export default function NewSurvey() {
     }
   };
 
-  const deleteCurrentPage = () => {
-    const updatedQuestions = surveyQuestions.filter(
-      (question) => question.page !== currentPage + 1
-    );
-    setSurveyQuestions(updatedQuestions);
-    setCurrentPage((prev) => (prev > 0 ? prev - 1 : 0));
-    setAlertDialog((prev) => !prev);
-  };
-
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
 
   const fetchChatGPTResponse = async (title: string | null) => {
     setIsLoading(true);
-    const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표를 붙이지 말고 한국어로 부탁해.`;
+    const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표와 번호를 붙이지 말고 한국어로 부탁해.`;
     try {
       const response = await fetch("/api/chatgpt", {
         method: "POST",
@@ -222,7 +163,7 @@ export default function NewSurvey() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error from /api/chatgpt:", errorData);
+        console.error("/api/chatgpt에서 에러 발생:", errorData);
         throw new Error(errorData.error || "Unknown error");
       }
 
@@ -297,11 +238,9 @@ export default function NewSurvey() {
                 <EditSurvey
                   key={index}
                   initialData={editData!}
-                  onSave={onSaveEdit}
                   onCancel={() => setEditIndex(null)}
                   refetch={refetch}
                   setEditIndex={setEditIndex}
-                  currentPage={currentPage}
                 />
               ) : (
                 <CreatedQuestion
@@ -330,18 +269,6 @@ export default function NewSurvey() {
             />
           )}
 
-          {alertDialog && (
-            <Dialog
-              title={alertText}
-              leftText="취소"
-              rightText="삭제"
-              onLeftClick={() => {
-                setAlertDialog((prev) => !prev);
-              }}
-              onRightClick={deleteCurrentPage}
-              isDelete={true}
-            />
-          )}
           {saveDialog && (
             <Dialog
               title={"설문이 저장되었어요"}

@@ -11,6 +11,7 @@ import {
 import api from "@/pages/api/config";
 import { EditSurveyProps } from "../editInterface";
 import { korToEngTypeMapping } from "@/pages/my-survey/components/typeMapping";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export const EditInEditSurvey = ({
   initialData, // index에서 받은 기존 질문 데이터 객체
@@ -35,19 +36,8 @@ export const EditInEditSurvey = ({
   };
 
   // (공통) 원버튼 alert다이얼로그
-  const [oneBtnDialog, setOneBtnDialog] = useState<{
-    open: boolean;
-    title: string;
-  }>({
-    open: false,
-    title: "",
-  });
-  const showOneBtnDialog = (message: string) => {
-    setOneBtnDialog({ open: true, title: message });
-  };
-  const hideOneBtnDialog = () => {
-    setOneBtnDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // (공통) 원래 질문 제목
   const [questionTitle, setQuestionTitle] = useState(initialData?.title);

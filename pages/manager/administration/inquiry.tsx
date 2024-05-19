@@ -1,10 +1,9 @@
-import { ArrowBackIcon } from "@/pages/components/styles/Icons";
-import { useRouter } from "next/router";
 import { InquiryCard } from "./components/InquiryCard";
 import { useEffect, useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import api from "@/pages/api/config";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export interface IManagerList {
   memberId: number;
@@ -13,10 +12,12 @@ export interface IManagerList {
 }
 
 export default function AdministrationInquiry() {
-  const router = useRouter();
   const [managerList, setManagerList] = useState<IManagerList[]>();
   const [selectedManager, setSelectedManager] = useState<IManagerList>();
   const [updateList, setUpdateList] = useState(0);
+
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   useEffect(() => {
     api.get("/role/list").then((res) => {
@@ -56,17 +57,28 @@ export default function AdministrationInquiry() {
                 api
                   .delete(`/role/${selectedManager?.roleId}`)
                   .then((res) => {
-                    alert(
+                    showOneBtnDialog(
                       `${selectedManager?.nickname} 님의 관리자 권한을 삭제하였습니다.`
                     );
                     setShowPopUp((prev) => !prev);
                     setUpdateList((prev) => prev + 1);
                   })
-                  .catch((err) => alert("관리자 삭제에 실패하였습니다."));
+                  .catch((err) =>
+                    showOneBtnDialog("관리자 삭제에 실패하였습니다.")
+                  );
               }}
               isDelete={true}
             />
           </>
+        )}
+
+        {oneBtnDialog.open && (
+          <Dialog
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
+          />
         )}
       </div>
     </>

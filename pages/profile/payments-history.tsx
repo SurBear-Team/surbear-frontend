@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { ListCard } from "./components/ListCard";
 import { TopBar } from "../components/TopBar/TopBar";
 import { useEffect, useState } from "react";
@@ -15,7 +14,6 @@ interface IPaymentsHistory {
 }
 
 export default function PaymentsHistory() {
-  const router = useRouter();
   const [data, setData] = useState<IPaymentsHistory[]>();
 
   useEffect(() => {

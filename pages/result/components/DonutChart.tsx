@@ -6,7 +6,7 @@ export const DonutChart = ({ item, surveyResult }: ChartProps) => {
     // reduce로 response를 순회하며 surveyResult에서 해당 답변의 출현 횟수를 계산
     return Object.values(surveyResult).reduce((count, res) => {
       // res는 개별 응답의 상세정보
-      res.response.forEach(
+      res.response?.forEach(
         (response: {
           questionId: number;
           request: { answers: string | string[] };

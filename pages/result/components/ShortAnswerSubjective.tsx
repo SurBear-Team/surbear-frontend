@@ -239,14 +239,14 @@ export function ShortAnswerSubjective({
           item.surveyQuestion.id,
           Object.values(surveyResult)
         ).map((result) =>
-          result.response.map(
+          result.response?.map(
             (response) =>
               response.questionId === item.surveyQuestion.id && (
                 <div
                   className="w-full flex items-center p-2 gap-2 border-b-[1px] border-gray-2"
                   key={response.questionId}
                 >
-                  <div className="p-2 font-bold text-xs flex-center">
+                  <div className="p-2 font-bold text-xs flex justify-center items-center">
                     {engToKorAge[result.age]} {engToKorGender[result.gender]}
                   </div>
                   <div className="text-sm">{response.request.answers}</div>

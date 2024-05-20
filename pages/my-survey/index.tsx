@@ -115,7 +115,7 @@ export default function MySurvey() {
         queryClient.invalidateQueries("my-surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   // 설문 종료 다이얼로그 띄우기
@@ -143,7 +143,7 @@ export default function MySurvey() {
         queryClient.invalidateQueries("my-surveys");
         setDialog({ ...dialog, open: false }); // 다이얼로그 닫기
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   // 새 설문 만들기

@@ -46,7 +46,7 @@ export default function Store() {
           setData(res.data.content);
           setLastPage(res.data.totalPages);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     } else {
       api
         .get(`/external/${goodsSearch}`)

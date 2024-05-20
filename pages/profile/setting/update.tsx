@@ -44,7 +44,7 @@ export default function MemberUpdate() {
             const info = res.data;
             setMemberInfo(info);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     }
   }, [updateList]);

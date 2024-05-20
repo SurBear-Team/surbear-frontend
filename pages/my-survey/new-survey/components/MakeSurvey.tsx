@@ -184,8 +184,6 @@ export const MakeSurvey = ({
         },
       });
 
-      console.log("리스폰스", response);
-
       // 저장 후 입력 필드 초기화
       setQuestionTitle("");
       setChoices(["", ""]);

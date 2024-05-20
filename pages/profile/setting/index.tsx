@@ -53,7 +53,7 @@ export default function ProfileSetting() {
             setIsManager(true);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [memberInfo]);
   return (

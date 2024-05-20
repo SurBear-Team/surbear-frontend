@@ -118,8 +118,6 @@ export const EditSurvey = ({
       ],
     };
 
-    console.log("Payload:", JSON.stringify(payload, null, 2));
-
     try {
       const response = await api.post(`/survey/question-options`, payload);
 
@@ -173,8 +171,6 @@ export const EditSurvey = ({
       ],
     };
 
-    console.log("Payload:", JSON.stringify(payload, null, 2));
-
     try {
       const response = await api.post(`/survey/question-options`, payload);
 
@@ -207,8 +203,6 @@ export const EditSurvey = ({
         deleted: false,
       },
     };
-
-    console.log("Payload:", JSON.stringify(payload, null, 2));
 
     try {
       const response = await api.post(`/survey/question-options`, payload);

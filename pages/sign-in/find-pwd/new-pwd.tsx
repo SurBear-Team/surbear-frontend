@@ -36,7 +36,6 @@ export default function NewPwd() {
         newPassword: data.password,
       });
 
-      console.log(response);
       if (response.status === 200) {
         router.push("/sign-in/find-pwd/done");
         setUserEmail("");

@@ -229,7 +229,7 @@ export const EditSurvey = ({
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
       <div className="base-gray-9-text pb-4">질문 수정</div>
-      <div className="flex justify-center items-center gap-4">
+      <div className="flex-center gap-4">
         <div className="flex gap-4 w-full items-center">
           <div className="base-gray-9-text whitespace-nowrap">형식</div>
           <div className="drop-down-bar">
@@ -348,7 +348,7 @@ export const EditSurvey = ({
         </button>
       </div>
 
-      <div className="flex justify-center items-center">
+      <div className="flex-center">
         {oneBtnDialog.open && (
           <Dialog
             title={oneBtnDialog.title}

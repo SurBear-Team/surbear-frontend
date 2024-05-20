@@ -32,10 +32,8 @@ export const Dialog = ({
       <Overlay onClick={onLeftClick!} />
 
       <div className="card justify-center fixed max-w-lg w-4/5 px-6 py-8 gap-8 bg-white z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex flex-col w-full justify-center items-center gap-4">
-          <div className="text-gray-9 text-center font-semibold w-full">
-            {title}
-          </div>
+        <div className="flex-col w-full flex-center gap-4">
+          <div className="base-gray-9-text text-center w-full">{title}</div>
           {/* 본문 */}
           {content && (
             <div className="text-gray-9 text-center font-medium w-full">
@@ -58,7 +56,7 @@ export const Dialog = ({
         )}
 
         {/* 하단버튼두개 */}
-        <div className="flex justify-center items-center gap-4 w-full">
+        <div className="flex-center gap-4 w-full">
           {!onlyOneBtn && (
             <button
               onClick={onLeftClick}

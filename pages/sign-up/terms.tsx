@@ -179,7 +179,7 @@ export default function Terms() {
           {/* 다음 버튼 */}
           <button
             onClick={handleNextButtonClick}
-            className="long-button w-full mt-8 min-w-[34px] bg-white border-primary-1 text-primary-1"
+            className="long-button w-full mt-8 min-w-[34px] white-bg-primary-btn"
           >
             다음
           </button>

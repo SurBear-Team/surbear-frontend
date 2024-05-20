@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ISurvey, category } from "../browse/data";
 import { getTime } from "../utils";
 import { ReportIcon } from "./styles/Icons";
@@ -43,7 +43,7 @@ export default function SurveyCard({
             </div>
           )}
         </div>
-        <div className="text-gray-9 font-semibold pb-2">{data.title}</div>
+        <div className="base-gray-9-text pb-2">{data.title}</div>
 
         <>
           <div className="sm-gray-text">

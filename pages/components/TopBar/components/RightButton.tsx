@@ -24,7 +24,7 @@ function SearchBox() {
         {...register("search")}
         className="w-40 border border-gray-4 px-2 py-1"
         type="text"
-      ></input>
+      />
       <button type="submit">
         <SearchIcon />
       </button>

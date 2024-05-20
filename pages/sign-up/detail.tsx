@@ -177,7 +177,7 @@ export default function SignUpDetail() {
           {/* 회원가입 완료 버튼 */}
           <div className="w-full">
             <button
-              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               onClick={checkDuplicate}
             >
               회원가입 완료

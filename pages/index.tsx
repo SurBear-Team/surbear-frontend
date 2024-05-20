@@ -15,7 +15,7 @@ export default function Home() {
     }
   }, []);
   return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="h-screen flex-center">
       <LogoSVG />
     </div>
   );

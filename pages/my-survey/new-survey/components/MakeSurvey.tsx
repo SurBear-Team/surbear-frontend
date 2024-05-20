@@ -209,7 +209,7 @@ export const MakeSurvey = ({
       <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
         <div className="base-gray-9-text pb-4">새 질문 만들기</div>
         {/* 형식 필수답변 */}
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex-center gap-4">
           <div className="flex gap-4 w-full items-center">
             {/* 형식 고르기 */}
             <div className="base-gray-9-text whitespace-nowrap">형식</div>

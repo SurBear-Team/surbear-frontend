@@ -82,7 +82,7 @@ export const TabButton = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 flex flex-col gap-1 justify-center items-center ${
+      className={`px-4 py-2 flex-col gap-1 flex-center ${
         disabled ? "opacity-50" : "cursor-pointer"
       }`}
     >

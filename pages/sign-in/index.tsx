@@ -115,7 +115,7 @@ export default function SignIn() {
             <div className="w-full h-[1px] bg-[#EAEAEA]" />
           </div>
           <button
-            className="long-button mt-7 bg-white border-primary-1 text-primary-1"
+            className="long-button mt-7 white-bg-primary-btn"
             onClick={() => {
               router.push("/browse");
               queryClient.invalidateQueries("member");

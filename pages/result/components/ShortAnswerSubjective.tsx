@@ -246,7 +246,7 @@ export function ShortAnswerSubjective({
                   className="w-full flex items-center p-2 gap-2 border-b-[1px] border-gray-2"
                   key={response.questionId}
                 >
-                  <div className="p-2 font-bold text-xs flex justify-center items-center">
+                  <div className="p-2 font-bold text-xs flex-center">
                     {engToKorAge[result.age]} {engToKorGender[result.gender]}
                   </div>
                   <div className="text-sm">{response.request.answers}</div>

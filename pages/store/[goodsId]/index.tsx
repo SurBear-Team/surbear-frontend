@@ -213,6 +213,10 @@ export default function BuyGoods() {
                   onClick={() =>
                     onSingleCheck(!checkItems.includes(el.id), el.id)
                   }
+                  showSheet={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  }}
                 />
               ))}
             </div>

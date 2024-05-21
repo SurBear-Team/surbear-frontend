@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
@@ -70,7 +70,7 @@ export const MakeSurvey = ({
   // (공통) 질문 제목
   const [questionTitle, setQuestionTitle] = useState(firstTitle || "");
 
-  const handleTitleChange = (e: any) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
 

@@ -16,7 +16,6 @@ import { ShortAnswerSubjective } from "../components/ShortAnswerSubjective";
 import { SurveyResult } from "../components/resultInterface";
 import { Dialog } from "@/pages/components/Dialog";
 import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
-import { ShareIcon } from "@/pages/components/styles/Icons";
 
 export default function Result() {
   const { id } = router.query;
@@ -120,19 +119,6 @@ export default function Result() {
   }, [data]);
 
   const slideSortedList = ["성별", "나이"];
-
-  const copyLinkToClipboard = () => {
-    const shareUrl = `${window.location.origin}/result/${id}`;
-    navigator.clipboard
-      .writeText(shareUrl)
-      .then(() => {
-        showOneBtnDialog("주소가 클립보드에 복사되었어요");
-      })
-      .catch((error) => {
-        console.error("링크 복사 오류: ", error);
-      });
-  };
-
   return (
     <>
       <TopBar
@@ -146,18 +132,14 @@ export default function Result() {
       />
       <div className="white-screen flex-col pt-20 justify-start">
         <div className="inner-screen px-6 py-8 relative">
-          <button
-            className="flex w-full items-center justify-end gap-2 pb-2"
-            onClick={copyLinkToClipboard}
-          >
-            결과 공유
-            <ShareIcon />
-          </button>
           {/* 질문 리스트 */}
           {data &&
             data.map((item, index) => (
               <>
-                <div key={index} className="base-gray-9-text pb-4">
+                <div
+                  key={item.surveyQuestion.id}
+                  className="base-gray-9-text pb-4"
+                >
                   {index + 1}. {item.surveyQuestion.content}
                 </div>
 

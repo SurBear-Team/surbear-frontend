@@ -34,7 +34,7 @@ export default function ItemDetail({
       .then((res) => {
         setData(res.data.result.goodsDetail);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [goodsCode]);
   return (
     <>

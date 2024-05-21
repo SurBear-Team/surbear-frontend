@@ -122,7 +122,7 @@ export default function Terms() {
             onClick={() => handleCheckboxClick("terms1")}
             label="[필수] 개인정보수집및활용동의1"
             isAll={false}
-            showSheet={(e: MouseEvent) => {
+            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms1");
             }}
@@ -134,7 +134,7 @@ export default function Terms() {
             onClick={() => handleCheckboxClick("terms2")}
             label="[필수] 개인정보수집및활용동의2"
             isAll={false}
-            showSheet={(e: MouseEvent) => {
+            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms2");
             }}
@@ -145,7 +145,7 @@ export default function Terms() {
             onClick={() => handleCheckboxClick("terms3")}
             label="[필수] 개인정보수집및활용동의3"
             isAll={false}
-            showSheet={(e: MouseEvent) => {
+            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms3");
             }}
@@ -156,7 +156,7 @@ export default function Terms() {
             onClick={() => handleCheckboxClick("terms4")}
             label="[필수] 개인정보수집및활용동의4"
             isAll={false}
-            showSheet={(e: MouseEvent) => {
+            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms4");
             }}
@@ -167,7 +167,7 @@ export default function Terms() {
             onClick={() => handleCheckboxClick("terms5")}
             label="[필수] 개인정보수집및활용동의5"
             isAll={false}
-            showSheet={(e: MouseEvent) => {
+            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms5");
             }}

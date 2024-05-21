@@ -18,7 +18,7 @@ interface SurveyFilterProps {
   data: SurveyData[]; // data가 SurveyData 타입의 배열이라고 명시
   setSurveyIds: (ids: number[]) => void; // setSurveyIds 함수의 타입 명시
   item: SurveyData; // item이 SurveyData 타입이라고 명시
-  surveyResult: { [key: string]: any }; // surveyResult의 타입 명시, 더 구체적인 타입으로 대체 가능
+  surveyResult: { [key: string]: SurveyResult }; // surveyResult의 타입 명시, 더 구체적인 타입으로 대체 가능
 }
 
 const engGenderOptions = ["MALE", "FEMALE"];

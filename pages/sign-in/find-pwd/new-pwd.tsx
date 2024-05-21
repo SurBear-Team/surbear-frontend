@@ -67,7 +67,7 @@ export default function NewPwd() {
                 type="password"
                 placeholder="비밀번호를 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.password &&
@@ -90,7 +90,7 @@ export default function NewPwd() {
                 type="password"
                 placeholder="비밀번호를 다시 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.passwordConfirm &&

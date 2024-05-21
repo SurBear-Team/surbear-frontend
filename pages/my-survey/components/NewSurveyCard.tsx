@@ -25,7 +25,7 @@ interface SurveyData {
   description: string;
   openType: boolean;
   deadLine: string;
-  surveyAuthorId?: any;
+  surveyAuthorId?: number;
 }
 
 interface NewSurveyCardProps {

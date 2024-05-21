@@ -10,7 +10,7 @@ interface DialogProps {
   leftText?: string;
   onLeftClick?: () => void;
   rightText: string;
-  onRightClick: (text?: any) => void;
+  onRightClick: (text?: string) => void;
   isDelete?: boolean;
 }
 

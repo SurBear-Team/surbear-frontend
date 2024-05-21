@@ -278,29 +278,6 @@ export const UpdateIcon = () => {
   );
 };
 
-// 공유 아이콘
-export const ShareIcon = () => {
-  return (
-    <svg
-      width="16"
-      height="16"
-      data-slot="icon"
-      fill="none"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
-      ></path>
-    </svg>
-  );
-};
-
 // 아래 세모 아이콘
 export const TriangleDownIcon = () => {
   return (
@@ -482,14 +459,14 @@ export const OrderDownIcon: React.FC<OrderIconProps> = ({ isActive }) => {
 };
 
 // (새 설문) 새 질문 동그라미플러스 아이콘
-export const AddQuestionIcon = (isActive: any) => {
+export const AddQuestionIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="32"
       height="32"
       viewBox="0 0 32 32"
-      fill={isActive ? "#6E7CF2" : "none"}
+      fill="none"
     >
       <path
         fillRule="evenodd"

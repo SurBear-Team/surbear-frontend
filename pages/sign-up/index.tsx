@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { TopBar } from "../components/TopBar/TopBar";
 import { useRecoilState } from "recoil";
 import { userIdAtom, userPasswordAtom } from "./userState";
@@ -6,6 +6,11 @@ import { useRouter } from "next/router";
 import api from "../api/config";
 import { AxiosError } from "axios";
 
+interface FormData {
+  username: string;
+  password: string;
+  passwordConfirm: string;
+}
 export default function IdPassword() {
   const router = useRouter();
   const {
@@ -14,7 +19,7 @@ export default function IdPassword() {
     watch,
     setError,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     mode: "onChange",
   });
 
@@ -63,7 +68,7 @@ export default function IdPassword() {
   };
 
   // 모든 유효성 검사 통과하고 다음 버튼 누르면 실행되는 함수
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     const isUnique = await checkUserIdDuplication(data.username);
     if (isUnique) {
       setUserId(data.username);

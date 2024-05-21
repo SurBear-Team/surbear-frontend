@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
 import { TopBar } from "../components/TopBar/TopBar";
@@ -52,7 +52,7 @@ export default function SignUpDetail() {
   };
 
   // 닉네임 onChange
-  const onNicknameChange = (e: any) => {
+  const onNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserNickname(e.target.value);
   };
 

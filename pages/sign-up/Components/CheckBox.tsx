@@ -5,7 +5,7 @@ interface CheckBoxProps {
   onClick: () => void;
   label: string;
   isAll?: boolean;
-  showSheet?: any;
+  showSheet?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Checkbox = ({

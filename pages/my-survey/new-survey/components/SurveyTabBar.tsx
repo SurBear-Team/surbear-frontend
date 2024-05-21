@@ -13,7 +13,7 @@ interface SurveyTabBarProps {
   goToNextPage: () => void;
   saveSurvey: () => void;
   canAddPage: boolean;
-  setSelectedQuestion: (value: any) => void;
+  setSelectedQuestion: (value: string | null) => void;
 }
 
 export const SurveyTabBar = ({

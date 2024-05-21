@@ -33,7 +33,7 @@ export default function PointHistory() {
             .then((res) => {
               setData(res.data.reverse());
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.error(err));
         }
       }
     }

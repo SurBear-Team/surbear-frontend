@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 import { CancleSaveButtonFrame } from "../../components/CancleSaveButtonFrame";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
@@ -70,7 +70,7 @@ export const MakeSurvey = ({
   // (공통) 질문 제목
   const [questionTitle, setQuestionTitle] = useState(firstTitle || "");
 
-  const handleTitleChange = (e: any) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
 
@@ -184,8 +184,6 @@ export const MakeSurvey = ({
         },
       });
 
-      console.log("리스폰스", response);
-
       // 저장 후 입력 필드 초기화
       setQuestionTitle("");
       setChoices(["", ""]);
@@ -209,7 +207,7 @@ export const MakeSurvey = ({
       <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
         <div className="base-gray-9-text pb-4">새 질문 만들기</div>
         {/* 형식 필수답변 */}
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex-center gap-4">
           <div className="flex gap-4 w-full items-center">
             {/* 형식 고르기 */}
             <div className="base-gray-9-text whitespace-nowrap">형식</div>

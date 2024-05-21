@@ -119,7 +119,6 @@ export default function Result() {
   }, [data]);
 
   const slideSortedList = ["성별", "나이"];
-
   return (
     <>
       <TopBar
@@ -137,7 +136,10 @@ export default function Result() {
           {data &&
             data.map((item, index) => (
               <>
-                <div key={index} className="base-gray-9-text pb-4">
+                <div
+                  key={item.surveyQuestion.id}
+                  className="base-gray-9-text pb-4"
+                >
                   {index + 1}. {item.surveyQuestion.content}
                 </div>
 

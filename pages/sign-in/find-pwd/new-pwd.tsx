@@ -36,7 +36,6 @@ export default function NewPwd() {
         newPassword: data.password,
       });
 
-      console.log(response);
       if (response.status === 200) {
         router.push("/sign-in/find-pwd/done");
         setUserEmail("");
@@ -68,7 +67,7 @@ export default function NewPwd() {
                 type="password"
                 placeholder="비밀번호를 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.password &&
@@ -91,7 +90,7 @@ export default function NewPwd() {
                 type="password"
                 placeholder="비밀번호를 다시 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.passwordConfirm &&
@@ -107,7 +106,7 @@ export default function NewPwd() {
             <div className="w-full">
               <button
                 type="submit"
-                className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+                className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               >
                 다음
               </button>

@@ -25,7 +25,7 @@ interface SurveyData {
   description: string;
   openType: boolean;
   deadLine: string;
-  surveyAuthorId?: any;
+  surveyAuthorId?: number;
 }
 
 interface NewSurveyCardProps {
@@ -326,7 +326,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       </div>
 
       {/* 오류 다이얼로그 */}
-      <div className="fixed h-screen flex items-center justify-center z-50">
+      <div className="fixed h-screen flex-center z-50">
         {oneBtnDialog.open && (
           <Dialog
             title={oneBtnDialog.title}

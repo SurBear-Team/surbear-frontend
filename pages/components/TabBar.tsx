@@ -6,6 +6,13 @@ import {
   ProfileIcon,
 } from "./styles/Icons";
 
+interface TabBoxProps {
+  onClick: () => void;
+  Icon: React.ReactNode;
+  text: string;
+  isActive: boolean;
+}
+
 export const TabBar = () => {
   const router = useRouter();
   const isActive = (path: string) => router.pathname === path;
@@ -52,7 +59,7 @@ export const TabBar = () => {
   );
 };
 
-const TabBox = ({ onClick, Icon, text, isActive }: any) => {
+const TabBox = ({ onClick, Icon, text, isActive }: TabBoxProps) => {
   return (
     <div
       className="flex flex-col w-full items-center px-[23px] py-[15px] gap-1 cursor-pointer"

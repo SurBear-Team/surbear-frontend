@@ -1,4 +1,3 @@
-import api from "@/pages/api/config";
 import { useForm } from "react-hook-form";
 
 interface DialogProps {

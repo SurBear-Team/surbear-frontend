@@ -135,7 +135,7 @@ export default function Authentication() {
               onChange={(e) => setInputEmail(e.target.value)}
             />
             <button
-              className="long-button bg-white border-primary-1 text-primary-1"
+              className="long-button white-bg-primary-btn"
               onClick={checkDuplicate}
             >
               {codeSent ? "인증번호 재발급" : "인증번호 받기"}
@@ -167,7 +167,7 @@ export default function Authentication() {
           {/* 다음버튼 */}
           <div className="w-full">
             <button
-              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               onClick={handleNext}
             >
               다음

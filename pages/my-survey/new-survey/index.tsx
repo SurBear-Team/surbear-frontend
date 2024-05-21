@@ -25,6 +25,20 @@ export interface NewSurveyProps {
   options?: { id: number; answer: string }[];
 }
 
+interface SurveyData {
+  surveyQuestion: {
+    id: number;
+    surveyId: number;
+    questionType: string;
+    content: string;
+    page: number;
+    questionOrder: number;
+    maxText: number;
+    required: boolean;
+  };
+  options: { id: number; answer: string }[];
+}
+
 export default function NewSurvey() {
   const router = useRouter();
 
@@ -56,26 +70,30 @@ export default function NewSurvey() {
     return data;
   };
 
-  const { data, refetch } = useQuery(["new-survey"], fetchSurvey, {
-    onSuccess: (data) => {
-      const formattedQuestions = data.map((item: any) => ({
-        id: item.surveyQuestion.id,
-        title: item.surveyQuestion.content,
-        type: item.surveyQuestion.questionType,
-        choices: item.options.map((option: any) => option.answer),
-        count: item.surveyQuestion.maxText,
-        page: item.surveyQuestion.page,
-        required: item.surveyQuestion.required,
-        surveyId: item.surveyQuestion.surveyId,
-        questionOrder: item.surveyQuestion.questionOrder,
-        options: item.options.map((option: any) => ({
-          id: option.id,
-          answer: option.answer,
-        })),
-      }));
-      setSurveyQuestions(formattedQuestions);
-    },
-  });
+  const { data, refetch } = useQuery<SurveyData[]>(
+    ["new-survey"],
+    fetchSurvey,
+    {
+      onSuccess: (data) => {
+        const formattedQuestions = data.map((item) => ({
+          id: item.surveyQuestion.id,
+          title: item.surveyQuestion.content,
+          type: item.surveyQuestion.questionType,
+          choices: item.options.map((option) => option.answer),
+          count: item.surveyQuestion.maxText,
+          page: item.surveyQuestion.page,
+          required: item.surveyQuestion.required,
+          surveyId: item.surveyQuestion.surveyId,
+          questionOrder: item.surveyQuestion.questionOrder,
+          options: item.options.map((option) => ({
+            id: option.id,
+            answer: option.answer,
+          })),
+        }));
+        setSurveyQuestions(formattedQuestions);
+      },
+    }
+  );
 
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editData, setEditData] = useState<NewSurveyProps | null>(null);
@@ -199,8 +217,8 @@ export default function NewSurvey() {
     }
   };
 
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const handleSelectQuestion = (question: any) => {
+  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+  const handleSelectQuestion = (question: string) => {
     setSelectedQuestion(question);
   };
 

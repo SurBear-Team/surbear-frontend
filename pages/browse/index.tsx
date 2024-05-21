@@ -70,7 +70,7 @@ export default function Browse() {
           setData(filtered);
           setLastPage(res.data.totalPages);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [currentPage, categoryType]);
 
@@ -154,7 +154,7 @@ export default function Browse() {
                     showOneBtnDialog("신고되었습니다.");
                     setShowAlertDialog((prev) => !prev);
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => console.error(err));
               }
             }}
             isDelete={true}

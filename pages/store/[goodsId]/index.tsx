@@ -35,7 +35,7 @@ export default function BuyGoods() {
           setData(res.data.result.goodsDetail);
           setPrice(+res.data.result.goodsDetail.salePrice);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [goodsId]);
 
@@ -56,7 +56,7 @@ export default function BuyGoods() {
               setPoint(res.data.point);
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     }
   }, []);
@@ -247,7 +247,7 @@ export default function BuyGoods() {
                   router.push("/store/done");
                   queryClient.invalidateQueries("product-count");
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => console.error(err));
             }}
           />
         </>

@@ -73,7 +73,7 @@ export default function Survey() {
           const lastPage = data[data.length - 1].surveyQuestion.page;
           setLastPage(lastPage);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [id]);
 

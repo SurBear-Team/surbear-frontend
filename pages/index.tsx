@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import LogoSVG from "./components/styles/LogoSVG";
 import { useEffect } from "react";
+import CharSVG from "./components/styles/CharSVG";
 
 export default function Home() {
   const router = useRouter();
@@ -15,7 +16,8 @@ export default function Home() {
     }
   }, []);
   return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="h-screen flex-col flex-center">
+      <CharSVG />
       <LogoSVG />
     </div>
   );

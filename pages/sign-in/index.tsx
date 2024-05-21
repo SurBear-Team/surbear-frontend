@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
@@ -18,10 +18,10 @@ export default function SignIn() {
   const [inputId, setInputId] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
-  const onInputIdChange = (e: any) => {
+  const onInputIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputId(e.target.value);
   };
-  const onPasswordChange = (e: any) => {
+  const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputPassword(e.target.value);
   };
 
@@ -115,7 +115,7 @@ export default function SignIn() {
             <div className="w-full h-[1px] bg-[#EAEAEA]" />
           </div>
           <button
-            className="long-button mt-7 bg-white border-primary-1 text-primary-1"
+            className="long-button mt-7 white-bg-primary-btn"
             onClick={() => {
               router.push("/browse");
               queryClient.invalidateQueries("member");

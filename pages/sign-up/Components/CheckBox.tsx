@@ -5,7 +5,7 @@ interface CheckBoxProps {
   onClick: () => void;
   label: string;
   isAll?: boolean;
-  showSheet?: any;
+  showSheet?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Checkbox = ({
@@ -27,7 +27,7 @@ export const Checkbox = ({
     {!isAll && (
       <button
         onClick={showSheet}
-        className="flex flex-shrink-0 text-xs border border-[#6E7CF2] text-[#6E7CF2] px-2 py-1 font-bold ml-[14px] rounded-2xl"
+        className="flex flex-shrink-0 text-xs border white-bg-primary-btn px-2 py-1 font-bold ml-[14px] rounded-2xl"
       >
         보기
       </button>

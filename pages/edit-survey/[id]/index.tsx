@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
 import { editSurveyTitleAtom } from "../editSurveyState";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
@@ -188,7 +188,7 @@ export default function EditSurveyPage() {
   // (공통) 질문 제목
   const [questionTitle, setQuestionTitle] = useState("");
 
-  const handleTitleChange = (e: any) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
 
@@ -225,7 +225,7 @@ export default function EditSurveyPage() {
   const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
 
   // (공통) 설문 만들기
-  const addNewSurveyComponent = (newComponentData: any) => {
+  const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
     let newPages = [...surveyPages];
 
     // 현재 페이지에 배열(currentPage)이 초기화되었는지 확인하고
@@ -248,7 +248,7 @@ export default function EditSurveyPage() {
         return; // 함수 중단
       }
 
-      let surveyData;
+      let surveyData: NewSurveyProps | null = null;
       // 카테고리 분류
       if (
         typeType === "객관식 - 단일 선택" ||
@@ -279,7 +279,9 @@ export default function EditSurveyPage() {
           choices: [],
         };
       }
-      addNewSurveyComponent(surveyData);
+      if (surveyData) {
+        addNewSurveyComponent(surveyData);
+      }
 
       const response = await api.post("/survey/question", {
         answers:
@@ -365,7 +367,7 @@ export default function EditSurveyPage() {
             <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
               <div className="base-gray-9-text pb-4">새 질문 만들기</div>
               {/* 형식 필수답변 */}
-              <div className="flex justify-center items-center gap-4">
+              <div className="flex-center gap-4">
                 <div className="flex gap-4 w-full items-center">
                   {/* 형식 고르기 */}
                   <div className="base-gray-9-text whitespace-nowrap">형식</div>
@@ -437,7 +439,7 @@ export default function EditSurveyPage() {
                     ))}
                     {/* 새 답변 추가 버튼 */}
                     <button
-                      className="medium-Btn white-bg-primary-btn  w-auto mx-auto mt-6 flex items-center gap-1"
+                      className="medium-Btn white-bg-primary-btn w-auto mx-auto mt-6 flex items-center gap-1"
                       onClick={addChoice}
                     >
                       <PlusIcon /> 새 답변 추가

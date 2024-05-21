@@ -7,13 +7,7 @@ import { Sheet } from "./Components/Sheet";
 import { TopBar } from "../components/TopBar/TopBar";
 import { Dialog } from "../components/Dialog";
 
-type CheckboxName =
-  | "all"
-  | "terms1"
-  | "terms2"
-  | "terms3"
-  | "terms4"
-  | "terms5";
+type CheckboxName = "all" | "terms1" | "terms2" | "terms3";
 
 interface DialogState {
   open: boolean;
@@ -33,23 +27,15 @@ export default function Terms() {
     terms1: false,
     terms2: false,
     terms3: false,
-    terms4: false,
-    terms5: false,
   });
 
   useEffect(() => {
-    const { terms1, terms2, terms3, terms4, terms5 } = isChecked;
+    const { terms1, terms2, terms3 } = isChecked;
     setIsChecked((prevState) => ({
       ...prevState,
-      all: terms1 && terms2 && terms3 && terms4 && terms5,
+      all: terms1 && terms2 && terms3,
     }));
-  }, [
-    isChecked.terms1,
-    isChecked.terms2,
-    isChecked.terms3,
-    isChecked.terms4,
-    isChecked.terms5,
-  ]);
+  }, [isChecked.terms1, isChecked.terms2, isChecked.terms3]);
 
   const handleCheckboxClick = (name: CheckboxName) => {
     if (name === "all") {
@@ -59,8 +45,6 @@ export default function Terms() {
         terms1: isAllChecked,
         terms2: isAllChecked,
         terms3: isAllChecked,
-        terms4: isAllChecked,
-        terms5: isAllChecked,
       });
     } else {
       setIsChecked((prevState) => ({
@@ -84,9 +68,9 @@ export default function Terms() {
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   useEffect(() => {
-    const { terms1, terms2, terms3, terms4, terms5, all } = isChecked;
+    const { terms1, terms2, terms3, all } = isChecked;
     // 모든 조건이 참일 때만 버튼을 활성화
-    setIsButtonActive(terms1 && terms2 && terms3 && terms4 && terms5 && all);
+    setIsButtonActive(terms1 && terms2 && terms3 && all);
   }, [isChecked]);
 
   // 모든 필수 약관을 체크해야 다음으로 보내줌
@@ -120,7 +104,7 @@ export default function Terms() {
           <Checkbox
             inputChecked={isChecked.terms1}
             onClick={() => handleCheckboxClick("terms1")}
-            label="[필수] 개인정보수집및활용동의1"
+            label="기본 규정"
             isAll={false}
             showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
@@ -132,7 +116,7 @@ export default function Terms() {
           <Checkbox
             inputChecked={isChecked.terms2}
             onClick={() => handleCheckboxClick("terms2")}
-            label="[필수] 개인정보수집및활용동의2"
+            label="이용자와 서비스의 관계"
             isAll={false}
             showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
@@ -143,33 +127,11 @@ export default function Terms() {
           <Checkbox
             inputChecked={isChecked.terms3}
             onClick={() => handleCheckboxClick("terms3")}
-            label="[필수] 개인정보수집및활용동의3"
+            label="개인정보 및 책임"
             isAll={false}
             showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
               handleShowSheet("terms3");
-            }}
-          />
-
-          <Checkbox
-            inputChecked={isChecked.terms4}
-            onClick={() => handleCheckboxClick("terms4")}
-            label="[필수] 개인정보수집및활용동의4"
-            isAll={false}
-            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.stopPropagation();
-              handleShowSheet("terms4");
-            }}
-          />
-
-          <Checkbox
-            inputChecked={isChecked.terms5}
-            onClick={() => handleCheckboxClick("terms5")}
-            label="[필수] 개인정보수집및활용동의5"
-            isAll={false}
-            showSheet={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.stopPropagation();
-              handleShowSheet("terms5");
             }}
           />
 

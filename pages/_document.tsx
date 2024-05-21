@@ -3,7 +3,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 export const META = {
   title: "SurBear | 서베어",
   description: "포인트가 쌓이는 설문조사 플랫폼",
-  image: "public/images/Thumbnail.png",
+  image: "https://ifh.cc/g/KO2sso.png", // 2025-04-25까지 이미지 호스팅 (ifc.cc)
   URL: "https://www.surbear.site",
 };
 

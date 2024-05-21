@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import { goodsSearchAtom } from "../atoms";
 import { useRouter } from "next/router";
 import { Dialog } from "../components/Dialog";
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 interface IGoods {
   createdAt: string;
@@ -27,10 +28,9 @@ export default function Store() {
   const [showDetail, setShowDetail] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
 
-  const [oneBtnDialog, setOneBtnDialog] = useState({
-    open: false,
-    title: "",
-  });
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
+
   const [data, setData] = useState<IGoods[]>();
 
   const [goodsSearch, setGoodsSearch] = useRecoilState(goodsSearchAtom);
@@ -46,7 +46,7 @@ export default function Store() {
           setData(res.data.content);
           setLastPage(res.data.totalPages);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     } else {
       api
         .get(`/external/${goodsSearch}`)
@@ -56,7 +56,7 @@ export default function Store() {
           setData(currentData);
           setLastPage(Math.ceil(temp.length / 20));
         })
-        .catch((err) => alert("검색 결과가 없습니다."));
+        .catch((err) => console.error("검색 결과가 없습니다."));
     }
   }, [page, goodsSearch]);
 
@@ -104,10 +104,7 @@ export default function Store() {
                     if (localStorage.getItem("surbearToken") !== null) {
                       router.push(`/store/${detailId}`);
                     } else {
-                      setOneBtnDialog({
-                        open: true,
-                        title: "로그인이 필요한 서비스입니다",
-                      });
+                      showOneBtnDialog("로그인이 필요한 서비스입니다");
                     }
                   }
                 }}
@@ -137,6 +134,7 @@ export default function Store() {
           rightText="확인"
           onRightClick={() => {
             router.push("/sign-in");
+            hideOneBtnDialog();
           }}
         />
       )}

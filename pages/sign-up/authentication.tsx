@@ -6,11 +6,7 @@ import api from "../api/config";
 import { useRecoilState } from "recoil";
 import { userEmailAtom } from "./userState";
 import { AxiosError } from "axios";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 export default function Authentication() {
   const router = useRouter();
@@ -25,22 +21,14 @@ export default function Authentication() {
   const [, setUserEmail] = useRecoilState(userEmailAtom);
 
   // 다이얼로그
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
-  const showDialog = (title: string) => {
-    setDialog({ open: true, title: title });
-  };
-  const hideDialog = () => {
-    setDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 가입된 메일인지 확인
   const checkDuplicate = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
-      showDialog("유효하지 않은 이메일이에요");
+      showOneBtnDialog("유효하지 않은 이메일이에요");
       return; // 잘못된 이메일 입력하고 버튼 누르면 함수 종료
     }
     try {
@@ -52,16 +40,18 @@ export default function Authentication() {
       if (response.data === true) {
         handleSendCode();
       } else {
-        showDialog("인증번호 전송에 실패했어요");
+        showOneBtnDialog("인증번호 전송에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       // (409) 이미 가입한 이메일이면
       if (axiosError.response && axiosError.response.status === 409) {
-        showDialog("이미 가입한 이메일이에요");
+        showOneBtnDialog("이미 가입한 이메일이에요");
       } else {
-        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+        showOneBtnDialog(
+          "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
@@ -74,18 +64,20 @@ export default function Authentication() {
       });
       setVeriCode(response.data); // POST하고 받은 번호 저장
 
-      showDialog("인증번호가 전송되었어요");
+      showOneBtnDialog("인증번호가 전송되었어요");
       setCodeSent(true); // 코드 받았음 true
 
       // 5분 후 인증번호 초기화 및 세션 만료 알림
       setTimeout(() => {
         setVeriCode("");
-        showDialog("세션이 만료됐어요 다시 인증해주세요");
+        showOneBtnDialog("세션이 만료됐어요 다시 인증해주세요");
         setInputVeriCode("");
       }, 5 * 60 * 1000); // 5분
     } catch (error) {
       console.error(error);
-      showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+      showOneBtnDialog(
+        "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+      );
     }
   };
 
@@ -99,19 +91,21 @@ export default function Authentication() {
 
       if (response.status === 200) {
         setIsVerified(true); // 인증성공 true
-        showDialog("인증에 성공했어요");
+        showOneBtnDialog("인증에 성공했어요");
         setUserEmail(inputEmail); // recoil에 이메일 저장
       } else {
-        showDialog("인증에 실패했어요");
+        showOneBtnDialog("인증에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       // (401) 인증번호 틀리면
       if (axiosError.response && axiosError.response.status === 401) {
-        showDialog("인증 번호를 확인해주세요");
+        showOneBtnDialog("인증 번호를 확인해주세요");
       } else {
-        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+        showOneBtnDialog(
+          "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
@@ -121,7 +115,7 @@ export default function Authentication() {
     {
       isVerified
         ? router.push("/sign-up")
-        : showDialog("이메일 인증을 완료해주세요");
+        : showOneBtnDialog("이메일 인증을 완료해주세요");
     }
   };
 
@@ -141,7 +135,7 @@ export default function Authentication() {
               onChange={(e) => setInputEmail(e.target.value)}
             />
             <button
-              className="long-button bg-white border-primary-1 text-primary-1"
+              className="long-button white-bg-primary-btn"
               onClick={checkDuplicate}
             >
               {codeSent ? "인증번호 재발급" : "인증번호 받기"}
@@ -173,19 +167,19 @@ export default function Authentication() {
           {/* 다음버튼 */}
           <div className="w-full">
             <button
-              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               onClick={handleNext}
             >
               다음
             </button>
           </div>
 
-          {dialog.open && (
+          {oneBtnDialog.open && (
             <Dialog
-              title={dialog.title}
+              title={oneBtnDialog.title}
               rightText="확인"
-              onRightClick={hideDialog}
               onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </div>

@@ -51,7 +51,7 @@ export default function MultipleChoice({
             className="flex gap-3 p-2 items-center border border-gray-4 rounded-lg cursor-pointer"
           >
             <div
-              className={`w-4 h-4 border border-gray-7 rounded-[4px] flex justify-center items-center shrink-0 ${
+              className={`w-4 h-4 border border-gray-7 rounded-[4px] flex-center shrink-0 ${
                 selected.find((target) => target === el.answer) !== undefined &&
                 "border-none bg-primary-1"
               }`}

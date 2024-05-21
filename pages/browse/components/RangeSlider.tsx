@@ -80,9 +80,9 @@ export default function RangeSlider({
             setInputValue(result);
             setValue(result);
           }}
-          onKeyUp={(event: any) => {
+          onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.code === "Enter") {
-              const result = Math.round(+event.target.value / 10) * 10;
+              const result = Math.round(+event.currentTarget.value / 10) * 10;
               setInputValue(result);
               setValue(result);
             }

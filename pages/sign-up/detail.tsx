@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Overlay } from "../components/styles/Overlay";
 import { AgeSheet } from "./Components/AgeSheet";
 import { TopBar } from "../components/TopBar/TopBar";
@@ -13,26 +13,13 @@ import {
 import { AxiosError } from "axios";
 import api from "../api/config";
 import { Dialog } from "../components/Dialog";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 export default function SignUpDetail() {
   const router = useRouter();
 
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
-  const showDialog = (title: string) => {
-    setDialog({ open: true, title: title });
-  };
-  const hideDialog = () => {
-    setDialog({ open: false, title: "" });
-  };
-
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
   // 사용자가 입력하는 닉네임
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   // recoil로 가져오는 것들, post에 쓰임
@@ -55,15 +42,17 @@ export default function SignUpDetail() {
       const axiosError = error as AxiosError;
       // (409) 이미 가입한 닉네임이면
       if (axiosError.response && axiosError.response.status === 409) {
-        showDialog("이미 가입한 닉네임이에요");
+        showOneBtnDialog("이미 가입한 닉네임이에요");
       } else {
-        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+        showOneBtnDialog(
+          "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
 
   // 닉네임 onChange
-  const onNicknameChange = (e: any) => {
+  const onNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserNickname(e.target.value);
   };
 
@@ -108,7 +97,7 @@ export default function SignUpDetail() {
   // 다음 버튼
   const onNextClick = async () => {
     if (!userNickname.trim()) {
-      showDialog("닉네임을 입력해주세요");
+      showOneBtnDialog("닉네임을 입력해주세요");
       return;
     }
 
@@ -123,9 +112,9 @@ export default function SignUpDetail() {
       console.error(axiosError);
       // (409) 중복
       if (axiosError.response && axiosError.response.status === 409) {
-        showDialog("이미 가입한 계정이에요");
+        showOneBtnDialog("이미 가입한 계정이에요");
       } else {
-        showDialog("회원가입에 실패했습니다. 다시 시도해주세요");
+        showOneBtnDialog("회원가입에 실패했습니다. 다시 시도해주세요");
       }
     }
   };
@@ -188,7 +177,7 @@ export default function SignUpDetail() {
           {/* 회원가입 완료 버튼 */}
           <div className="w-full">
             <button
-              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               onClick={checkDuplicate}
             >
               회원가입 완료
@@ -205,12 +194,12 @@ export default function SignUpDetail() {
             </>
           )}
 
-          {dialog.open && (
+          {oneBtnDialog.open && (
             <Dialog
-              title={dialog.title}
+              title={oneBtnDialog.title}
               rightText="확인"
-              onRightClick={hideDialog}
               onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </div>

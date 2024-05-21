@@ -22,7 +22,7 @@ export default function LeftButton({ hasBack, title, onClick }: IBackButton) {
           >
             <ArrowBackIcon />
           </div>
-          <span className="font-semibold text-gray-9 text-base whitespace-nowrap overflow-hidden text-ellipsis">
+          <span className="base-gray-9-text whitespace-nowrap overflow-hidden text-ellipsis">
             {title}
           </span>
         </div>

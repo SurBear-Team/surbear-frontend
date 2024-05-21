@@ -40,7 +40,7 @@ export default function SingleChoice({
             key={index}
             className="flex gap-3 p-2 items-center border border-gray-4 rounded-lg cursor-pointer"
           >
-            <div className="w-4 h-4 border border-gray-7 rounded-full flex justify-center items-center shrink-0">
+            <div className="w-4 h-4 border border-gray-7 rounded-full flex-center shrink-0">
               {selected === index && (
                 <div className="w-2 h-2 bg-primary-1 rounded-full" />
               )}

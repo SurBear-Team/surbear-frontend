@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
 import { editSurveyTitleAtom } from "../editSurveyState";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { Dialog } from "@/pages/components/Dialog";
@@ -19,6 +19,7 @@ import {
   korToEngTypeMapping,
   engToKorTypeMapping,
 } from "@/pages/my-survey/components/typeMapping";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function EditSurveyPage() {
   const router = useRouter();
@@ -29,19 +30,8 @@ export default function EditSurveyPage() {
   const [isNewSurvey, setIsNewSurvey] = useState(false);
 
   // 원버튼 다이얼로그
-  const [oneBtnDialog, setOneBtnDialog] = useState<{
-    open: boolean;
-    title: string;
-  }>({
-    open: false,
-    title: "",
-  });
-  const showOneBtnDialog = (message: string) => {
-    setOneBtnDialog({ open: true, title: message });
-  };
-  const hideOneBtnDialog = () => {
-    setOneBtnDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [showCloseDialog, setShowCloseDialog] = useState(false); // 뒤로가기 누르면
   const [saveDialog, setSaveDialog] = useState(false); // 저장하기 누르면
@@ -198,7 +188,7 @@ export default function EditSurveyPage() {
   // (공통) 질문 제목
   const [questionTitle, setQuestionTitle] = useState("");
 
-  const handleTitleChange = (e: any) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
 
@@ -235,7 +225,7 @@ export default function EditSurveyPage() {
   const [surveyPages, setSurveyPages] = useState<NewSurveyProps[][]>([[]]);
 
   // (공통) 설문 만들기
-  const addNewSurveyComponent = (newComponentData: any) => {
+  const addNewSurveyComponent = (newComponentData: NewSurveyProps) => {
     let newPages = [...surveyPages];
 
     // 현재 페이지에 배열(currentPage)이 초기화되었는지 확인하고
@@ -258,7 +248,7 @@ export default function EditSurveyPage() {
         return; // 함수 중단
       }
 
-      let surveyData;
+      let surveyData: NewSurveyProps | null = null;
       // 카테고리 분류
       if (
         typeType === "객관식 - 단일 선택" ||
@@ -289,7 +279,9 @@ export default function EditSurveyPage() {
           choices: [],
         };
       }
-      addNewSurveyComponent(surveyData);
+      if (surveyData) {
+        addNewSurveyComponent(surveyData);
+      }
 
       const response = await api.post("/survey/question", {
         answers:
@@ -329,7 +321,7 @@ export default function EditSurveyPage() {
       />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
-          <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
+          <div className="base-gray-9-text py-6 pl-6 self-start">
             {`${currentPage} 페이지`}
           </div>
           {currentPageData.map((item, index) =>
@@ -373,16 +365,12 @@ export default function EditSurveyPage() {
           {/* 새 질문 생성 */}
           {isNewSurvey && (
             <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
-              <div className="sm-gray-9-text text-base pb-4">
-                새 질문 만들기
-              </div>
+              <div className="base-gray-9-text pb-4">새 질문 만들기</div>
               {/* 형식 필수답변 */}
-              <div className="flex justify-center items-center gap-4">
+              <div className="flex-center gap-4">
                 <div className="flex gap-4 w-full items-center">
                   {/* 형식 고르기 */}
-                  <div className="sm-gray-9-text text-base whitespace-nowrap">
-                    형식
-                  </div>
+                  <div className="base-gray-9-text whitespace-nowrap">형식</div>
                   <TypeDropDown
                     onShowTypeClick={() => {
                       setShowType((prev) => !prev);
@@ -395,7 +383,7 @@ export default function EditSurveyPage() {
                 </div>
 
                 <div className="flex gap-1 items-center">
-                  <div className="sm-gray-9-text text-base whitespace-nowrap">
+                  <div className="base-gray-9-text whitespace-nowrap">
                     필수 답변
                   </div>
                   <MyCheckBox
@@ -406,7 +394,7 @@ export default function EditSurveyPage() {
               </div>
               {/* 질문 제목 */}
               <div className="flex flex-col gap-1">
-                <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
+                <div className="base-gray-9-text pt-2">질문 제목</div>
                 <input
                   className="main-input text-gray-9"
                   value={questionTitle}
@@ -423,7 +411,7 @@ export default function EditSurveyPage() {
                   <>
                     {choices?.map((choice, index) => (
                       <div key={index} className="flex flex-col gap-1">
-                        <div className="sm-gray-9-text text-base pt-2">
+                        <div className="base-gray-9-text pt-2">
                           답변 {index + 1}
                         </div>
                         <input
@@ -451,7 +439,7 @@ export default function EditSurveyPage() {
                     ))}
                     {/* 새 답변 추가 버튼 */}
                     <button
-                      className="medium-Btn white-bg-primary-btn  w-auto mx-auto mt-6 flex items-center gap-1"
+                      className="medium-Btn white-bg-primary-btn w-auto mx-auto mt-6 flex items-center gap-1"
                       onClick={addChoice}
                     >
                       <PlusIcon /> 새 답변 추가

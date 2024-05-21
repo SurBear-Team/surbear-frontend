@@ -1,14 +1,11 @@
 import api from "@/pages/api/config";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ListCard } from "./components/ListCard";
 import { getTimeAsString } from "../utils";
 import { ISurvey } from "../browse/data";
 
 export default function SurveyHistory() {
-  const router = useRouter();
-
   const [data, setData] = useState<ISurvey[]>();
   useEffect(() => {
     if (typeof window !== undefined) {

@@ -80,9 +80,7 @@ export default function Detail({
           <div className="flex flex-col px-2 gap-2">
             <div className="flex flex-col gap-1">
               <div className="sm-gray-text">{value}</div>
-              <div className="font-semibold text-base text-gray-9">
-                {data.title}
-              </div>
+              <div className="base-gray-9-text">{data.title}</div>
               <div className="flex flex-col sm-gray-text">
                 <span>지급 포인트 : {data.point}pt</span>
                 <span>
@@ -102,7 +100,7 @@ export default function Detail({
           </div>
           <div className="gray-line mt-4" />
           {/* 본문 */}
-          <div className="flex flex-grow relative font-semibold text-gray-9 text-base overflow-y-scroll hide-scrollbar">
+          <div className="flex flex-grow relative base-gray-9-text overflow-y-scroll hide-scrollbar">
             <div className="w-full px-2 py-4 absolute">{data.description}</div>
           </div>
           <div className="gray-line" />

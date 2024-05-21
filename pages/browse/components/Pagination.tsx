@@ -41,7 +41,7 @@ export default function Pagination({
       <div className="flex gap-2">
         <div
           onClick={onPrevClick}
-          className="w-6 h-6 rounded-full border bg-white border-primary-1 justify-center items-center flex shadow-md cursor-pointer"
+          className="w-6 h-6 rounded-full border bg-white border-primary-1 flex-center shadow-md cursor-pointer"
         >
           <PrevPageIcon isBlue />
         </div>
@@ -51,25 +51,22 @@ export default function Pagination({
             <div
               key={index}
               onClick={() => onNumClick(el)}
-              className={`w-6 h-6 rounded-full justify-center items-center flex cursor-pointer shadow-md ${
+              className={`w-6 h-6 rounded-full flex-center cursor-pointer shadow-md ${
                 el === currentPage
-                  ? "bg-primary-1 text-white"
-                  : "border bg-white border-primary-1 text-primary-1"
+                  ? "primary-btn-style"
+                  : "border white-bg-primary-btn"
               }`}
             >
               <div className="text-xs font-semibold">{el}</div>
             </div>
           ) : (
-            <div
-              key={index}
-              className="w-6 h-6 rounded-full justify-center items-center flex"
-            />
+            <div key={index} className="w-6 h-6 rounded-full flex-center" />
           )
         )}
 
         <div
           onClick={onNextClick}
-          className="w-6 h-6 rounded-full border bg-white border-primary-1 justify-center items-center flex shadow-md cursor-pointer"
+          className="w-6 h-6 rounded-full border bg-white border-primary-1 flex-center shadow-md cursor-pointer"
         >
           <NextPageIcon isBlue />
         </div>

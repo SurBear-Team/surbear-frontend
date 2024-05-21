@@ -6,11 +6,7 @@ import { Dialog } from "@/pages/components/Dialog";
 import api from "@/pages/api/config";
 import { useRecoilState } from "recoil";
 import { findIdAtom } from "../findStatus";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function FindId() {
   const router = useRouter();
@@ -24,22 +20,14 @@ export default function FindId() {
 
   const [, setUserId] = useRecoilState(findIdAtom);
 
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
-  const showDialog = (title: string) => {
-    setDialog({ open: true, title: title });
-  };
-  const hideDialog = () => {
-    setDialog({ open: false, title: "" });
-  };
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 가입한 메일인지 찾기
   const veriEmail = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(inputEmail)) {
-      showDialog("유효하지 않은 이메일이에요");
+      showOneBtnDialog("유효하지 않은 이메일이에요");
       return;
     }
     try {
@@ -54,7 +42,7 @@ export default function FindId() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 404) {
-        showDialog("존재하지 않는 이메일이에요");
+        showOneBtnDialog("존재하지 않는 이메일이에요");
       }
     }
   };
@@ -65,19 +53,21 @@ export default function FindId() {
         email: inputEmail,
       });
       setVeriCode(response.data);
-      showDialog("인증번호가 전송되었어요");
+      showOneBtnDialog("인증번호가 전송되었어요");
       setCodeSent(true);
 
       // 5분 후 인증번호 초기화 및 세션 만료 알림
       setTimeout(() => {
         setVeriCode("");
-        showDialog("세션이 만료됐어요 다시 인증해주세요");
+        showOneBtnDialog("세션이 만료됐어요 다시 인증해주세요");
         setInputVeriCode("");
       }, 5 * 60 * 1000); // 5분
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
-      showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+      showOneBtnDialog(
+        "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+      );
     }
   };
 
@@ -90,17 +80,19 @@ export default function FindId() {
 
       if (response.status === 200) {
         setIsVerified(true);
-        showDialog("인증에 성공했어요");
+        showOneBtnDialog("인증에 성공했어요");
       } else {
-        showDialog("인증에 실패했어요");
+        showOneBtnDialog("인증에 실패했어요");
       }
     } catch (error) {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 401) {
-        showDialog("인증 번호를 확인해주세요");
+        showOneBtnDialog("인증 번호를 확인해주세요");
       } else {
-        showDialog("네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요");
+        showOneBtnDialog(
+          "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
@@ -110,7 +102,7 @@ export default function FindId() {
       setUserId(inputEmail);
       router.push("/sign-in/find-id/done");
     } else {
-      showDialog("이메일 인증을 완료해주세요");
+      showOneBtnDialog("이메일 인증을 완료해주세요");
     }
   };
 
@@ -130,7 +122,7 @@ export default function FindId() {
               onChange={(e) => setInputEmail(e.target.value)}
             />
             <button
-              className="long-button bg-white border-primary-1 text-primary-1"
+              className="long-button white-bg-primary-btn"
               onClick={veriEmail}
             >
               {codeSent ? "인증번호 재발급" : "인증번호 받기"}
@@ -162,19 +154,19 @@ export default function FindId() {
           {/* 다음버튼 */}
           <div className="w-full">
             <button
-              className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+              className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               onClick={handleNext}
             >
               다음
             </button>
           </div>
 
-          {dialog.open && (
+          {oneBtnDialog.open && (
             <Dialog
-              title={dialog.title}
+              title={oneBtnDialog.title}
               rightText="확인"
-              onRightClick={hideDialog}
               onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </div>

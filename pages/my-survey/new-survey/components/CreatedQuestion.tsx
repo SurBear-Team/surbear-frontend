@@ -23,8 +23,8 @@ export const CreatedQuestion = ({
     <div className="px-6 w-full">
       {/* 질문제목 */}
       <div className="flex pb-2">
-        <div className="sm-gray-9-text text-base pr-2">{`${answerIndex}.`}</div>
-        <div className="sm-gray-9-text text-base">{title}</div>
+        <div className="base-gray-9-text pr-2">{`${answerIndex}.`}</div>
+        <div className="base-gray-9-text">{title}</div>
       </div>
       <div className="pb-6 sm-gray-9-text">{engToKorTypeMapping[type]}</div>
 

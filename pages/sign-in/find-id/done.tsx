@@ -29,7 +29,7 @@ export default function FoundId() {
       </div>
       <div className="gray-line mt-12 w-full" />
       <button
-        className="long-button w-full mt-8 bg-white border-primary-1 text-primary-1"
+        className="long-button w-full mt-8 white-bg-primary-btn"
         onClick={() => {
           router.push("/sign-in/find-pwd");
           setUserEmail("");

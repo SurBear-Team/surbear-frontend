@@ -11,9 +11,12 @@ import api from "../api/config";
 import { useRecoilState } from "recoil";
 import { categoryTypeAtom } from "../atoms";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 export default function Browse() {
   const [data, setData] = useState<ISurvey[]>();
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 유저 토큰
   const [token, setToken] = useState<number | null>(null);
@@ -67,7 +70,7 @@ export default function Browse() {
           setData(filtered);
           setLastPage(res.data.totalPages);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [currentPage, categoryType]);
 
@@ -148,13 +151,22 @@ export default function Browse() {
                     reason: text,
                   })
                   .then((res) => {
-                    alert("신고되었습니다.");
+                    showOneBtnDialog("신고되었습니다.");
                     setShowAlertDialog((prev) => !prev);
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => console.error(err));
               }
             }}
             isDelete={true}
+          />
+        )}
+
+        {oneBtnDialog.open && (
+          <Dialog
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

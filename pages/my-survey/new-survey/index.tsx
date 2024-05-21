@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MakeSurvey } from "./components/MakeSurvey";
 import { CreatedQuestion } from "./components/CreatedQuestion";
-import { MinusIcon } from "@/pages/components/styles/Icons";
 import { EditSurvey } from "./components/EditSurvey";
 import { Overlay } from "@/pages/components/styles/Overlay";
 import { SurveyTabBar } from "./components/SurveyTabBar";
@@ -26,6 +25,20 @@ export interface NewSurveyProps {
   options?: { id: number; answer: string }[];
 }
 
+interface SurveyData {
+  surveyQuestion: {
+    id: number;
+    surveyId: number;
+    questionType: string;
+    content: string;
+    page: number;
+    questionOrder: number;
+    maxText: number;
+    required: boolean;
+  };
+  options: { id: number; answer: string }[];
+}
+
 export default function NewSurvey() {
   const router = useRouter();
 
@@ -43,8 +56,6 @@ export default function NewSurvey() {
 
   const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [isNewSurvey, setIsNewSurvey] = useState(false); // 새 설문 만들기 창
-  const [alertDialog, setAlertDialog] = useState(false);
-  const [alertText, setAlertText] = useState("");
 
   const [saveDialog, setSaveDialog] = useState(false);
 
@@ -59,27 +70,30 @@ export default function NewSurvey() {
     return data;
   };
 
-  const { data, refetch } = useQuery(["new-survey"], fetchSurvey, {
-    onSuccess: (data) => {
-      const formattedQuestions = data.map((item: any) => ({
-        id: item.surveyQuestion.id,
-        title: item.surveyQuestion.content,
-        type: item.surveyQuestion.questionType,
-        choices: item.options.map((option: any) => option.answer),
-        count: item.surveyQuestion.maxText,
-        page: item.surveyQuestion.page,
-        required: item.surveyQuestion.required,
-        surveyId: item.surveyQuestion.surveyId,
-        questionOrder: item.surveyQuestion.questionOrder,
-        options: item.options.map((option: any) => ({
-          id: option.id,
-          answer: option.answer,
-        })),
-      }));
-      setSurveyQuestions(formattedQuestions);
-    },
-  });
-  console.log("설문 전체 데이터:", data);
+  const { data, refetch } = useQuery<SurveyData[]>(
+    ["new-survey"],
+    fetchSurvey,
+    {
+      onSuccess: (data) => {
+        const formattedQuestions = data.map((item) => ({
+          id: item.surveyQuestion.id,
+          title: item.surveyQuestion.content,
+          type: item.surveyQuestion.questionType,
+          choices: item.options.map((option) => option.answer),
+          count: item.surveyQuestion.maxText,
+          page: item.surveyQuestion.page,
+          required: item.surveyQuestion.required,
+          surveyId: item.surveyQuestion.surveyId,
+          questionOrder: item.surveyQuestion.questionOrder,
+          options: item.options.map((option) => ({
+            id: option.id,
+            answer: option.answer,
+          })),
+        }));
+        setSurveyQuestions(formattedQuestions);
+      },
+    }
+  );
 
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editData, setEditData] = useState<NewSurveyProps | null>(null);
@@ -137,52 +151,6 @@ export default function NewSurvey() {
     }
   };
 
-  const onSaveEdit = async (updatedData: NewSurveyProps) => {
-    try {
-      const existingQuestion = surveyQuestions[editIndex!];
-
-      const formattedOptions =
-        updatedData.choices?.map((choice, index) => ({
-          beforeChangeSurveyQuestionOptionList: existingQuestion.options![index]
-            ? {
-                id: existingQuestion.options![index].id,
-                answer: existingQuestion.options![index].answer,
-              }
-            : { id: 0, answer: "" },
-          afterChangeSurveyQuestionOptionList: {
-            id: existingQuestion.options![index]
-              ? existingQuestion.options![index].id
-              : 0,
-            answer: choice,
-            deleteFlag: false,
-            creationFlag: !existingQuestion.options![index],
-          },
-        })) || [];
-
-      await api.post("/survey/question-options", {
-        surveyQuestion: {
-          id: existingQuestion.id,
-          surveyId: surveyId,
-          questionType: updatedData.type,
-          content: updatedData.title,
-          page: currentPage + 1,
-          questionOrder: 0, // 필요한 값 설정
-          maxText: updatedData.count || 0, // 필요한 값 설정
-          required: existingQuestion.required,
-          deleted: false,
-        },
-        options: formattedOptions,
-      });
-
-      const updatedQuestions = [...surveyQuestions];
-      updatedQuestions[editIndex!] = updatedData;
-      setSurveyQuestions(updatedQuestions);
-      setEditIndex(null);
-    } catch (error) {
-      console.error("질문 수정 중 오류가 발생했습니다:", error);
-    }
-  };
-
   const goToNextPage = () => {
     if (currentPage < Math.max(...surveyQuestions.map((q) => q.page || 0))) {
       setCurrentPage(currentPage + 1);
@@ -195,22 +163,13 @@ export default function NewSurvey() {
     }
   };
 
-  const deleteCurrentPage = () => {
-    const updatedQuestions = surveyQuestions.filter(
-      (question) => question.page !== currentPage + 1
-    );
-    setSurveyQuestions(updatedQuestions);
-    setCurrentPage((prev) => (prev > 0 ? prev - 1 : 0));
-    setAlertDialog((prev) => !prev);
-  };
-
   const [showRecommendation, setShowRecommendation] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
 
   const fetchChatGPTResponse = async (title: string | null) => {
     setIsLoading(true);
-    const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표를 붙이지 말고 한국어로 부탁해.`;
+    const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표와 번호를 붙이지 말고 한국어로 부탁해.`;
     try {
       const response = await fetch("/api/chatgpt", {
         method: "POST",
@@ -222,7 +181,7 @@ export default function NewSurvey() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error from /api/chatgpt:", errorData);
+        console.error("/api/chatgpt에서 에러 발생:", errorData);
         throw new Error(errorData.error || "Unknown error");
       }
 
@@ -258,8 +217,8 @@ export default function NewSurvey() {
     }
   };
 
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const handleSelectQuestion = (question: any) => {
+  const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+  const handleSelectQuestion = (question: string) => {
     setSelectedQuestion(question);
   };
 
@@ -287,7 +246,7 @@ export default function NewSurvey() {
       />
       <div className="white-screen flex-col pt-14 justify-start">
         <div className="inner-screen pb-20">
-          <div className="sm-gray-9-text text-base py-6 pl-6 self-start">
+          <div className="base-gray-9-text py-6 pl-6 self-start">
             {`${currentPage + 1} 페이지`}
           </div>
           {surveyQuestions
@@ -297,11 +256,9 @@ export default function NewSurvey() {
                 <EditSurvey
                   key={index}
                   initialData={editData!}
-                  onSave={onSaveEdit}
                   onCancel={() => setEditIndex(null)}
                   refetch={refetch}
                   setEditIndex={setEditIndex}
-                  currentPage={currentPage}
                 />
               ) : (
                 <CreatedQuestion
@@ -330,18 +287,6 @@ export default function NewSurvey() {
             />
           )}
 
-          {alertDialog && (
-            <Dialog
-              title={alertText}
-              leftText="취소"
-              rightText="삭제"
-              onLeftClick={() => {
-                setAlertDialog((prev) => !prev);
-              }}
-              onRightClick={deleteCurrentPage}
-              isDelete={true}
-            />
-          )}
           {saveDialog && (
             <Dialog
               title={"설문이 저장되었어요"}
@@ -379,7 +324,7 @@ export default function NewSurvey() {
             <>
               <Overlay onClick={() => {}} />
               <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
-                <span className="whitespace-nowrap sm-gray-9-text text-base">
+                <span className="whitespace-nowrap base-gray-9-text">
                   ChatGPT가 질문을 추천해드려요! <br />
                   추천을 받으시겠어요?
                 </span>
@@ -411,9 +356,9 @@ export default function NewSurvey() {
             <>
               <Overlay onClick={() => {}} />
               <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5">
-                <span className="whitespace-nowrap sm-gray-9-text text-base">
+                <span className="whitespace-nowrap base-gray-9-text">
                   이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!
-                  <div className="whitespace-nowrap sm-gray-9-text text-base pt-2">
+                  <div className="whitespace-nowrap base-gray-9-text pt-2">
                     마음에 드는 질문을 선택할 수 있어요!
                   </div>
                 </span>

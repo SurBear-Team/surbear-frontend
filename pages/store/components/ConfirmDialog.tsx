@@ -1,4 +1,3 @@
-import { getAge } from "@/pages/utils";
 import { IBuyInfo } from "../[goodsId]";
 
 interface IConfirmDialog {

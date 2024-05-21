@@ -13,6 +13,7 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -24,7 +25,7 @@ interface SurveyData {
   description: string;
   openType: boolean;
   deadLine: string;
-  surveyAuthorId?: any;
+  surveyAuthorId?: number;
 }
 
 interface NewSurveyCardProps {
@@ -72,17 +73,8 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
   });
 
   // 다이얼로그
-  const [dialog, setDialog] = useState<{ open: boolean; text: string }>({
-    open: false,
-    text: "",
-  });
-  const showDialog = (message: string) => {
-    setDialog({ open: true, text: message });
-  };
-  const hideDialog = () => {
-    setDialog({ open: false, text: "" });
-  };
-
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
   // 제목
   const [surveyTitle, setSurveyTitle] = useState("");
 
@@ -155,20 +147,20 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     const descriptionTrimmed = description.trim(); // 앞뒤 공백 제거
 
     if (!deadline) {
-      showDialog("종료 날짜와 시간을 입력해주세요.");
+      showOneBtnDialog("종료 날짜와 시간을 입력해주세요.");
       return false;
     }
 
     const isoDeadline = deadline.toISOString(); // 분과 초를 00으로 고정
 
     if (!titleTrimmed || !descriptionTrimmed) {
-      showDialog("설문 주제와 설문 설명을 입력해주세요");
+      showOneBtnDialog("설문 주제와 설문 설명을 입력해주세요");
       return false;
     } else if (isNaN(parsedMaxPerson) || parsedMaxPerson <= 0) {
-      showDialog("유효한 최대 인원 수를 입력해주세요");
+      showOneBtnDialog("유효한 최대 인원 수를 입력해주세요");
       return false;
     } else if (new Date(isoDeadline) < now) {
-      showDialog("종료 시간은 현재 이후로 입력해주세요");
+      showOneBtnDialog("종료 시간은 현재 이후로 입력해주세요");
       return false;
     }
 
@@ -204,7 +196,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         })
         .catch((error) => {
           console.error("설문 수정 오류 : ", error);
-          showDialog("설문 수정에 실패했습니다.");
+          showOneBtnDialog("설문 수정에 실패했습니다.");
         });
     } else {
       try {
@@ -220,11 +212,11 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
           queryClient.invalidateQueries("registered");
           router.push("/my-survey/new-survey");
         } else {
-          showDialog("설문 생성에 실패했습니다.");
+          showOneBtnDialog("설문 생성에 실패했습니다.");
         }
       } catch (error) {
         console.error(error);
-        showDialog("설문 생성에 실패했습니다.");
+        showOneBtnDialog("설문 생성에 실패했습니다.");
       }
     }
   };
@@ -235,7 +227,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       <div className="card fixed bg-white w-4/5 max-w-lg min-w-80 gap-4 shadow-md z-50">
         {/* 새 설문 주제 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">
+          <div className="base-gray-9-text">
             {isEdit ? "설문 수정하기" : "새 설문 주제"}
           </div>
           <input
@@ -249,7 +241,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 설문 설명 */}
         <div className="flex flex-col gap-1 w-full">
-          <div className="sm-gray-9-text text-base">설문 설명</div>
+          <div className="base-gray-9-text">설문 설명</div>
           <textarea
             value={description}
             onChange={handleDescriptionChange}
@@ -259,9 +251,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 카테고리 */}
         <div className="flex w-full items-center gap-4">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
-            카테고리
-          </div>
+          <div className="base-gray-9-text whitespace-nowrap">카테고리</div>
           <TypeDropDown
             onShowTypeClick={() => {
               setShowCategory((prev) => !prev);
@@ -277,7 +267,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
         <div className="flex w-full justify-between">
           {/* 결과 비공개 여부 */}
           <div className="flex items-center gap-2">
-            <div className="sm-gray-9-text text-base whitespace-nowrap">
+            <div className="base-gray-9-text whitespace-nowrap">
               결과 비공개 여부
             </div>
             <MyCheckBox
@@ -288,7 +278,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
           {/* 최대 인원 */}
           <div className="flex justify-between items-center gap-2">
-            <div className="sm-gray-9-text text-base">최대 인원</div>
+            <div className="base-gray-9-text">최대 인원</div>
             <input
               value={maxPeople === "788183" ? "" : maxPeople}
               onChange={handleMaxPersonChange}
@@ -300,7 +290,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
         {/* 종료 날짜 및 시간 */}
         <div className="w-full flex flex-col gap-1">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
+          <div className="base-gray-9-text whitespace-nowrap">
             종료 날짜 및 시간
           </div>
           <DatePicker
@@ -336,13 +326,13 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
       </div>
 
       {/* 오류 다이얼로그 */}
-      <div className="fixed h-screen flex items-center justify-center z-50">
-        {dialog.open && (
+      <div className="fixed h-screen flex-center z-50">
+        {oneBtnDialog.open && (
           <Dialog
-            title={dialog.text}
-            onlyOneBtn={true}
-            rightText={"닫기"}
-            onRightClick={hideDialog}
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

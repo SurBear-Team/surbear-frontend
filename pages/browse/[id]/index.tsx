@@ -10,6 +10,7 @@ import { Dialog } from "@/pages/components/Dialog";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useQueryClient } from "react-query";
 import RangeSlider from "../components/RangeSlider";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export interface IOption {
   id: number;
@@ -42,6 +43,8 @@ export default function Survey() {
   const [data, setData] = useState<IData[]>();
   const [answers, setAnswers] = useState<IAnswers[]>([]);
   const [showPopUp, setShowPopUp] = useState(false);
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const router = useRouter();
   const { id } = router.query;
@@ -70,7 +73,7 @@ export default function Survey() {
           const lastPage = data[data.length - 1].surveyQuestion.page;
           setLastPage(lastPage);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     }
   }, [id]);
 
@@ -108,16 +111,16 @@ export default function Survey() {
                     router.push("/browse/done");
                   })
                   .catch((err) =>
-                    alert("설문조사 제출 실패! 다시 시도해주세요")
+                    showOneBtnDialog("설문조사 제출 실패! 다시 시도해주세요")
                   );
               }
             })
             .catch((err) =>
-              alert("사용자 인식 실패! 로그인 후 다시 시도해주세요")
+              showOneBtnDialog("사용자 인식 실패! 로그인 후 다시 시도해주세요")
             );
         }
       } else {
-        alert("로그인 상태를 확인해주세요.");
+        showOneBtnDialog("로그인 상태를 확인해주세요.");
       }
     }
   };
@@ -308,7 +311,7 @@ export default function Survey() {
                   answers.findIndex((el) => el.questionId === target)
                 );
                 if (checkRequired?.findIndex((el) => el === -1) !== -1) {
-                  alert("필수 질문을 답해주세요.");
+                  showOneBtnDialog("필수 질문을 답해주세요.");
                 } else {
                   setShowPopUp((prev) => !prev);
                 }
@@ -340,6 +343,14 @@ export default function Survey() {
             onRightClick={() => onConfirm()}
           />
         </>
+      )}
+      {oneBtnDialog.open && (
+        <Dialog
+          title={oneBtnDialog.title}
+          rightText="확인"
+          onlyOneBtn
+          onRightClick={hideOneBtnDialog}
+        />
       )}
     </>
   );

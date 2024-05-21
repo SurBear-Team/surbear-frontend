@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import LogoSVG from "../components/styles/LogoSVG";
@@ -6,37 +6,22 @@ import api from "../api/config";
 import { AxiosError } from "axios";
 import { Dialog } from "../components/Dialog";
 import { useQueryClient } from "react-query";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 
 export default function SignIn() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // 로그인 여부 확인
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      if (localStorage.getItem("surbearToken") !== null) {
-        router.push("/browse");
-      }
-    }
-  }, []);
-
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [inputId, setInputId] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
-  const onInputIdChange = (e: any) => {
+  const onInputIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputId(e.target.value);
   };
-  const onPasswordChange = (e: any) => {
+  const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputPassword(e.target.value);
   };
 
@@ -61,15 +46,11 @@ export default function SignIn() {
       const axiosError = error as AxiosError;
       console.error(axiosError);
       if (axiosError.response && axiosError.response.status === 404) {
-        setDialog({
-          open: true,
-          title: "아이디 혹은 비밀번호를 확인해주세요",
-        });
+        showOneBtnDialog("아이디 혹은 비밀번호를 확인해주세요");
       } else {
-        setDialog({
-          open: true,
-          title: "네트워크 에러. 나중에 다시 시도해주세요",
-        });
+        showOneBtnDialog(
+          "네트워크 에러가 발생했습니다. 나중에 다시 시도해주세요"
+        );
       }
     }
   };
@@ -134,7 +115,7 @@ export default function SignIn() {
             <div className="w-full h-[1px] bg-[#EAEAEA]" />
           </div>
           <button
-            className="long-button mt-7 bg-white border-primary-1 text-primary-1"
+            className="long-button mt-7 white-bg-primary-btn"
             onClick={() => {
               router.push("/browse");
               queryClient.invalidateQueries("member");
@@ -148,14 +129,12 @@ export default function SignIn() {
           </button>
         </div>
 
-        {dialog.open && (
+        {oneBtnDialog.open && (
           <Dialog
-            title={dialog.title}
+            title={oneBtnDialog.title}
             rightText="확인"
-            onRightClick={() => {
-              setDialog((current) => ({ ...current, open: false }));
-            }}
             onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
       </div>

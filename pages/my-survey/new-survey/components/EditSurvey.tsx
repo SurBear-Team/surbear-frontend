@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dialog } from "@/pages/components/Dialog";
 import { MyCheckBox } from "@/pages/components/MyCheckBox";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
@@ -10,27 +10,21 @@ import {
 } from "@/pages/components/styles/Icons";
 import api from "@/pages/api/config";
 import { NewSurveyProps } from "..";
-import {
-  engToKorTypeMapping,
-  korToEngTypeMapping,
-} from "../../components/typeMapping";
+import { engToKorTypeMapping } from "../../components/typeMapping";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 interface EditSurveyProps {
   initialData: NewSurveyProps;
-  onSave: (updatedData: NewSurveyProps) => void;
   onCancel: () => void;
   refetch: () => void;
   setEditIndex: (index: number | null) => void;
-  currentPage: number;
 }
 
 export const EditSurvey = ({
   initialData,
-  onSave,
   onCancel,
   refetch,
   setEditIndex,
-  currentPage,
 }: EditSurveyProps) => {
   const typeType = initialData?.type;
 
@@ -44,8 +38,8 @@ export const EditSurvey = ({
     setIsChecked((isChecked) => !isChecked);
   };
 
-  const [alertDialog, setAlertDialog] = useState(false);
-  const [alertText, setAlertText] = useState("");
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [questionTitle, setQuestionTitle] = useState(initialData?.title);
   const [count, setCount] = useState(initialData?.count);
@@ -89,13 +83,11 @@ export const EditSurvey = ({
       (choice, idx) => choice.trim() === updatedAnswer && idx !== optionIndex
     );
     if (isDuplicate) {
-      setAlertDialog(true);
-      setAlertText("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
+      showOneBtnDialog("중복된 답변이 있습니다. 다른 답변을 입력해주세요.");
       return;
     }
     if (!updatedAnswer.trim()) {
-      setAlertDialog(true);
-      setAlertText("답변을 모두 입력해주세요.");
+      showOneBtnDialog("답변을 모두 입력해주세요.");
       return;
     }
 
@@ -126,8 +118,6 @@ export const EditSurvey = ({
       ],
     };
 
-    console.log("Payload:", JSON.stringify(payload, null, 2));
-
     try {
       const response = await api.post(`/survey/question-options`, payload);
 
@@ -136,13 +126,11 @@ export const EditSurvey = ({
         refetch();
       } else {
         console.error("질문 수정 중 오류가 발생했습니다:", response);
-        setAlertDialog(true);
-        setAlertText("질문 수정 중 오류가 발생했습니다.");
+        showOneBtnDialog("질문 수정 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("질문 수정 중 오류가 발생했습니다:", error);
-      setAlertDialog(true);
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요.");
     }
   };
 
@@ -151,8 +139,7 @@ export const EditSurvey = ({
       ? initialData.options[optionIndex]
       : null;
     if (!initialOption) {
-      setAlertDialog(true);
-      setAlertText("해당 답변을 찾을 수 없습니다.");
+      showOneBtnDialog("해당 답변을 찾을 수 없습니다.");
       return;
     }
 
@@ -184,8 +171,6 @@ export const EditSurvey = ({
       ],
     };
 
-    console.log("Payload:", JSON.stringify(payload, null, 2));
-
     try {
       const response = await api.post(`/survey/question-options`, payload);
 
@@ -194,13 +179,11 @@ export const EditSurvey = ({
         refetch();
       } else {
         console.error("답변 삭제 중 오류가 발생했습니다:", response);
-        setAlertDialog(true);
-        setAlertText("답변 삭제 중 오류가 발생했습니다.");
+        showOneBtnDialog("답변 삭제 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("답변 삭제 중 오류가 발생했습니다:", error);
-      setAlertDialog(true);
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요.");
     }
 
     setDeleteQuestionDialog(false);
@@ -221,8 +204,6 @@ export const EditSurvey = ({
       },
     };
 
-    console.log("Payload:", JSON.stringify(payload, null, 2));
-
     try {
       const response = await api.post(`/survey/question-options`, payload);
 
@@ -231,22 +212,20 @@ export const EditSurvey = ({
         refetch(); // 데이터 다시 가져오기
       } else {
         console.error("질문 수정 중 오류가 발생했습니다:", response);
-        setAlertDialog(true);
-        setAlertText("질문 수정 중 오류가 발생했습니다.");
+        showOneBtnDialog("질문 수정 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("질문 수정 중 오류가 발생했습니다:", error);
-      setAlertDialog(true);
-      setAlertText("네트워크 에러. 나중에 다시 시도해주세요.");
+      showOneBtnDialog("네트워크 에러. 나중에 다시 시도해주세요.");
     }
   };
 
   return (
     <div className="bg-gray-1 flex flex-col justify-center h-auto p-6 w-full">
-      <div className="sm-gray-9-text text-base pb-4">질문 수정</div>
-      <div className="flex justify-center items-center gap-4">
+      <div className="base-gray-9-text pb-4">질문 수정</div>
+      <div className="flex-center gap-4">
         <div className="flex gap-4 w-full items-center">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">형식</div>
+          <div className="base-gray-9-text whitespace-nowrap">형식</div>
           <div className="drop-down-bar">
             <div className="sm-gray-9-text text-center w-full">
               {engToKorTypeMapping[typeType]}
@@ -255,9 +234,7 @@ export const EditSurvey = ({
         </div>
 
         <div className="flex gap-1 items-center">
-          <div className="sm-gray-9-text text-base whitespace-nowrap">
-            필수 답변
-          </div>
+          <div className="base-gray-9-text whitespace-nowrap">필수 답변</div>
           <MyCheckBox
             isChecked={isChecked}
             onCheckClick={handleCheckboxChange}
@@ -266,7 +243,7 @@ export const EditSurvey = ({
       </div>
 
       <div className="flex flex-col gap-1">
-        <div className="sm-gray-9-text text-base pt-2">질문 제목</div>
+        <div className="base-gray-9-text pt-2">질문 제목</div>
         <input
           className="main-input text-gray-9"
           value={questionTitle}
@@ -280,9 +257,7 @@ export const EditSurvey = ({
           <div className="gray-line my-8" />
           {choices?.map((choice: string, index: number) => (
             <div key={index} className="flex flex-col gap-1">
-              <div className="sm-gray-9-text text-base pt-2">
-                답변 {index + 1}
-              </div>
+              <div className="base-gray-9-text pt-2">답변 {index + 1}</div>
               <input
                 className="main-input text-gray-9"
                 value={choice}
@@ -367,13 +342,13 @@ export const EditSurvey = ({
         </button>
       </div>
 
-      <div className="flex justify-center items-center">
-        {alertDialog && (
+      <div className="flex-center">
+        {oneBtnDialog.open && (
           <Dialog
-            title={alertText}
-            onlyOneBtn={true}
-            rightText={"닫기"}
-            onRightClick={() => setAlertDialog(false)}
+            title={oneBtnDialog.title}
+            rightText="확인"
+            onlyOneBtn
+            onRightClick={hideOneBtnDialog}
           />
         )}
 

@@ -1,16 +1,11 @@
 import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import api from "@/pages/api/config";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { findIdAtom } from "../findStatus";
 import { Dialog } from "@/pages/components/Dialog";
-
-interface DialogState {
-  open: boolean;
-  title: string;
-}
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
 export default function NewPwd() {
   const router = useRouter();
@@ -23,10 +18,8 @@ export default function NewPwd() {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
-  const [dialog, setDialog] = useState<DialogState>({
-    open: false,
-    title: "",
-  });
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   // 비밀번호 유효성 검사
   const validatePassword = (password: string) => {
@@ -43,17 +36,15 @@ export default function NewPwd() {
         newPassword: data.password,
       });
 
-      console.log(response);
       if (response.status === 200) {
         router.push("/sign-in/find-pwd/done");
         setUserEmail("");
       }
     } catch (error) {
       console.error("Axios 요청 에러:", error);
-      setDialog({
-        open: true,
-        title: "네트워크 오류가 발생했어요",
-      });
+      showOneBtnDialog(
+        "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요"
+      );
     }
   };
   return (
@@ -70,13 +61,13 @@ export default function NewPwd() {
                   validate: validatePassword,
                   minLength: {
                     value: 8,
-                    message: "비밀번호는 최소 8자 이상이어야 합니다.",
+                    message: "비밀번호는 최소 8자 이상이어야 합니다",
                   },
                 })}
                 type="password"
                 placeholder="비밀번호를 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.password &&
@@ -94,12 +85,12 @@ export default function NewPwd() {
                 {...register("passwordConfirm", {
                   validate: (value) =>
                     value === watch("password") ||
-                    "비밀번호가 일치하지 않습니다.",
+                    "비밀번호가 일치하지 않습니다",
                 })}
                 type="password"
                 placeholder="비밀번호를 다시 입력해주세요"
                 className={`main-input mt-1 text-gray-9 ${
-                  errors.username && "border-red-1"
+                  errors.password && "border-red-1"
                 }`}
               />
               {errors.passwordConfirm &&
@@ -115,21 +106,19 @@ export default function NewPwd() {
             <div className="w-full">
               <button
                 type="submit"
-                className="long-button px-32 mt-8 font-semibold bg-white border-primary-1 text-primary-1"
+                className="long-button px-32 mt-8 font-semibold white-bg-primary-btn"
               >
                 다음
               </button>
             </div>
           </form>
 
-          {dialog.open && (
+          {oneBtnDialog.open && (
             <Dialog
-              title={dialog.title}
+              title={oneBtnDialog.title}
               rightText="확인"
-              onRightClick={() => {
-                setDialog((current) => ({ ...current, open: false }));
-              }}
               onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </div>

@@ -6,6 +6,8 @@ import { InputDialog } from "../components/InputDialog";
 import api from "@/pages/api/config";
 import MemberInfoDialog from "../components/MemberInfoDialog";
 import { useRouter } from "next/router";
+import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import { Dialog } from "@/pages/components/Dialog";
 
 export interface IMemberInfo {
   age: string;
@@ -29,6 +31,9 @@ export default function Member() {
       }
     }
   }, []);
+
+  const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
+    useOneBtnDialog();
 
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpType, setPopUpType] = useState("");
@@ -106,7 +111,7 @@ export default function Member() {
                     })
                     .catch((err) => {
                       if (err.response.status === 404) {
-                        alert("존재하지 않는 닉네임입니다.");
+                        showOneBtnDialog("존재하지 않는 닉네임입니다.");
                       }
                     });
                 }
@@ -134,7 +139,9 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/survey/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
+                    .catch((err) =>
+                      showOneBtnDialog("존재하지 않는 닉네임입니다.")
+                    );
                 }
               }}
             />
@@ -154,7 +161,9 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/survey-history/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
+                    .catch((err) =>
+                      showOneBtnDialog("존재하지 않는 닉네임입니다.")
+                    );
                 }
               }}
             />
@@ -174,7 +183,9 @@ export default function Member() {
                       setSelectedMember(data.nickname);
                       setPopUpType("decidePoint");
                     })
-                    .catch((err) => alert("존재하지 않는 사용자입니다."));
+                    .catch((err) =>
+                      showOneBtnDialog("존재하지 않는 사용자입니다.")
+                    );
                 }
               }}
             />
@@ -190,7 +201,7 @@ export default function Member() {
                 if (data.nickname !== undefined) {
                   const point = +data.nickname;
                   if (isNaN(point)) {
-                    alert("숫자만 입력해주세요.");
+                    showOneBtnDialog("숫자만 입력해주세요.");
                   } else {
                     api
                       .post(
@@ -205,11 +216,11 @@ export default function Member() {
                         }
                       )
                       .then((res) => {
-                        alert("포인트 지급이 완료되었습니다.");
+                        showOneBtnDialog("포인트 지급이 완료되었습니다.");
                         setShowPopUp((prev) => !prev);
                       })
                       .catch((err) =>
-                        alert("사용자 인증을 다시 확인해주세요.")
+                        showOneBtnDialog("사용자 인증을 다시 확인해주세요.")
                       );
                   }
                 }
@@ -231,7 +242,9 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/goods-history/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
+                    .catch((err) =>
+                      showOneBtnDialog("존재하지 않는 닉네임입니다.")
+                    );
                 }
               }}
             />
@@ -251,9 +264,20 @@ export default function Member() {
                     .then((res) => {
                       router.push(`/manager/member/point-history/${nickname}`);
                     })
-                    .catch((err) => alert("존재하지 않는 닉네임입니다."));
+                    .catch((err) =>
+                      showOneBtnDialog("존재하지 않는 닉네임입니다.")
+                    );
                 }
               }}
+            />
+          )}
+
+          {oneBtnDialog.open && (
+            <Dialog
+              title={oneBtnDialog.title}
+              rightText="확인"
+              onlyOneBtn
+              onRightClick={hideOneBtnDialog}
             />
           )}
         </>

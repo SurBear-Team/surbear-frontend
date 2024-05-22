@@ -6,11 +6,11 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
-import MultipleChoice from "../components/MultipleChoice";
-import RangeSlider from "../components/RangeSlider";
-import ShortAnswer from "../components/ShortAnswer";
-import SingleChoice from "../components/SingleChoice";
-import Subjective from "../components/Subjective";
+import MultipleChoice from "./components/MultipleChoice";
+import RangeSlider from "./components/RangeSlider";
+import ShortAnswer from "./components/ShortAnswer";
+import SingleChoice from "./components/SingleChoice";
+import Subjective from "./components/Subjective";
 
 export interface IOption {
   id: number;

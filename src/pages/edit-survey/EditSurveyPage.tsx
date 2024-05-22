@@ -17,9 +17,9 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
-import { EditInEditSurvey } from "../components/EditInEditSurvey";
-import { EditTabBar } from "../components/EditTabBar";
-import { SurveyData, SurveyQuestion } from "../editInterface";
+import { EditInEditSurvey } from "./components/EditInEditSurvey";
+import { EditTabBar } from "./components/EditTabBar";
+import { SurveyData, SurveyQuestion } from "./editInterface";
 
 export default function EditSurveyPage() {
   const router = useRouter();

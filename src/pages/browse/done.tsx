@@ -1,7 +1,7 @@
 import CharSVG from "@/components/styles/CharSVG";
 import { useRouter } from "next/router";
 
-export default function FoundId() {
+export default function Done() {
   const router = useRouter();
 
   return (

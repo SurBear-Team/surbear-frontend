@@ -29,6 +29,7 @@ export const MySurveyCard = ({
     LIFE: "생활",
     HOBBY: "취미",
     IT: "IT",
+    EDUCATION: "교육",
     CULTURE: "문화",
   };
   const translatedCategory = categoryMapping[category];

@@ -1,9 +1,10 @@
-import React from "react";
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import { engToKorAge } from "./AgeBarChart";
 import { engToKorGender } from "./GenderBarChart";
-import { ChartProps, SurveyResponseDetail } from "./resultInterface";
 import { engAgeCategories, engGenderCategories } from "./categories";
+import { ChartProps, SurveyResponseDetail } from "./resultInterface";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const colors = [
   "#FF5733",

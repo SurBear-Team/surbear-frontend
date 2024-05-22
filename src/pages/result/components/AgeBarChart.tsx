@@ -1,6 +1,8 @@
-import Chart from "react-apexcharts";
-import { ChartProps } from "./resultInterface";
+import dynamic from "next/dynamic";
 import { engAgeCategories } from "./categories";
+import { ChartProps } from "./resultInterface";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface ResponseProps {
   questionId: number; // 질문 ID

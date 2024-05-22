@@ -1,5 +1,7 @@
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
 import { ChartProps } from "./resultInterface";
+
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export const DonutChart = ({ item, surveyResult }: ChartProps) => {
   const series = item.options.map((option) => {

@@ -1,4 +1,4 @@
-import { IBuyInfo } from "../[goodsId]";
+import { IBuyInfo } from "../BuyGoodsPage";
 
 interface IConfirmDialog {
   info: IBuyInfo;

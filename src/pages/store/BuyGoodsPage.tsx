@@ -8,8 +8,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "react-query";
-import ConfirmDialog from "../components/ConfirmDialog";
-import { IGoodsDetail } from "../components/ItemDetail";
+import ConfirmDialog from "./components/ConfirmDialog";
+import { IGoodsDetail } from "./components/ItemDetail";
 
 export interface IBuyInfo {
   goodsName: string;

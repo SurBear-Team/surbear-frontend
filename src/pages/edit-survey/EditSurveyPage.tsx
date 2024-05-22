@@ -10,7 +10,7 @@ import {
   engToKorTypeMapping,
   korToEngTypeMapping,
 } from "@/pages/my-survey/components/typeMapping";
-import { NewSurveyProps } from "@/pages/my-survey/new-survey";
+import { NewSurveyProps } from "@/pages/my-survey/new-survey/NewSurveyPage";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
 import { useRouter } from "next/router";

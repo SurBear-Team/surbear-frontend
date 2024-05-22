@@ -9,8 +9,8 @@ import {
 } from "@/components/styles/Icons";
 import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { useState } from "react";
-import { NewSurveyProps } from "..";
 import { engToKorTypeMapping } from "../../components/typeMapping";
+import { NewSurveyProps } from "../NewSurveyPage";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
 
 interface EditSurveyProps {

@@ -14,7 +14,7 @@ interface IPointHistory {
   updatedAt: string;
 }
 
-export default function PointHistory() {
+export default function GoodsHistory() {
   const router = useRouter();
   const { nickname } = router.query;
 

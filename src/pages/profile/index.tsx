@@ -5,7 +5,7 @@ import api from "../../api/config";
 import { Dialog } from "../../components/Dialog";
 import { TabBar } from "../../components/TabBar";
 import { TopBar } from "../../components/TopBar/TopBar";
-import { IMemberInfo } from "../manager/member";
+import { IMemberInfo } from "../manager/member/Member";
 import { ProfileCard } from "./components/ProfileCard";
 
 export default function Profile() {

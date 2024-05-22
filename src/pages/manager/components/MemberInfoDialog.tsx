@@ -1,5 +1,5 @@
 import { getAge } from "@/pages/utils";
-import { IMemberInfo } from "../member";
+import { IMemberInfo } from "../member/Member";
 
 interface IMemberInfoDialog {
   info: IMemberInfo;

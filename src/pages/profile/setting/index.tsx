@@ -1,8 +1,8 @@
 import api from "@/api/config";
 import { Dialog } from "@/components/Dialog";
 import { TopBar } from "@/components/TopBar/TopBar";
-import { IManagerList } from "@/pages/manager/administration/inquiry";
-import { IMemberInfo } from "@/pages/manager/member";
+import { IManagerList } from "@/pages/manager/administration/AdministrationInquiry";
+import { IMemberInfo } from "@/pages/manager/member/Member";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SettingCard } from "../components/SettingCard";

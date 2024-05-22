@@ -2,7 +2,7 @@ import api from "@/pages/api/config";
 import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
-import { editSurveyTitleAtom } from "../editSurveyState";
+import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
 import { ChangeEvent, useEffect, useState } from "react";
 import { TopBar } from "@/pages/components/TopBar/TopBar";
 import { CreatedQuestion } from "@/pages/my-survey/new-survey/components/CreatedQuestion";

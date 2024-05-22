@@ -1,6 +1,6 @@
 import { SmallCheckIcon } from "@/components/styles/Icons";
 import { useEffect, useState } from "react";
-import { IOption } from "../Survey";
+import { IOption } from "../SurveyPage";
 
 interface IMultipleChoice {
   index: number;

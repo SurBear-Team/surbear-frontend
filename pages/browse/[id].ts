@@ -1,1 +1,1 @@
-export { default } from "@/pages/browse/Survey";
+export { default } from "@/pages/browse/SurveyPage";

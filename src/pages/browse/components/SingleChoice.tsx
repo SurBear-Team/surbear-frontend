@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IOption } from "../Survey";
+import { IOption } from "../SurveyPage";
 
 interface ISingleChoice {
   index: number;

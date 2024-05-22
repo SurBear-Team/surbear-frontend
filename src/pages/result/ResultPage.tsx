@@ -7,15 +7,15 @@ import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import router from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { AgeBarChart } from "../components/AgeBarChart";
-import { DonutChart } from "../components/DonutChart";
-import { GenderBarChart } from "../components/GenderBarChart";
-import { ShortAnswerSubjective } from "../components/ShortAnswerSubjective";
+import { AgeBarChart } from "./components/AgeBarChart";
+import { DonutChart } from "./components/DonutChart";
+import { GenderBarChart } from "./components/GenderBarChart";
+import { ShortAnswerSubjective } from "./components/ShortAnswerSubjective";
 import {
   SliderAgeBarChart,
   SliderGenderBarChart,
-} from "../components/SliderBarChart";
-import { SurveyResult } from "../components/resultInterface";
+} from "./components/SliderBarChart";
+import { SurveyResult } from "./components/resultInterface";
 
 export default function Result() {
   const { id } = router.query;

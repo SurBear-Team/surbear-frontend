@@ -1,13 +1,13 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { TopBar } from "@/components/TopBar/TopBar";
 import { IManagerList } from "@/pages/manager/administration/inquiry";
 import { IMemberInfo } from "@/pages/manager/member";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { SettingCard } from "../components/SettingCard";
 
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { useQuery } from "react-query";
 
 export default function ProfileSetting() {

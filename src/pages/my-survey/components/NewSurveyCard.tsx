@@ -1,9 +1,9 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { MyCheckBox } from "@/components/MyCheckBox";
+import { Overlay } from "@/components/styles/Overlay";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 import axios from "axios";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useRouter } from "next/router";

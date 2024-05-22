@@ -1,7 +1,7 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { ListCard } from "@/pages/profile/components/ListCard";
 import { getTimeAsString } from "@/pages/utils";
 import { useEffect, useState } from "react";

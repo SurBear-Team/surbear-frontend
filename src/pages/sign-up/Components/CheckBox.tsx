@@ -1,4 +1,4 @@
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import { MyCheckBox } from "@/components/MyCheckBox";
 
 interface CheckBoxProps {
   inputChecked: boolean;

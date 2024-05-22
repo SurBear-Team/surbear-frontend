@@ -2,11 +2,11 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import api from "../api/config";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import { TabBar } from "../../components/TabBar";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { ISurvey } from "../browse/data";
-import { Dialog } from "../components/Dialog";
-import { TabBar } from "../components/TabBar";
-import { TopBar } from "../components/TopBar/TopBar";
 import { MySurveyCard } from "./components/MySurveyCard";
 import { NewSurveyCard } from "./components/NewSurveyCard";
 

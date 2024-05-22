@@ -1,7 +1,7 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { Overlay } from "@/components/styles/Overlay";
 import { InputDialog } from "@/pages/manager/components/InputDialog";
 import { IMemberInfo } from "@/pages/manager/member";
 import { AgeSheet } from "@/pages/sign-up/Components/AgeSheet";

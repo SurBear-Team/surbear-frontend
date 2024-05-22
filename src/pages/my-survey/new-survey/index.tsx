@@ -1,7 +1,7 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { Overlay } from "@/components/styles/Overlay";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";

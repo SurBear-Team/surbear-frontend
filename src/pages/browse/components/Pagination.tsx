@@ -1,4 +1,4 @@
-import { NextPageIcon, PrevPageIcon } from "@/pages/components/styles/Icons";
+import { NextPageIcon, PrevPageIcon } from "@/components/styles/Icons";
 
 interface IPagination {
   currentPage: number;

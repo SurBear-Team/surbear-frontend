@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import api from "../api/config";
-import { TopBar } from "../components/TopBar/TopBar";
+import api from "../../api/config";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { getTimeAsString } from "../utils";
 import { ListCard } from "./components/ListCard";
 

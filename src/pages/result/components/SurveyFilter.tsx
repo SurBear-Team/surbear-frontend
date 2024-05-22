@@ -1,4 +1,4 @@
-import { Overlay } from "@/pages/components/styles/Overlay";
+import { Overlay } from "@/components/styles/Overlay";
 import { SurveyData } from "./ShortAnswerSubjective";
 
 interface SurveyFilterProps {

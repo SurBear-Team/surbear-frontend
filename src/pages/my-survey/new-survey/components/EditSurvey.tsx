@@ -1,13 +1,13 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { MyCheckBox } from "@/components/MyCheckBox";
 import {
   MinusIcon,
   PlusIcon,
   SaveIcon,
   UpdateIcon,
-} from "@/pages/components/styles/Icons";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+} from "@/components/styles/Icons";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { useState } from "react";
 import { NewSurveyProps } from "..";
 import { engToKorTypeMapping } from "../../components/typeMapping";

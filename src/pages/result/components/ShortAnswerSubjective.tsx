@@ -1,10 +1,10 @@
-import { FilterIcon } from "@/pages/components/styles/Icons";
+import { FilterIcon } from "@/components/styles/Icons";
 import { useEffect, useState } from "react";
 import { engToKorAge } from "./AgeBarChart";
 import { engToKorGender } from "./GenderBarChart";
 import { SurveyFilter } from "./SurveyFilter";
-import { SurveyResult } from "./resultInterface";
 import { engAgeCategories } from "./categories";
+import { SurveyResult } from "./resultInterface";
 
 export interface SurveyQuestion {
   id: number;

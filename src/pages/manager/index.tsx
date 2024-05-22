@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { SettingCard } from "../profile/components/SettingCard";
-import { TopBar } from "../components/TopBar/TopBar";
 
 export default function ManagerFunction() {
   const router = useRouter();

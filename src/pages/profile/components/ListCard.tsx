@@ -1,4 +1,4 @@
-import { BanIcon } from "@/pages/components/styles/Icons";
+import { BanIcon } from "@/components/styles/Icons";
 
 interface ListCardProps {
   getTime?: string;

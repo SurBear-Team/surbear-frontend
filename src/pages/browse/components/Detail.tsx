@@ -1,11 +1,11 @@
-import { ArrowBackIcon, ReportIcon } from "@/pages/components/styles/Icons";
-import { ISurvey, category } from "../data";
-import { motion } from "framer-motion";
-import { Overlay } from "@/pages/components/styles/Overlay";
-import { useRouter } from "next/router";
+import { Dialog } from "@/components/Dialog";
+import { ArrowBackIcon, ReportIcon } from "@/components/styles/Icons";
+import { Overlay } from "@/components/styles/Overlay";
 import { getTime } from "@/pages/utils";
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { Dialog } from "@/pages/components/Dialog";
+import { ISurvey, category } from "../data";
 
 interface IDetail {
   layoutId: number;

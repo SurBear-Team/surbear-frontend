@@ -2,13 +2,13 @@ import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import api from "../api/config";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import { TabBar } from "../../components/TabBar";
+import { TopBar } from "../../components/TopBar/TopBar";
+import { useOneBtnDialog } from "../../hooks/useOneBtnDialog";
 import { goodsSearchAtom } from "../atoms";
 import Pagination from "../browse/components/Pagination";
-import { Dialog } from "../components/Dialog";
-import { TabBar } from "../components/TabBar";
-import { TopBar } from "../components/TopBar/TopBar";
-import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
 import ItemCard from "./components/ItemCard";
 import ItemDetail from "./components/ItemDetail";
 

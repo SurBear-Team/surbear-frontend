@@ -2,11 +2,11 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import api from "../api/config";
-import { Dialog } from "../components/Dialog";
-import { TopBar } from "../components/TopBar/TopBar";
-import { Overlay } from "../components/styles/Overlay";
-import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import { TopBar } from "../../components/TopBar/TopBar";
+import { Overlay } from "../../components/styles/Overlay";
+import { useOneBtnDialog } from "../../hooks/useOneBtnDialog";
 import { AgeSheet } from "./Components/AgeSheet";
 import {
   userEmailAtom,

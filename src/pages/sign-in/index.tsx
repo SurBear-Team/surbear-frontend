@@ -3,10 +3,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { useQueryClient } from "react-query";
-import api from "../api/config";
-import { Dialog } from "../components/Dialog";
-import LogoSVG from "../components/styles/LogoSVG";
-import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import LogoSVG from "../../components/styles/LogoSVG";
+import { useOneBtnDialog } from "../../hooks/useOneBtnDialog";
 
 export default function SignIn() {
   const router = useRouter();

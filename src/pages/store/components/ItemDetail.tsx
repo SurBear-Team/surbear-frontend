@@ -1,6 +1,6 @@
-import api from "@/pages/api/config";
-import { ArrowBackIcon } from "@/pages/components/styles/Icons";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import api from "@/api/config";
+import { ArrowBackIcon } from "@/components/styles/Icons";
+import { Overlay } from "@/components/styles/Overlay";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 

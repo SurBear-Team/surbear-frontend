@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import api from "../api/config";
-import { Dialog } from "../components/Dialog";
-import { TabBar } from "../components/TabBar";
-import { TopBar } from "../components/TopBar/TopBar";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import { TabBar } from "../../components/TabBar";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { IMemberInfo } from "../manager/member";
 import { ProfileCard } from "./components/ProfileCard";
 

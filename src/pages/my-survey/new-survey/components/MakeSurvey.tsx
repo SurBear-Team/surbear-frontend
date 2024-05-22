@@ -1,7 +1,7 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { MyCheckBox } from "@/components/MyCheckBox";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";

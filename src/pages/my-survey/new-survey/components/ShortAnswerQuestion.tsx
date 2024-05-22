@@ -1,4 +1,4 @@
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
+import { MyCheckBox } from "@/components/MyCheckBox";
 import { useEffect, useState } from "react";
 
 // 단답형

@@ -1,9 +1,9 @@
 import {
   AddQuestionIcon,
-  PrevPageIcon,
   NextPageIcon,
+  PrevPageIcon,
   SaveIcon,
-} from "@/pages/components/styles/Icons";
+} from "@/components/styles/Icons";
 import { TabButton } from "@/pages/my-survey/new-survey/components/SurveyTabBar";
 
 interface EditTabBarprops {

@@ -1,10 +1,10 @@
 import {
-  AddQuestionIcon,
   AddPageIcon,
-  PrevPageIcon,
+  AddQuestionIcon,
   NextPageIcon,
+  PrevPageIcon,
   SaveIcon,
-} from "@/pages/components/styles/Icons";
+} from "@/components/styles/Icons";
 
 interface SurveyTabBarProps {
   setIsNewSurvey: (value: (prevState: boolean) => boolean) => void;

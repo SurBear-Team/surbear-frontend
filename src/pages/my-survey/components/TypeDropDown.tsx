@@ -1,4 +1,4 @@
-import { TriangleDownIcon } from "@/pages/components/styles/Icons";
+import { TriangleDownIcon } from "@/components/styles/Icons";
 
 interface TypeDropDownProps {
   onShowTypeClick: () => void;

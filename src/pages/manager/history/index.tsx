@@ -1,7 +1,7 @@
 // 관리자 내역 조회
 
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { Overlay } from "@/pages/components/styles/Overlay";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { Overlay } from "@/components/styles/Overlay";
 import { SettingCard } from "@/pages/profile/components/SettingCard";
 import { useRouter } from "next/router";
 import { useState } from "react";

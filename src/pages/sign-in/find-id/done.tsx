@@ -1,5 +1,5 @@
-import api from "@/pages/api/config";
-import CharSVG from "@/pages/components/styles/CharSVG";
+import api from "@/api/config";
+import CharSVG from "@/components/styles/CharSVG";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { useRecoilState } from "recoil";

@@ -1,5 +1,5 @@
-import api from "@/pages/api/config";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
+import api from "@/api/config";
+import { TopBar } from "@/components/TopBar/TopBar";
 import { ListCard } from "@/pages/profile/components/ListCard";
 import { useQuery } from "react-query";
 

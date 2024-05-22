@@ -2,8 +2,8 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import api from "../api/config";
-import { TopBar } from "../components/TopBar/TopBar";
+import api from "../../api/config";
+import { TopBar } from "../../components/TopBar/TopBar";
 import { userIdAtom, userPasswordAtom } from "./userState";
 
 interface FormData {

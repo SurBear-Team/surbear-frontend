@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Overlay } from "../components/styles/Overlay";
+import { Overlay } from "../../components/styles/Overlay";
 import { Checkbox } from "./Components/CheckBox";
 import { Sheet } from "./Components/Sheet";
 
-import { TopBar } from "../components/TopBar/TopBar";
-import { Dialog } from "../components/Dialog";
+import { Dialog } from "../../components/Dialog";
+import { TopBar } from "../../components/TopBar/TopBar";
 
 type CheckboxName = "all" | "terms1" | "terms2" | "terms3";
 

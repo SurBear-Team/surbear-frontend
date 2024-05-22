@@ -2,10 +2,10 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import api from "../api/config";
-import { Dialog } from "../components/Dialog";
-import { TopBar } from "../components/TopBar/TopBar";
-import { useOneBtnDialog } from "../hooks/useOneBtnDialog";
+import api from "../../api/config";
+import { Dialog } from "../../components/Dialog";
+import { TopBar } from "../../components/TopBar/TopBar";
+import { useOneBtnDialog } from "../../hooks/useOneBtnDialog";
 import { userEmailAtom } from "./userState";
 
 export default function Authentication() {

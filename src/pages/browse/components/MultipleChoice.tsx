@@ -1,4 +1,4 @@
-import { SmallCheckIcon } from "@/pages/components/styles/Icons";
+import { SmallCheckIcon } from "@/components/styles/Icons";
 import { useEffect, useState } from "react";
 import { IOption } from "../[id]";
 

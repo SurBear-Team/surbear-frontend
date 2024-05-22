@@ -1,5 +1,5 @@
+import { MinusIcon, PlusIcon } from "@/components/styles/Icons";
 import React from "react";
-import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
 
 interface MultipleChoiceQuestionProps {
   choices: string[];

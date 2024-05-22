@@ -1,10 +1,10 @@
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { MyCheckBox } from "@/pages/components/MyCheckBox";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { MinusIcon, PlusIcon } from "@/pages/components/styles/Icons";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { MyCheckBox } from "@/components/MyCheckBox";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { MinusIcon, PlusIcon } from "@/components/styles/Icons";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { editSurveyTitleAtom } from "@/pages/edit-survey/editSurveyState";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
 import {
   engToKorTypeMapping,

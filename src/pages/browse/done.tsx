@@ -1,4 +1,4 @@
-import CharSVG from "@/pages/components/styles/CharSVG";
+import CharSVG from "@/components/styles/CharSVG";
 import { useRouter } from "next/router";
 
 export default function FoundId() {

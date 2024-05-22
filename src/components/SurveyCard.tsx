@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { ISurvey, category } from "../browse/data";
-import { getTime } from "../utils";
-import { ReportIcon } from "./styles/Icons";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { ISurvey, category } from "../pages/browse/data";
+import { getTime } from "../pages/utils";
+import { ReportIcon } from "./styles/Icons";
 
 interface SurveyCardProps {
   layoutId: number;

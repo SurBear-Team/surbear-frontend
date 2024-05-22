@@ -1,9 +1,9 @@
 // 관리자 관리
-import api from "@/pages/api/config";
-import { Dialog } from "@/pages/components/Dialog";
-import { TopBar } from "@/pages/components/TopBar/TopBar";
-import { Overlay } from "@/pages/components/styles/Overlay";
-import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
+import api from "@/api/config";
+import { Dialog } from "@/components/Dialog";
+import { TopBar } from "@/components/TopBar/TopBar";
+import { Overlay } from "@/components/styles/Overlay";
+import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { SettingCard } from "@/pages/profile/components/SettingCard";
 import { useRouter } from "next/router";
 import { useState } from "react";

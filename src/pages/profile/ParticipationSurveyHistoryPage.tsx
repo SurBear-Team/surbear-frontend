@@ -14,7 +14,7 @@ export interface IHistory {
   title: string;
 }
 
-export default function SurveyHistory() {
+export default function ParticipationSurveyHistory() {
   const router = useRouter();
   const [token, setToken] = useState("");
 

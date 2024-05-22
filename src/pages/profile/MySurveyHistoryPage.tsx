@@ -5,7 +5,7 @@ import { ISurvey } from "../browse/data";
 import { getTimeAsString } from "../utils";
 import { ListCard } from "./components/ListCard";
 
-export default function SurveyHistory() {
+export default function MySurveyHistory() {
   const [data, setData] = useState<ISurvey[]>();
   useEffect(() => {
     if (typeof window !== undefined) {

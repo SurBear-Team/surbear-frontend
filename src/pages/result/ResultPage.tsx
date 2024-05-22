@@ -4,7 +4,7 @@ import { TopBar } from "@/components/TopBar/TopBar";
 import { useOneBtnDialog } from "@/hooks/useOneBtnDialog";
 import { SurveyData } from "@/pages/edit-survey/editInterface";
 import { TypeDropDown } from "@/pages/my-survey/components/TypeDropDown";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { AgeBarChart } from "./components/AgeBarChart";
@@ -18,6 +18,7 @@ import {
 import { SurveyResult } from "./components/resultInterface";
 
 export default function Result() {
+  const router = useRouter();
   const { id } = router.query;
   const [resultTitle, setResultTitle] = useState("");
 

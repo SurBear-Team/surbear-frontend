@@ -84,7 +84,10 @@ export default function Detail({
               <div className="flex flex-col sm-gray-text">
                 <span>지급 포인트 : {data.point}pt</span>
                 <span>
-                  최대 참여 가능 인원 : {data.maximumNumberOfPeople}명
+                  최대 참여 가능 인원 :{" "}
+                  {data.maximumNumberOfPeople > 10000
+                    ? "제한 없음"
+                    : `${data.maximumNumberOfPeople}명`}
                 </span>
                 <span>
                   설문 시작일 : {startedTime.year}년 {startedTime.month}월{" "}

@@ -15,7 +15,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useOneBtnDialog } from "@/pages/hooks/useOneBtnDialog";
 
-const categoryList = ["기타", "사회", "경제", "생활", "취미", "IT", "문화"];
+const categoryList = [
+  "기타",
+  "사회",
+  "경제",
+  "생활",
+  "취미",
+  "IT",
+  "교육",
+  "문화",
+];
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 interface SurveyData {
@@ -107,6 +116,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
     생활: "LIFE",
     취미: "HOBBY",
     IT: "IT",
+    교육: "EDUCATION",
     문화: "CULTURE",
   };
 

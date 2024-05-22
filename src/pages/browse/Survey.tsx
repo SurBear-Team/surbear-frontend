@@ -108,6 +108,7 @@ export default function Survey() {
                   .then((res) => {
                     queryClient.invalidateQueries("surveyHistory");
                     queryClient.invalidateQueries("member");
+                    queryClient.invalidateQueries("participation");
                     router.push("/browse/done");
                   })
                   .catch((err) =>

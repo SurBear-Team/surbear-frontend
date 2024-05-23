@@ -66,6 +66,12 @@ export default function MemberUpdate() {
   const toggleShowSheet = () => {
     setShowSheet(!showSheet);
   };
+
+  // 닉네임 유효성 검사 함수
+  const validateNickname = (nickname: string) => {
+    const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$/;
+    return regex.test(nickname);
+  };
   return (
     <>
       <TopBar hasBack title="회원 정보 조회" noShadow />
@@ -114,6 +120,12 @@ export default function MemberUpdate() {
                 onLeftClick={() => setShowNicknameDialog((prev) => !prev)}
                 onRightClick={(data) => {
                   if (data.nickname !== undefined) {
+                    if (!validateNickname(data.nickname)) {
+                      openDialog(
+                        "닉네임은 한글, 영문, 숫자로 이루어진 2~10자여야 합니다."
+                      );
+                      return;
+                    }
                     api
                       .post("/member/verification/duplicate", {
                         type: "nickname",

@@ -27,9 +27,20 @@ export default function SignUpDetail() {
   const userId = useRecoilValue(userIdAtom);
   const userPassword = useRecoilValue(userPasswordAtom);
 
+  const validateNickname = (nickname: string) => {
+    const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$/;
+    return regex.test(nickname);
+  };
+
   // 닉네임 중복 확인
   const checkDuplicate = async () => {
     // 유효성검사 추가
+    if (!validateNickname(userNickname)) {
+      showOneBtnDialog(
+        "닉네임은 한글, 영문, 숫자로 이루어진 2~10자여야 합니다."
+      );
+      return;
+    }
     try {
       const response = await api.post("/member/verification/duplicate", {
         type: "nickname",

@@ -1,7 +1,7 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
 /* :root {
   --foreground-rgb: 0, 0, 0;
@@ -55,19 +55,35 @@ input::-webkit-inner-spin-button {
 
 @layer components {
   .screen {
-    @apply w-full max-w-xl mx-auto h-screen bg-white items-center flex justify-center;
+    @apply w-full bg-[#F8F8F8] h-screen pt-[82px] pb-[81px] items-center flex justify-center;
+  }
+
+  .white-screen {
+    @apply screen bg-white;
   }
 
   .inner-screen {
-    @apply bg-[#F8F8F8] w-full h-screen pt-[120px] pb-[105px] px-6 gap-[6px] flex flex-col overflow-auto hide-scrollbar;
+    @apply max-w-xl w-full;
+  }
+
+  .list-screen {
+    @apply relative max-w-xl w-full h-full gap-3 flex flex-col overflow-scroll hide-scrollbar;
+  }
+
+  .list {
+    @apply flex flex-col px-6 py-6 gap-3;
+  }
+
+  .flex-center {
+    @apply flex justify-center items-center;
   }
 
   .long-button {
-    @apply w-full font-semibold rounded-full py-2 cursor-pointer border;
+    @apply w-full font-semibold rounded-full py-2 cursor-pointer border whitespace-nowrap;
   }
 
   .main-input {
-    @apply p-2 w-full border border-gray-4 text-gray-4 font-semibold placeholder:font-semibold placeholder:text-gray-4;
+    @apply p-2 w-full border border-gray-4 text-gray-9 font-semibold placeholder:font-semibold placeholder:text-gray-4;
   }
 
   /* 회색글씨 */
@@ -78,6 +94,11 @@ input::-webkit-inner-spin-button {
   /* text-9 글씨 */
   .sm-gray-9-text {
     @apply text-gray-9 font-semibold text-sm;
+  }
+
+  /* 16px text-9 글씨 */
+  .base-gray-9-text {
+    @apply sm-gray-9-text text-base;
   }
 
   /* 파란배경 버튼 색 */
@@ -91,7 +112,7 @@ input::-webkit-inner-spin-button {
   }
 
   .gray-line {
-    @apply bg-gray-2 h-[1px] flex justify-center;
+    @apply bg-gray-2 h-[1px] flex justify-center flex-shrink-0;
   }
 
   .check-box {
@@ -103,7 +124,7 @@ input::-webkit-inner-spin-button {
   }
 
   .profile-card {
-    @apply card py-4 flex-row w-full items-center bg-white justify-between;
+    @apply card py-4 flex-row w-full max-w-xl items-center bg-white justify-between;
   }
 
   .small-Btn {
@@ -112,6 +133,10 @@ input::-webkit-inner-spin-button {
 
   .medium-Btn {
     @apply small-Btn px-8;
+  }
+
+  .large-Btn {
+    @apply small-Btn px-16;
   }
 
   .drop-down-bar {

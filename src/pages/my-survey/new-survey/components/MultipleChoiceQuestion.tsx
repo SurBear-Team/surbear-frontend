@@ -25,6 +25,7 @@ export const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
             value={choice}
             onChange={(e) => handleChoiceChange(index, e.target.value)}
             placeholder="답변을 입력해주세요"
+            maxLength={50}
           />
           <div className="flex gap-2 justify-end">
             <div

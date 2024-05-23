@@ -12,6 +12,7 @@ import { korToEngTypeMapping } from "@/pages/my-survey/components/typeMapping";
 import { ShortAnswerType } from "@/pages/my-survey/new-survey/components/ShortAnswerQuestion";
 import { useState } from "react";
 import { EditSurveyProps } from "../editInterface";
+import { SubjectiveType } from "@/pages/my-survey/new-survey/components/SubjectiveQuestion";
 
 export const EditInEditSurvey = ({
   initialData, // index에서 받은 기존 질문 데이터 객체
@@ -299,9 +300,19 @@ export const EditInEditSurvey = ({
         </>
       )}
 
-      {(typeType === "단답형" || typeType === "주관식") && (
+      {typeType === "단답형" && (
         <>
           <ShortAnswerType
+            setCount={setCount}
+            hasLimit={initialData?.count !== 788183}
+            value={initialData?.count}
+          />
+          <div className="gray-line mt-8" />
+        </>
+      )}
+      {typeType === "주관식" && (
+        <>
+          <SubjectiveType
             setCount={setCount}
             hasLimit={initialData?.count !== 788183}
             value={initialData?.count}

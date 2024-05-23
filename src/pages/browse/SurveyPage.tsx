@@ -126,6 +126,8 @@ export default function Survey() {
     }
   };
 
+  console.log(data);
+
   return (
     <>
       <TopBar
@@ -208,7 +210,11 @@ export default function Survey() {
                         index={index + 1}
                         title={el.surveyQuestion.content}
                         required={el.surveyQuestion.required}
-                        maxText={el.surveyQuestion.maxText}
+                        maxText={
+                          el.surveyQuestion.maxText > 100
+                            ? 100
+                            : el.surveyQuestion.maxText
+                        }
                         onSelect={(selected: string) => {
                           const id = el.surveyQuestion.id;
                           const newAnswer = {
@@ -248,6 +254,11 @@ export default function Survey() {
                           );
                           setAnswers([...otherAnswers, newAnswer]);
                         }}
+                        maxText={
+                          el.surveyQuestion.maxText > 500
+                            ? 500
+                            : el.surveyQuestion.maxText
+                        }
                         initial={
                           answers
                             .find(

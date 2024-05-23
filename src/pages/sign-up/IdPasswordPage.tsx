@@ -61,9 +61,11 @@ export default function IdPassword() {
 
   // 비밀번호 유효성 검사
   const validatePassword = (password: string) => {
-    const isValidContent = /^[A-Za-z0-9]+$/.test(password);
+    const isValidContent =
+      /^[A-Za-z0-9~`!@#$%^&*()-_=+\\|{}\[\]:;"'<>,.?/]+$/.test(password);
     return (
-      isValidContent || "비밀번호는 영문 소문자, 대문자, 숫자만 포함시켜주세요"
+      isValidContent ||
+      "비밀번호는 영문 소문자, 대문자, 숫자, 특수문자만 포함시켜주세요"
     );
   };
 
@@ -95,6 +97,10 @@ export default function IdPassword() {
                   value: 6,
                   message: "아이디는 최소 6자 이상이어야 합니다.",
                 },
+                maxLength: {
+                  value: 20,
+                  message: "아이디는 최대 20자까지 입력 가능합니다.",
+                },
                 onBlur: (e) => checkUserIdDuplication(e.target.value),
               })}
               type="text"
@@ -120,6 +126,10 @@ export default function IdPassword() {
                 minLength: {
                   value: 8,
                   message: "비밀번호는 최소 8자 이상이어야 합니다.",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "비밀번호는 최대 20자까지 입력 가능합니다.",
                 },
               })}
               type="password"

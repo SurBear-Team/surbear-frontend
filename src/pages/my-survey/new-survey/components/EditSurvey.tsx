@@ -12,6 +12,7 @@ import { useState } from "react";
 import { engToKorTypeMapping } from "../../components/typeMapping";
 import { NewSurveyProps } from "../NewSurveyPage";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
+import { SubjectiveType } from "./SubjectiveQuestion";
 
 interface EditSurveyProps {
   initialData: NewSurveyProps;
@@ -264,6 +265,7 @@ export const EditSurvey = ({
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 placeholder="답변을 입력해주세요"
                 disabled={disabledInputs[index]}
+                maxLength={50}
               />
 
               <div className="flex gap-2 justify-end">
@@ -309,9 +311,20 @@ export const EditSurvey = ({
         </>
       )}
 
-      {(typeType === "SHORT_ANSWER" || typeType === "SUBJECTIVE") && (
+      {typeType === "SHORT_ANSWER" && (
         <>
           <ShortAnswerType
+            setCount={setCount}
+            hasLimit={initialData?.count !== 788183}
+            value={initialData?.count}
+          />
+          <div className="gray-line mt-8" />
+        </>
+      )}
+
+      {typeType === "SUBJECTIVE" && (
+        <>
+          <SubjectiveType
             setCount={setCount}
             hasLimit={initialData?.count !== 788183}
             value={initialData?.count}

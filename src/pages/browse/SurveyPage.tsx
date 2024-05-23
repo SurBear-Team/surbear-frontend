@@ -126,8 +126,6 @@ export default function Survey() {
     }
   };
 
-  console.log(data);
-
   return (
     <>
       <TopBar

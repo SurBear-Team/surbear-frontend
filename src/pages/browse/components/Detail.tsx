@@ -104,7 +104,9 @@ export default function Detail({
           <div className="gray-line mt-4" />
           {/* 본문 */}
           <div className="flex flex-grow relative base-gray-9-text overflow-y-scroll hide-scrollbar">
-            <div className="w-full px-2 py-4 absolute">{data.description}</div>
+            <div className="w-full px-2 py-4 absolute whitespace-pre-wrap">
+              {data.description}
+            </div>
           </div>
           <div className="gray-line" />
           {/* 하단 버튼 */}

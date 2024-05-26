@@ -171,32 +171,41 @@ export default function NewSurvey() {
     setIsLoading(true);
     const prompt = `"${title}"에 대한 설문조사에 추천할만한 짧은 질문 세 개만 추천해봐. 따옴표와 번호를 붙이지 말고 한국어로 부탁해.`;
     try {
-      const response = await fetch("/api/chatgpt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: prompt }),
-      });
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: prompt }],
+            n: 1,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("/api/chatgpt에서 에러 발생:", errorData);
+        console.error("OpenAI API에서 에러 발생:", errorData);
         throw new Error(errorData.error || "Unknown error");
       }
 
       const data = await response.json();
+      console.log("API 응답 데이터:", data); // 응답 데이터 출력
 
-      if (data && data.answers && data.answers[0]) {
-        const splitQuestions = data.answers[0].split("\n");
+      if (data && data.choices && data.choices[0]) {
+        const splitQuestions = data.choices[0].message.content.split("\n");
         setQuestions(splitQuestions);
       } else {
-        console.error("유효하지 않은 데이터 : ", data);
+        console.error("유효하지 않은 데이터:", data);
         setQuestions([]);
       }
     } catch (error) {
       console.error(
-        "네트워크가 오류가 발생했어요. 나중에 다시 시도해주세요",
+        "네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요",
         error
       );
       setQuestions([]);
@@ -369,13 +378,13 @@ export default function NewSurvey() {
                     {questions.map((question, i) => (
                       <div key={i} className="flex items-center gap-2">
                         <div
-                          className={`check-box rounded-full min-w-4 ${
-                            selectedQuestion === question
-                              ? "bg-[#6E7CF2]"
-                              : "bg-white border border-gray-7"
-                          }`}
+                          className={`check-box relative flex items-center justify-center rounded-full min-w-4 border border-gray-7}`}
                           onClick={() => handleSelectQuestion(question)}
-                        />
+                        >
+                          {selectedQuestion === question && (
+                            <div className="w-2 h-2 rounded-full absolute bg-primary-1" />
+                          )}
+                        </div>
                         <div className="text-gray-9 text-sm font-medium">
                           {question}
                         </div>

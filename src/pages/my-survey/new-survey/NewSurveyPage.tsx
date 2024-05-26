@@ -332,7 +332,7 @@ export default function NewSurvey() {
           {showRecommendation && (
             <>
               <Overlay onClick={() => {}} />
-              <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto">
+              <div className="card fixed bg-white flex-grow justify-around flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 max-w-lg">
                 <span className="whitespace-nowrap base-gray-9-text">
                   ChatGPT가 질문을 추천해드려요! <br />
                   추천을 받으시겠어요?
@@ -364,7 +364,7 @@ export default function NewSurvey() {
           {showGTP && (
             <>
               <Overlay onClick={() => {}} />
-              <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5">
+              <div className="card justify-center fixed bg-white flex-col gap-6 z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 max-w-lg">
                 <span className="whitespace-nowrap base-gray-9-text">
                   이런 질문은 어떠세요? <br /> ChatGPT가 질문을 추천해드려요!
                   <div className="whitespace-nowrap base-gray-9-text pt-2">

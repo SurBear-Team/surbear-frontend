@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import api from "../../api/config";
 import { Dialog } from "../../components/Dialog";
@@ -11,6 +11,16 @@ import { useOneBtnDialog } from "../../hooks/useOneBtnDialog";
 export default function SignIn() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  // 로그인 여부 확인
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      if (localStorage.getItem("surbearToken") !== null) {
+        router.push("/browse");
+      } else {
+        router.push("/sign-in");
+      }
+    }
+  }, []);
 
   const { oneBtnDialog, showOneBtnDialog, hideOneBtnDialog } =
     useOneBtnDialog();

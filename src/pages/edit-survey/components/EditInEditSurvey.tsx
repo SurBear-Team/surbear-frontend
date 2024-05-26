@@ -31,7 +31,7 @@ export const EditInEditSurvey = ({
   ); // 모든 입력을 초기에 비활성화(true)
 
   // (공통) 필수 답변 체크 박스
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(initialData.required);
   const handleCheckboxChange = () => {
     setIsChecked((isChecked) => !isChecked);
   };

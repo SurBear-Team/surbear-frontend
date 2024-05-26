@@ -81,7 +81,7 @@ export default function IdPassword() {
   return (
     <>
       <TopBar hasBack noShadow title="회원가입" />
-      <div className="white-screen px-12 flex-col w-full">
+      <div className="white-screen">
         <form
           className="inner-screen px-12 flex-col"
           onSubmit={handleSubmit(onSubmit)}

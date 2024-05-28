@@ -11,6 +11,7 @@ import { CreatedQuestion } from "./components/CreatedQuestion";
 import { EditSurvey } from "./components/EditSurvey";
 import { MakeSurvey } from "./components/MakeSurvey";
 import { SurveyTabBar } from "./components/SurveyTabBar";
+import axios from "axios";
 
 export interface NewSurveyProps {
   id?: number;
@@ -195,6 +196,22 @@ export default function NewSurvey() {
 
       const data = await response.json();
       console.log("API 응답 데이터:", data); // 응답 데이터 출력
+
+      if (data && data.usage) {
+        const { prompt_tokens, completion_tokens, total_tokens } = data.usage;
+
+        const usageData = {
+          prompt_tokens: prompt_tokens,
+          completion_tokens: completion_tokens,
+          total_tokens: total_tokens,
+        };
+
+        await axios.post("https://api.surbear.site/external/gpt", usageData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
       if (data && data.choices && data.choices[0]) {
         const splitQuestions = data.choices[0].message.content.split("\n");

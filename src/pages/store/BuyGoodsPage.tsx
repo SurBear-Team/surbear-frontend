@@ -249,6 +249,7 @@ export default function BuyGoods() {
                 )
                 .then((res) => {
                   router.push("/store/done");
+                  queryClient.invalidateQueries("member");
                   queryClient.invalidateQueries("product-count");
                 })
                 .catch((err) => console.error(err));

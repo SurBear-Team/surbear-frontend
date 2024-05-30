@@ -41,7 +41,7 @@ export default function GoodsHistory() {
 
   return (
     <>
-      <TopBar hasBack noShadow title="현재 포인트 내역" />
+      <TopBar hasBack noShadow title="회원 상품 교환 내역 조회" />
       <div className="white-screen flex-col pt-[50px] justify-start">
         <div className="inner-screen">
           {data?.map((el) => (

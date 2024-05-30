@@ -41,7 +41,7 @@ export const Sheet = ({
       {/* 개인정보수집및활용동의 */}
       <span className="pt-4 font-semibold text-gray-9">{term?.title}</span>
       {/* 본문 */}
-      <div className="bg-gray-1 max-h-[calc(80%-1rem)] flex-grow mt-4 p-4 font-semibold rounded-xl overflow-y-scroll hide-scrollbar">
+      <div className="bg-gray-1 max-h-[calc(80%-1rem)] flex-grow mt-4 p-4 font-semibold rounded-xl overflow-y-scroll hide-scrollbar whitespace-pre-wrap">
         {term?.content}
       </div>
     </motion.div>

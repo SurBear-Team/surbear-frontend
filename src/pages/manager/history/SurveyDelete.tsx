@@ -37,15 +37,17 @@ export default function SurveyDelete() {
     <>
       <TopBar title="설문조사 강제 삭제 내역" hasBack noShadow />
       <div className="white-screen flex-col justify-start pt-12">
-        {data &&
-          data.map((el, index) => (
-            <ListCard
-              key={index}
-              getTime={getTimeAsString(el.createdAt)}
-              content={el.title}
-              surveyOwner={`삭제 : ${el.nickname}`}
-            />
-          ))}
+        <div className="inner-screen">
+          {data &&
+            data.map((el, index) => (
+              <ListCard
+                key={index}
+                getTime={getTimeAsString(el.createdAt)}
+                content={el.title}
+                surveyOwner={`삭제 : ${el.nickname}`}
+              />
+            ))}
+        </div>
       </div>
     </>
   );

@@ -6,6 +6,7 @@ interface ISubjective {
   required: boolean;
   onSelect: (value: string) => void;
   initial: string[];
+  maxText: number;
 }
 
 export default function Subjective({
@@ -14,6 +15,7 @@ export default function Subjective({
   required,
   onSelect,
   initial,
+  maxText,
 }: ISubjective) {
   const [answer, setAnswer] = useState("");
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function Subjective({
             setAnswer(value);
             onSelect(value);
           }}
+          maxLength={maxText}
         />
       </div>
     </>

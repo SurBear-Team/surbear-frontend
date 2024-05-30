@@ -51,6 +51,7 @@ export const Dialog = ({
               onChange={(event) => setText(event.target.value)}
               value={text}
               className="w-full p-2 items-start border-[1px] border-gray-4 sm-gray-9-text font-normal"
+              maxLength={200}
             />
           </div>
         )}

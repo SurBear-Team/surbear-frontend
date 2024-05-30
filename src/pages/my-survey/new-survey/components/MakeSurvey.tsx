@@ -11,6 +11,7 @@ import { korToEngTypeMapping } from "../../components/typeMapping";
 import { surveyIdAtom } from "../../surveyState";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { ShortAnswerType } from "./ShortAnswerQuestion";
+import { SubjectiveType } from "./SubjectiveQuestion";
 
 interface MakeSurveyProps {
   addNewSurveyComponent: (surveyData: {
@@ -230,7 +231,6 @@ export const MakeSurvey = ({
             />
           </div>
         </div>
-
         {/* 질문 제목 */}
         <div className="flex flex-col gap-1">
           <div className="base-gray-9-text pt-2">질문 제목</div>
@@ -239,9 +239,9 @@ export const MakeSurvey = ({
             value={questionTitle}
             onChange={handleTitleChange}
             placeholder="제목을 입력해주세요"
+            maxLength={100}
           />
         </div>
-
         {/* 답변들 */}
         {(typeType === "객관식 - 단일 선택" ||
           typeType === "객관식 - 다중 선택") && (
@@ -256,20 +256,23 @@ export const MakeSurvey = ({
             />
           </>
         )}
-
-        {(typeType === "단답형" || typeType === "주관식") && (
+        {typeType === "단답형" && (
           <>
             <ShortAnswerType setCount={setCount} />
             <div className="gray-line mt-8" />
           </>
         )}
-
+        {typeType === "주관식" && (
+          <>
+            <SubjectiveType setCount={setCount} />
+            <div className="gray-line mt-8" />
+          </>
+        )}
         {typeType === "슬라이더" && (
           <>
             <div className="gray-line mt-8" />
           </>
         )}
-
         {/* 취소 저장 저장후새질문추가 */}
         <CancleSaveButtonFrame
           onCancleClick={onCancel}

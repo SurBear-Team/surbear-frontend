@@ -216,7 +216,7 @@ export default function Member() {
                         }
                       )
                       .then((res) => {
-                        showOneBtnDialog("포인트 지급이 완료되었습니다.");
+                        alert("포인트 지급이 완료되었습니다.");
                         setShowPopUp((prev) => !prev);
                       })
                       .catch((err) =>

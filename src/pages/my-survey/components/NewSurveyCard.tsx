@@ -141,7 +141,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
 
   // 최대 인원 onChange
   const handleMaxPersonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxPeople(e.target.value);
+    +e.target.value > 200 ? setMaxPeople("200") : setMaxPeople(e.target.value);
   };
 
   const [deadline, setDeadline] = useState<Date | null>(null);
@@ -246,6 +246,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
             onBlur={handleTitleBlur}
             placeholder="설문 주제를 입력해주세요"
             className="main-input text-gray-9"
+            maxLength={50}
           />
         </div>
 
@@ -256,6 +257,7 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
             value={description}
             onChange={handleDescriptionChange}
             className="w-auto p-2 items-start border-[1px] border-gray-4 font-normal text-sm resize-none"
+            maxLength={300}
           />
         </div>
 
@@ -292,6 +294,10 @@ export const NewSurveyCard = ({ onCancel, surveyId }: NewSurveyCardProps) => {
             <input
               value={maxPeople === "788183" ? "" : maxPeople}
               onChange={handleMaxPersonChange}
+              onBlur={() => {
+                if (+maxPeople < 1) setMaxPeople("1");
+                if (maxPeople === "") setMaxPeople("");
+              }}
               type="number"
               className="w-16 p-2 rounded-lg border-[1px] border-gray-4"
             />

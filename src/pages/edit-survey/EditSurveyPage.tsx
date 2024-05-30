@@ -20,6 +20,7 @@ import { useRecoilValue } from "recoil";
 import { EditInEditSurvey } from "./components/EditInEditSurvey";
 import { EditTabBar } from "./components/EditTabBar";
 import { SurveyData, SurveyQuestion } from "./editInterface";
+import { SubjectiveType } from "../my-survey/new-survey/components/SubjectiveQuestion";
 
 export default function EditSurveyPage() {
   const router = useRouter();
@@ -450,6 +451,12 @@ export default function EditSurveyPage() {
               {typeType === "단답형" && (
                 <>
                   <ShortAnswerType setCount={setCount} />
+                  <div className="gray-line mt-8" />
+                </>
+              )}
+              {typeType === "주관식" && (
+                <>
+                  <SubjectiveType setCount={setCount} />
                   <div className="gray-line mt-8" />
                 </>
               )}

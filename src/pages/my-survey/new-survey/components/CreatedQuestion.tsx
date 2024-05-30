@@ -24,7 +24,9 @@ export const CreatedQuestion = ({
       {/* 질문제목 */}
       <div className="flex pb-2">
         <div className="base-gray-9-text pr-2">{`${answerIndex}.`}</div>
-        <div className="base-gray-9-text">{title}</div>
+        <div className="base-gray-9-text overflow-hidden text-ellipsis">
+          {title}
+        </div>
       </div>
       <div className="pb-6 sm-gray-9-text">{engToKorTypeMapping[type]}</div>
 
@@ -43,7 +45,14 @@ export const CreatedQuestion = ({
         </div>
       ))}
       {(type === "SHORT_ANSWER" || type === "SUBJECTIVE") && count && (
-        <div>최대 글자수: {count === 788183 ? "제한 없음" : count}</div>
+        <div>
+          최대 글자수:{" "}
+          {count === 788183
+            ? type === "SHORT_ANSWER"
+              ? "100자"
+              : "500자"
+            : `${count}자`}
+        </div>
       )}
       {/* 수정 삭제 버튼 */}
       <div className="flex gap-2 justify-end">
